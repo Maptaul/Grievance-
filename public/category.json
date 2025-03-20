@@ -1,0 +1,103 @@
+[
+        {
+          "category": "Electricity",
+          "icon": "⚡",
+          "issues": [
+            "Power outage",
+            "Voltage fluctuation",
+            "Streetlights not working",
+            "Exposed electrical wires"
+          ]
+        },
+        {
+          "category": "Gas",
+          "icon": "🔥",
+          "issues": [
+            "Gas leakage",
+            "Low gas pressure",
+            "No gas supply",
+            "Gas pipeline damage"
+          ]
+        },
+        {
+          "category": "Water & Sewerage",
+          "icon": "🚰",
+          "issues": [
+            "No water supply",
+            "Water leakage",
+            "Sewage overflow",
+            "Blocked drainage"
+          ]
+        },
+        {
+          "category": "Road & Infrastructure",
+          "icon": "🛣️",
+          "issues": [
+            "Potholes on roads",
+            "Broken sidewalks",
+            "Damaged bridges",
+            "Blocked roads"
+          ]
+        },
+        {
+          "category": "Sanitation & Waste Management",
+          "icon": "🗑️",
+          "issues": [
+            "Garbage not collected",
+            "Overflowing dumpsters",
+            "Illegal dumping",
+            "Sewage smell"
+          ]
+        },
+        {
+          "category": "Public Transport",
+          "icon": "🚌",
+          "issues": [
+            "Bus/train delays",
+            "Broken traffic signals",
+            "Unsafe public transport",
+            "Illegal parking"
+          ]
+        },
+        {
+          "category": "Environment & Pollution",
+          "icon": "🌍",
+          "issues": [
+            "Air pollution",
+            "Water pollution",
+            "Illegal tree cutting",
+            "Noise pollution"
+          ]
+        },
+        {
+          "category": "Law & Order",
+          "icon": "🚔",
+          "issues": [
+            "Illegal construction",
+            "Encroachment on public property",
+            "Theft and vandalism",
+            "Drug-related activities"
+          ]
+        },
+        {
+          "category": "Animal Control",
+          "icon": "🐕",
+          "issues": [
+            "Stray animals",
+            "Animal cruelty",
+            "Pest infestation",
+            "Dead animals on road"
+          ]
+        },
+        {
+          "category": "Health & Medical",
+          "icon": "🏥",
+          "issues": [
+            "Lack of emergency services",
+            "Poor hospital facilities",
+            "Spread of infectious diseases",
+            "Contaminated water supply"
+          ]
+        }
+      ]
+      
