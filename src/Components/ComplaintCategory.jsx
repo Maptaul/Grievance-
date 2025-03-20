@@ -7,8 +7,13 @@ const ComplaintCategory = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("../../public/category.json") // Replace with your actual API URL
-      .then((response) => response.json())
+    fetch("/category.json") // ✅ Corrected path for Netlify
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to load data");
+        }
+        return response.json();
+      })
       .then((data) => {
         setComplaints(data);
         setLoading(false);
