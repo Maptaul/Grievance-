@@ -7,7 +7,7 @@ const ComplaintCategory = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/public/category.json") // Replace with your actual API URL
+    fetch("../../public/category.json") // Replace with your actual API URL
       .then((response) => response.json())
       .then((data) => {
         setComplaints(data);

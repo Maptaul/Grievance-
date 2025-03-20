@@ -2,6 +2,8 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import user from "../assets/download.png";
+import logo from "../assets/original.png";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,11 +44,7 @@ const NavBar = () => {
         </button>
         <Link to="/" className="flex items-center gap-4">
           <FaHome className="text-3xl" />
-          <img
-            className="w-40 md:w-60"
-            src="/src/assets/Header-logo2-original.png"
-            alt="Logo"
-          />
+          <img className="w-40 md:w-60" src={logo} alt="Logo" />
         </Link>
       </div>
 
@@ -62,7 +60,7 @@ const NavBar = () => {
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-12 rounded-full">
-              <img src="/src/assets/download.png" alt="User" />
+              <img src={user} alt="User" />
             </div>
           </label>
           <ul
