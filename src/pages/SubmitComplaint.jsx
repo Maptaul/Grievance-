@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { FiFile, FiMail, FiMapPin, FiUser, FiX } from "react-icons/fi";
+import React, { useRef, useState } from "react";
+import {
+  FiCamera,
+  FiFile,
+  FiImage,
+  FiMail,
+  FiMapPin,
+  FiUser,
+  FiX,
+} from "react-icons/fi";
 import Swal from "sweetalert2";
 
 const SubmitComplaint = () => {
@@ -8,9 +16,41 @@ const SubmitComplaint = () => {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [location, setLocation] = useState(null);
+  const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+
+    // File validation
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "video/mp4",
+      "application/pdf",
+    ];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    if (!validTypes.includes(selectedFile.type)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid File Type",
+        text: "Please upload JPEG, PNG, MP4, or PDF files",
+      });
+      return;
+    }
+
+    if (selectedFile.size > maxSize) {
+      Swal.fire({
+        icon: "error",
+        title: "File Too Large",
+        text: "Maximum file size is 10MB",
+      });
+      return;
+    }
+
+    setFile(selectedFile);
   };
 
   const getLocation = () => {
@@ -23,10 +63,10 @@ const SubmitComplaint = () => {
           });
           Swal.fire({
             icon: "success",
-            title: "Location Captured",
+            title: "Location Captured!",
             text: `Latitude: ${position.coords.latitude.toFixed(
               4
-            )}, Longitude: ${position.coords.longitude.toFixed(4)}`,
+            )}\nLongitude: ${position.coords.longitude.toFixed(4)}`,
             timer: 2000,
             showConfirmButton: false,
           });
@@ -35,39 +75,62 @@ const SubmitComplaint = () => {
           Swal.fire({
             icon: "error",
             title: "Location Error",
-            text: "Could not retrieve your location.",
+            text: "Please enable location services to continue",
           });
-          console.error("Error getting location:", error);
+          console.error("Location error:", error);
         }
       );
     } else {
       Swal.fire({
         icon: "error",
         title: "Unsupported Feature",
-        text: "Geolocation is not supported by your browser.",
+        text: "Geolocation is not supported by your device",
       });
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!description.trim()) {
+      Swal.fire({
+        icon: "error",
+        title: "Missing Information",
+        text: "Please provide a description of your complaint",
+      });
+      return;
+    }
+
     const complaintData = {
       name: isAnonymous ? "Anonymous" : name,
       description,
       file,
       location,
+      timestamp: new Date().toISOString(),
     };
 
-    console.log("Submitted Complaint:", complaintData);
+    console.log("Submitted complaint:", complaintData);
 
+    // Show success message
     Swal.fire({
       icon: "success",
       title: "Complaint Submitted!",
-      text: "Your complaint has been successfully recorded.",
-      showConfirmButton: true,
+      html: `
+        <div class="text-left">
+          <p>We've received your complaint and will process it shortly.</p>
+          ${
+            location
+              ? `<p class="mt-2">Location: ${location.latitude.toFixed(
+                  4
+                )}, ${location.longitude.toFixed(4)}</p>`
+              : ""
+          }
+        </div>
+      `,
+      confirmButtonColor: "#3B82F6",
     });
 
-    // Reset form after submission
+    // Reset form
     setName("");
     setDescription("");
     setFile(null);
@@ -76,126 +139,143 @@ const SubmitComplaint = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-10 p-8 bg-gradient-to-br from-blue-50 to-purple-50 shadow-2xl rounded-2xl border border-white/20">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">
+    <div className="max-w-2xl mx-auto my-4 p-4 bg-white rounded-xl shadow-lg">
+      <div className="text-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
           Report an Issue
-        </h2>
-        <p className="text-gray-600">Help us make our city better</p>
+        </h1>
+        <p className="text-gray-600 text-sm">Help improve our community</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Anonymous Toggle */}
-        <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={isAnonymous}
-                onChange={() => setIsAnonymous(!isAnonymous)}
-                className="sr-only"
-              />
-              <div
-                className={`w-12 h-6 rounded-full transition-colors ${
-                  isAnonymous ? "bg-blue-500" : "bg-gray-300"
-                }`}
-              >
-                <div
-                  className={`absolute top-1 w-4 h-4 bg-white rounded-full transform transition-transform ${
-                    isAnonymous ? "translate-x-6" : "translate-x-1"
-                  }`}
-                ></div>
-              </div>
-            </div>
+        <div className="bg-gray-50 p-3 rounded-lg">
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+            />
             <span className="text-gray-700 font-medium">
               Submit Anonymously
             </span>
           </label>
         </div>
 
-        {/* Name Input */}
+        {/* Name Field */}
         {!isAnonymous && (
-          <div className="relative">
-            <FiUser className="absolute top-4 left-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border-0 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              required
-            />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-700">
+              Your Name
+            </label>
+            <div className="relative">
+              <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
           </div>
         )}
 
-        {/* Description */}
-        <div className="relative">
-          <FiMail className="absolute top-4 left-4 text-gray-400" />
-          <textarea
-            placeholder="Describe your complaint in detail..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-0 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none h-40"
-            required
-          />
+        {/* Description Field */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">
+            Description
+          </label>
+          <div className="relative">
+            <FiMail className="absolute left-3 top-4 text-gray-400" />
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe the issue in detail..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-32"
+              required
+            />
+          </div>
         </div>
 
-        {/* File Upload */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors">
-          <label className="cursor-pointer">
-            <div className="space-y-2">
-              <FiFile className="inline-block text-3xl text-gray-400" />
-              <div className="text-gray-600">
-                {file ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <span>{file.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => setFile(null)}
-                      className="text-red-500 hover:text-red-600"
-                    >
-                      <FiX />
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <p className="font-medium">
-                      Drag & drop or click to upload
-                    </p>
-                    <p className="text-sm">(Image, Video, PDF - Max 10MB)</p>
-                  </>
-                )}
+        {/* Media Upload Section */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700">Add Media</label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => cameraInputRef.current.click()}
+              className="flex flex-col items-center justify-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+            >
+              <FiCamera className="w-6 h-6 text-blue-600 mb-2" />
+              <span className="text-sm text-gray-700">Take Photo</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current.click()}
+              className="flex flex-col items-center justify-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+            >
+              <FiImage className="w-6 h-6 text-purple-600 mb-2" />
+              <span className="text-sm text-gray-700">Choose File</span>
+            </button>
+          </div>
+
+          {/* Hidden Inputs */}
+          <input
+            type="file"
+            ref={cameraInputRef}
+            accept="image/*"
+            capture="environment"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*, video/*, application/pdf"
+            onChange={handleFileChange}
+            className="hidden"
+          />
+
+          {/* File Preview */}
+          {file && (
+            <div className="p-3 bg-gray-50 rounded-lg flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FiFile className="text-gray-500" />
+                <span className="text-sm font-medium">{file.name}</span>
               </div>
-              <input
-                type="file"
-                accept="image/*,video/*,.pdf"
-                onChange={handleFileChange}
-                className="hidden"
-              />
+              <button
+                type="button"
+                onClick={() => setFile(null)}
+                className="text-red-500 hover:text-red-600"
+              >
+                <FiX className="w-5 h-5" />
+              </button>
             </div>
-          </label>
+          )}
         </div>
 
         {/* Location Section */}
-        <div className="space-y-4">
+        <div className="space-y-2">
           <button
             type="button"
             onClick={getLocation}
-            className="w-full flex items-center justify-center gap-2 bg-white text-gray-700 px-6 py-3 rounded-lg shadow-sm hover:shadow-md transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
           >
-            <FiMapPin className="text-blue-500" />
-            {location ? "Update Location" : "Add Current Location"}
+            <FiMapPin className="text-blue-600" />
+            <span className="text-sm font-medium">
+              {location ? "Update Location" : "Add Current Location"}
+            </span>
           </button>
 
           {location && (
-            <div className="p-4 bg-white rounded-lg shadow-sm">
-              <p className="text-sm font-medium text-gray-700">
-                <FiMapPin className="inline-block mr-2 text-blue-500" />
-                Location captured:{" "}
-                <span className="text-green-600">
-                  {location.latitude.toFixed(4)},{" "}
-                  {location.longitude.toFixed(4)}
-                </span>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600">
+                <FiMapPin className="inline mr-2 text-blue-600" />
+                {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
               </p>
             </div>
           )}
@@ -204,9 +284,9 @@ const SubmitComplaint = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transform transition hover:scale-[1.01]"
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
         >
-          Submit Report
+          Submit Complaint
         </button>
       </form>
     </div>
