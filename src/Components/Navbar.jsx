@@ -8,13 +8,13 @@ const NavBar = () => {
 
   const navOptions = (
     <div className="flex flex-wrap gap-4">
-      <Link
+      {/* <Link
         to="/"
         // className="px-6 py-2 border border-gray-400 rounded-md text-gray-700 hover:bg-gray-100 transition"
         className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
       >
         MyGov Login
-      </Link>
+      </Link> */}
       <Link
         to="/aboutUs"
         className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
