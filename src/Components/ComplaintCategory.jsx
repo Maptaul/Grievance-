@@ -7,45 +7,33 @@ const ComplaintCategory = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/category.json") // ✅ Corrected path for Netlify
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to load data");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setComplaints(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+    fetch("/category.json")
+      .then((response) => response.json())
+      .then((data) => setComplaints(data), setLoading(false))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
+  if (loading) return <Loading />;
 
   return (
-    <div className="my-10">
+    <div className="my-10 px-4">
       <h2 className="text-3xl font-bold text-center mb-6">
         Select Complaint Category
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {complaints.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center bg-base-200 p-4 rounded-xl shadow-md hover:shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
+            className="flex flex-col items-center bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all"
           >
-            <span className="text-4xl">{item.icon}</span>
-            <p className="mt-2 text-lg font-semibold">{item.category}</p>
+            <span className="text-4xl mb-2">{item.icon}</span>
+            <p className="text-lg font-semibold text-center">{item.category}</p>
             <Link
-              to={`/submit-complaint?category=${encodeURIComponent(
-                item.category
-              )}`}
-              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-green-700 transition"
+              to={{
+                pathname: "/submit-complaint",
+                search: `?category=${encodeURIComponent(item.category)}`,
+              }}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               Make a Complaint
             </Link>

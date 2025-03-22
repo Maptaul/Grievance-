@@ -8,9 +8,12 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
+import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SubmitComplaint = () => {
+  const [searchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -30,23 +33,19 @@ const SubmitComplaint = () => {
       "video/mp4",
       "application/pdf",
     ];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
 
     if (!validTypes.includes(selectedFile.type)) {
-      Swal.fire({
-        icon: "error",
-        title: "Invalid File Type",
-        text: "Please upload JPEG, PNG, MP4, or PDF files",
-      });
+      Swal.fire(
+        "Invalid File Type",
+        "Please upload JPEG, PNG, MP4, or PDF files",
+        "error"
+      );
       return;
     }
 
     if (selectedFile.size > maxSize) {
-      Swal.fire({
-        icon: "error",
-        title: "File Too Large",
-        text: "Maximum file size is 10MB",
-      });
+      Swal.fire("File Too Large", "Maximum file size is 10MB", "error");
       return;
     }
 
@@ -64,28 +63,23 @@ const SubmitComplaint = () => {
           Swal.fire({
             icon: "success",
             title: "Location Captured!",
-            text: `Latitude: ${position.coords.latitude.toFixed(
-              4
-            )}\nLongitude: ${position.coords.longitude.toFixed(4)}`,
+            html: `Latitude: ${position.coords.latitude.toFixed(4)}<br>
+                  Longitude: ${position.coords.longitude.toFixed(4)}`,
             timer: 2000,
             showConfirmButton: false,
           });
         },
         (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Location Error",
-            text: "Please enable location services to continue",
-          });
+          Swal.fire(
+            "Location Error",
+            "Please enable location services",
+            "error"
+          );
           console.error("Location error:", error);
         }
       );
     } else {
-      Swal.fire({
-        icon: "error",
-        title: "Unsupported Feature",
-        text: "Geolocation is not supported by your device",
-      });
+      Swal.fire("Unsupported Feature", "Geolocation not supported", "error");
     }
   };
 
@@ -93,15 +87,12 @@ const SubmitComplaint = () => {
     e.preventDefault();
 
     if (!description.trim()) {
-      Swal.fire({
-        icon: "error",
-        title: "Missing Information",
-        text: "Please provide a description of your complaint",
-      });
+      Swal.fire("Missing Information", "Please provide a description", "error");
       return;
     }
 
     const complaintData = {
+      category: selectedCategory,
       name: isAnonymous ? "Anonymous" : name,
       description,
       file,
@@ -111,16 +102,16 @@ const SubmitComplaint = () => {
 
     console.log("Submitted complaint:", complaintData);
 
-    // Show success message
     Swal.fire({
       icon: "success",
       title: "Complaint Submitted!",
       html: `
         <div class="text-left">
-          <p>We've received your complaint and will process it shortly.</p>
+          <p class="font-semibold">Category: ${selectedCategory}</p>
+          <p class="mt-2">We've received your complaint and will process it shortly.</p>
           ${
             location
-              ? `<p class="mt-2">Location: ${location.latitude.toFixed(
+              ? `<p class="mt-2 text-sm">Location: ${location.latitude.toFixed(
                   4
                 )}, ${location.longitude.toFixed(4)}</p>`
               : ""
@@ -141,6 +132,13 @@ const SubmitComplaint = () => {
   return (
     <div className="max-w-2xl mx-auto my-4 p-4 bg-white rounded-xl shadow-lg">
       <div className="text-center mb-6">
+        {selectedCategory && (
+          <div className="mt-4">
+            <span className="font-bold text-lg bg-blue-100 text-fuchsia-600 px-4 py-2 rounded-full inline-block mt-2">
+              Selected Category: {selectedCategory}
+            </span>
+          </div>
+        )}
         <h1 className="text-2xl font-bold text-gray-800 mb-2">
           Report an Issue
         </h1>
