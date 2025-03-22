@@ -6,7 +6,7 @@ import Navbar from "../Components/Navbar";
 const Root = () => {
   return (
     <div className=" bg-base-200 min-h-screen ">
-      <header className="w-11/12 mx-auto">
+      <header className="">
         <Navbar />
       </header>
       <main className="min-h-screen">

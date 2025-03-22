@@ -33,7 +33,7 @@ const NavBar = () => {
   );
 
   return (
-    <nav className="navbar sticky top-0 z-10 w-full bg-base-200 bg-opacity-30 shadow-md p-4 flex items-center justify-between">
+    <nav className="navbar w-11/12 mx-auto sticky top-0 z-10  bg-base-200 bg-opacity-30  p-4 flex items-center justify-between">
       {/* Left Side - Logo and Menu */}
       <div className="flex items-center space-x-2">
         <button
