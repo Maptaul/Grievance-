@@ -5,6 +5,8 @@ import Root from "./Layouts/Root";
 import ComplaintCategory from "./Components/ComplaintCategory";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import SubmitComplaint from "./pages/SubmitComplaint";
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/complaint-category" element={<ComplaintCategory />} />
         <Route path="/submit-complaint" element={<SubmitComplaint />} />
         <Route path="*" element={<ErrorPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signUp" element={<SignUp />} />
       </Route>
     </Routes>
   );

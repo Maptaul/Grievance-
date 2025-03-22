@@ -18,13 +18,13 @@ const NavBar = () => {
         MyGov Login
       </Link> */}
       <Link
-        to="/aboutUs"
+        to="/login"
         className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
       >
         Complainant Login
       </Link>
       <Link
-        to="/contact"
+        to="/login"
         className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
       >
         Administrative Login
