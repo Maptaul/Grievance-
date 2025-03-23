@@ -1,34 +1,43 @@
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaHome } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import user from "../assets/download.png";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/original.png";
+import { AuthContext } from "../Providers/AuthProvider"; // Import your auth context
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logOut } = useContext(AuthContext); // Get user and logout from context
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+  };
 
   const navOptions = (
     <div className="flex flex-wrap gap-4">
-      {/* <Link
-        to="/"
-        // className="px-6 py-2 border border-gray-400 rounded-md text-gray-700 hover:bg-gray-100 transition"
-        className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
-      >
-        MyGov Login
-      </Link> */}
-      <Link
-        to="/login"
-        className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
-      >
-        Complainant Login
-      </Link>
-      <Link
-        to="/login"
-        className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
-      >
-        Administrative Login
-      </Link>
+      {!user ? (
+        <>
+          <Link
+            to="/login"
+            className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
+          >
+            Complainant Login
+          </Link>
+          <Link
+            to="/login"
+            className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
+          >
+            Administrative Login
+          </Link>
+        </>
+      ) : null}
     </div>
   );
 
@@ -56,26 +65,34 @@ const NavBar = () => {
       </div>
 
       {/* Right Side - Profile */}
-      <div className="flex items-center gap-4">
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-            <div className="w-12 rounded-full">
-              <img src={user} alt="User" />
-            </div>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-200 bg-opacity-30 shadow-md rounded-box  mt-3 w-auto p-4"
-          >
-            <li className="text-center mb-2 rounded-md bg-[#e9e2e222]">
-              <Link to="/dashboard">Dashboard </Link>
-            </li>
-            <li>
-              <button className="bg-[#e9e2e222]">Log Out</button>
-            </li>
-          </ul>
+      {user ? (
+        <div className="flex items-center gap-4">
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <div className="w-12 rounded-full">
+                <img
+                  src={user?.photoURL || user} // Use user's photo or default image
+                  alt="User"
+                  referrerPolicy="no-referrer" // For Google images
+                />
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-200 bg-opacity-30 shadow-md rounded-box mt-3 w-auto p-4"
+            >
+              <li className="text-center mb-2 rounded-md bg-[#e9e2e222]">
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <button className="bg-[#e9e2e222]" onClick={handleLogout}>
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Mobile Menu */}
       {isOpen && (

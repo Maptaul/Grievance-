@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import SubmitComplaint from "./pages/SubmitComplaint";
+import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
   return (
@@ -15,7 +16,14 @@ function App() {
       <Route path="/" element={<Root />}>
         <Route index element={<Home />} />
         <Route path="/complaint-category" element={<ComplaintCategory />} />
-        <Route path="/submit-complaint" element={<SubmitComplaint />} />
+        <Route
+          path="/submit-complaint"
+          element={
+            <PrivateRoute>
+              <SubmitComplaint />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
