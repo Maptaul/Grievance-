@@ -4,10 +4,10 @@ import { Link } from "react-router-dom"; // Fixed import issue
 
 const Banner = () => {
   return (
-    <div className="mt-8 bg-gray-100 rounded-lg p-6 shadow-md flex flex-col md:flex-row justify-between items-center">
+    <div className="mt-8 bg-gray-100 rounded-lg p-6 shadow-md flex flex-col items-center">
       {/* Text Section */}
-      <div className="w-full md:w-8/12 ">
-        <p className="text-lg leading-relaxed text-center">
+      <div className="w-full md:w-8/12  mb-10">
+        <p className="text-xl leading-relaxed text-center">
           Welcome to the <b>Central Grievance Platform</b> of the{" "}
           <b>Chittagong City Corporation, Bangladesh</b> is dedicated to
           ensuring transparency, accountability, and responsiveness in
@@ -17,12 +17,11 @@ const Banner = () => {
           </Link> */}
         </p>
       </div>
-
       {/* Button Section */}
-      <div className="w-full md:w-4/12 flex justify-center  ">
+      <div className="w-full md:w-4/12 flex justify-center">
         <Link
           to="/submit-complaint"
-          className="flex items-center bg-white border border-gray-300 rounded-full px-5 py-3 shadow-md hover:shadow-lg transition-transform transform hover:scale-105 relative"
+          className="flex items-center bg-white border border-gray-300 rounded-full px-3 py-2 shadow-md hover:shadow-lg transition-transform transform hover:scale-105 relative"
         >
           <span className="text-purple-700 font-semibold text-md">
             Submit Grievance

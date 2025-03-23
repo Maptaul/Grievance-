@@ -7,7 +7,7 @@ const ComplaintCategory = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/category.json")
+    fetch("http://localhost:3000/category")
       .then((response) => response.json())
       .then((data) => setComplaints(data), setLoading(false))
       .catch((error) => console.error("Error fetching data:", error));

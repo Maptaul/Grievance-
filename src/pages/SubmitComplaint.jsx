@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import {
   FiCamera,
@@ -10,6 +11,8 @@ import {
 } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SubmitComplaint = () => {
   const [searchParams] = useSearchParams();
@@ -83,7 +86,7 @@ const SubmitComplaint = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!description.trim()) {
@@ -91,42 +94,68 @@ const SubmitComplaint = () => {
       return;
     }
 
-    const complaintData = {
-      category: selectedCategory,
-      name: isAnonymous ? "Anonymous" : name,
-      description,
-      file,
-      location,
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      let fileUrl = "";
+      // Upload file if exists
+      if (file) {
+        const formData = new FormData();
+        formData.append("image", file);
 
-    console.log("Submitted complaint:", complaintData);
+        const imgResponse = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
+          formData
+        );
+        fileUrl = imgResponse.data.data.display_url;
+      }
 
-    Swal.fire({
-      icon: "success",
-      title: "Complaint Submitted!",
-      html: `
-        <div class="text-left">
-          <p class="font-semibold">Category: ${selectedCategory}</p>
-          <p class="mt-2">We've received your complaint and will process it shortly.</p>
-          ${
-            location
-              ? `<p class="mt-2 text-sm">Location: ${location.latitude.toFixed(
-                  4
-                )}, ${location.longitude.toFixed(4)}</p>`
-              : ""
-          }
-        </div>
-      `,
-      confirmButtonColor: "#3B82F6",
-    });
+      const complaintData = {
+        category: selectedCategory,
+        name: isAnonymous ? "Anonymous" : name,
+        description,
+        fileUrl,
+        location,
+        status: "Pending",
+        timestamp: new Date().toISOString(),
+      };
 
-    // Reset form
-    setName("");
-    setDescription("");
-    setFile(null);
-    setLocation(null);
-    setIsAnonymous(false);
+      // Send to your server
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
+
+      if (!response.ok) throw new Error("Failed to submit complaint");
+
+      Swal.fire({
+        icon: "success",
+        title: "Complaint Submitted!",
+        html: `
+          <div class="text-left">
+            <p class="font-semibold">Category: ${selectedCategory}</p>
+            <p class="mt-2">We've received your complaint and will process it shortly.</p>
+            ${
+              location
+                ? `<p class="mt-2 text-sm">Location: ${location.latitude.toFixed(
+                    4
+                  )}, ${location.longitude.toFixed(4)}</p>`
+                : ""
+            }
+          </div>
+        `,
+        confirmButtonColor: "#3B82F6",
+      });
+
+      // Reset form
+      setName("");
+      setDescription("");
+      setFile(null);
+      setLocation(null);
+      setIsAnonymous(false);
+    } catch (error) {
+      console.error("Submission Error:", error);
+      Swal.fire("Error", "Failed to submit complaint", "error");
+    }
   };
 
   return (

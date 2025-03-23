@@ -98,6 +98,23 @@
             "Spread of infectious diseases",
             "Contaminated water supply"
           ]
+        },
+        {
+          "category": "The Sidewalk",
+          "icon": "🛣️",
+          "issues": [
+            "Potholes on roads",
+            "Broken sidewalks",
+            "Damaged bridges",
+            "Blocked roads"
+          ]
+        },
+        {
+          "category": "Others",
+          "icon": "🛠️",
+          "issues": [
+            "Other issues"
+          ]
         }
       ]
       

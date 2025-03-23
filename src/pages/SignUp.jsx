@@ -1,3 +1,4 @@
+import axios from "axios";
 import Lottie from "lottie-react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -5,14 +6,17 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-
 import registrationLottie from "../assets/lottie/register.json";
 import { AuthContext } from "../Providers/AuthProvider";
 
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+
 const SignUp = () => {
-  const { createUser, googleSignIn, updateUserProfile, githubSignIn } =
+  const { createUser, googleSignIn, updateUserProfile } =
     useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
+  const [image, setImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -22,294 +26,263 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  // Password validation function
+  // Handle image upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
+        formData
+      );
+      setImage(res.data.data.display_url);
+    } catch (error) {
+      toast.error("Image upload failed");
+    }
+  };
+
+  // Password validation
   const validatePassword = (password) => {
     const upperCase = /[A-Z]/;
     const lowerCase = /[a-z]/;
     const minLength = 6;
 
-    if (!upperCase.test(password)) {
-      return "Password must include at least one uppercase letter.";
-    }
-    if (!lowerCase.test(password)) {
-      return "Password must include at least one lowercase letter.";
-    }
-    if (password.length < minLength) {
-      return "Password must be at least 6 characters long.";
-    }
+    if (!upperCase.test(password))
+      return "At least one uppercase letter required";
+    if (!lowerCase.test(password))
+      return "At least one lowercase letter required";
+    if (password.length < minLength) return "Minimum 6 characters required";
     return true;
   };
 
-  // Handle standard registration
+  // Form submission
   const onSubmit = async (data) => {
-    const { name, email, photo, password, role } = data;
-
+    setIsSubmitting(true);
     try {
-      // Create user with Firebase
-      const userCredential = await createUser(email, password);
-      const createdUser = userCredential.user;
+      // Create user
+      const userCredential = await createUser(data.email, data.password);
 
-      // Update user profile
-      await updateUserProfile(name, photo);
+      // Update profile with image URL from state
+      await updateUserProfile(data.name, image || data.photo);
 
-      // Save user data to the database
+      // Prepare user data
       const newUser = {
-        name,
-        email,
-        photo,
-        role,
+        name: data.name,
+        email: data.email,
+        photo: image || data.photo,
+        role: data.role,
         createdAt: new Date().toISOString(),
       };
-      const response = await fetch(
-        "https://learn-bridge-server-two.vercel.app/users",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
-        }
-      );
 
-      if (response.ok) {
-        console.log("user added to the database");
-        reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "User created successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/");
-      }
+      // Save to database
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
+
+      if (!response.ok) throw new Error("Database save failed");
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Registration Successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/");
     } catch (error) {
-      console.error("Registration Error:", error);
-      toast.error("Error during registration. Please try again.");
+      toast.error(error.message || "Registration failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Handle Google sign-in
+  // Google sign-in handler
   const handleGoogleLogin = async () => {
     try {
-      // Sign in with Google
       const result = await googleSignIn();
       const user = result.user;
 
-      if (user) {
-        // Extract user data
-        const { displayName: name, email, photoURL: photo } = user;
+      const newUser = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        role: "citizen",
+        createdAt: new Date().toISOString(),
+      };
 
-        // Prepare user data
-        const newUser = {
-          name,
-          email,
-          photo,
-          role: "student", // Default role; adjust as needed
-          createdAt: new Date().toISOString(),
-        };
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
 
-        // Save user data to the database
-        const response = await fetch(
-          "https://learn-bridge-server-two.vercel.app/users",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newUser),
-          }
-        );
+      if (!response.ok) throw new Error("Database save failed");
 
-        if (response.ok) {
-          toast.success("Google sign-in successful and data saved!");
-          navigate("/");
-        } else {
-          throw new Error("Failed to save user data.");
-        }
-      }
+      toast.success("Google registration successful!");
+      navigate("/");
     } catch (error) {
-      console.error("Google Login Error:", error);
-      toast.error("Error during Google sign-in. Please try again.");
-    }
-  };
-
-  const handleGithubLogin = async () => {
-    try {
-      // Sign in with GitHub
-      const result = await githubSignIn();
-      const user = result.user;
-
-      if (user) {
-        // Extract user data
-        const name = user.displayName || "GitHub User";
-        const email = user.email || null; // GitHub email may be null
-        const photo = user.photoURL || "https://via.placeholder.com/150";
-
-        // Ensure email is present
-        if (!email) {
-          toast.error(
-            "GitHub account email is not available. Please use another method."
-          );
-          return;
-        }
-
-        // Prepare user data
-        const newUser = {
-          name,
-          email,
-          photo,
-          role: "student",
-          createdAt: new Date().toISOString(),
-        };
-
-        // Save user data to the database
-        const response = await fetch(
-          "https://learn-bridge-server-two.vercel.app/users",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newUser),
-          }
-        );
-
-        const responseData = await response.json();
-        console.log("📩 Server Response:", responseData);
-
-        if (response.ok) {
-          toast.success("✅ User registered successfully!");
-          reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "User created successfully",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          navigate("/");
-        } else {
-          toast.error(`❌ Error: ${responseData.message}`);
-        }
-      }
-    } catch (error) {
-      console.error("GitHub Login Error:", error);
-      toast.error("Error during GitHub sign-in. Please try again.");
+      toast.error(error.message || "Google sign-in failed");
     }
   };
 
   return (
-    <div className="min-h-screen md:flex justify-center items-center mb-10">
-      <div className="text-center lg:text-left w-96">
-        <Lottie animationData={registrationLottie} loop />
+    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4">
+      <div className="w-full md:w-1/2 max-w-md mb-8 md:mb-0">
+        <Lottie
+          animationData={registrationLottie}
+          loop
+          className="rounded-lg"
+        />
       </div>
-      <div className="card bg-base-100 w-full max-w-lg shrink-0 rounded-md p-10 text-black">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          Create an Account
+
+      <div className="w-full md:w-1/2 max-w-md bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Create Account
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block font-medium text-gray-700">Name</label>
+          {/* Name Field */}
+          <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Full Name
+            </label>
             <input
               type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-              placeholder="Enter your name"
               {...register("name", { required: "Name is required" })}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="John Doe"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
             )}
           </div>
 
-          <div>
-            <label className="block font-medium text-gray-700">Email</label>
+          {/* Email Field */}
+          <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email
+            </label>
             <input
               type="email"
-              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-              placeholder="Enter your email"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Invalid email format",
                 },
               })}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="john@example.com"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
-          <div>
-            <label className="block font-medium text-gray-700">Photo URL</label>
+          {/* Image Upload */}
+          <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Profile Image
+            </label>
             <input
-              type="text"
-              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-              placeholder="Photo URL"
-              {...register("photo", { required: "Photo URL is required" })}
+              type="file"
+              onChange={handleImageUpload}
+              className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
             />
             {errors.photo && (
-              <p className="text-red-500 text-sm">{errors.photo.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.photo.message}
+              </p>
             )}
           </div>
 
-          <div>
-            <label className="block font-medium text-gray-700">
+          {/* Role Selection */}
+          <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Select Role
             </label>
             <select
-              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
               {...register("role", { required: "Role selection is required" })}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="" disabled>
-                Choose your role
-              </option>
+              <option value="">Select Role</option>
               <option value="citizen">Citizen</option>
               <option value="administrative">Administrative</option>
             </select>
             {errors.role && (
-              <p className="text-red-500 text-sm">{errors.role.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
             )}
           </div>
 
-          <div>
-            <label className="block font-medium text-gray-700">Password</label>
+          {/* Password Field */}
+          <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                placeholder="Enter password"
                 {...register("password", { validate: validatePassword })}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="••••••••"
               />
-              <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+              <button
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
+              </button>
             </div>
             {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg font-bold"
+            disabled={isSubmitting}
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
           >
-            Register
+            {isSubmitting ? "Registering..." : "Create Account"}
           </button>
         </form>
 
-        <div className="text-center mt-4">
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full py-2 flex items-center justify-center border rounded-lg hover:bg-gray-100"
-          >
-            <FaGoogle className="mr-2 text-red-500" /> Register with Google
-          </button>
+        <div className="my-6 flex items-center">
+          <div className="flex-1 border-t border-gray-300"></div>
+          <span className="px-4 text-gray-500 text-sm">OR</span>
+          <div className="flex-1 border-t border-gray-300"></div>
         </div>
 
-        <p className="text-center text-gray-600 mt-5">
+        {/* Google Sign-In Button */}
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <FaGoogle className="text-red-500" />
+          <span className="text-gray-700 font-medium">
+            Continue with Google
+          </span>
+        </button>
+
+        <p className="text-center mt-6 text-gray-600">
           Already have an account?{" "}
-          <Link className="text-blue-500 font-semibold" to="/login">
-            Login
+          <Link
+            to="/login"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Login here
           </Link>
         </p>
       </div>
