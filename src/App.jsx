@@ -3,6 +3,8 @@ import "./App.css";
 import Root from "./Layouts/Root";
 
 import ComplaintCategory from "./Components/ComplaintCategory";
+
+import Dashboard from "./Layouts/Dashboard";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -21,6 +23,14 @@ function App() {
           element={
             <PrivateRoute>
               <SubmitComplaint />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
             </PrivateRoute>
           }
         />
