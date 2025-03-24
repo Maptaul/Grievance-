@@ -6,18 +6,19 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import registrationLottie from "../assets/lottie/register.json";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SignUp = () => {
-  const { createUser, googleSignIn, updateUserProfile } =
-    useContext(AuthContext);
+  const { createUser, googleSignIn, updateUserProfile } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Initialize translation hook
 
   const {
     register,
@@ -40,7 +41,7 @@ const SignUp = () => {
       );
       setImage(res.data.data.display_url);
     } catch (error) {
-      toast.error("Image upload failed");
+      toast.error(t("submission_failed")); // Translated "Image upload failed"
     }
   };
 
@@ -70,18 +71,18 @@ const SignUp = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Database save failed");
+      if (!response.ok) throw new Error(t("submission_failed"));
 
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: "Registration Successful!",
+        title: t("registration_successful"), // Translated "Registration Successful!"
         showConfirmButton: false,
         timer: 1500,
       });
       navigate("/");
     } catch (error) {
-      toast.error(error.message || "Registration failed");
+      toast.error(error.message || t("submission_failed")); // Translated fallback
     } finally {
       setIsSubmitting(false);
     }
@@ -99,20 +100,20 @@ const SignUp = () => {
 
       <div className="w-full md:w-1/2 max-w-md bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-200">
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
-          Create Account
+          {t("create_account")} {/* Translated "Create Account" */}
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Name Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
+              {t("your_name")} {/* Translated "Full Name" */}
             </label>
             <input
               type="text"
-              {...register("name", { required: "Name is required" })}
+              {...register("name", { required: t("name_required") })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              placeholder="John Doe"
+              placeholder={t("name_placeholder")}
             />
             {errors.name && (
               <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -122,13 +123,13 @@ const SignUp = () => {
           {/* Email Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+              {t("your_name_override")} {/* Translated "Email" */}
             </label>
             <input
               type="email"
-              {...register("email", { required: "Email is required" })}
+              {...register("email", { required: t("email_required") })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              placeholder="john@example.com"
+              placeholder={t("name_placeholder_override")}
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -138,7 +139,7 @@ const SignUp = () => {
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Profile Image
+              {t("profile_image")} {/* Translated "Profile Image" */}
             </label>
             <input
               type="file"
@@ -150,29 +151,32 @@ const SignUp = () => {
           {/* Role Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Select Role
+              {t("select_role")} {/* Translated "Select Role" */}
             </label>
             <select
-              {...register("role", { required: "Role selection is required" })}
+              {...register("role", { required: t("role_required") })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
             >
-              <option value="">Select Role</option>
-              <option value="citizen">Citizen</option>
-              <option value="administrative">Administrative</option>
+              <option value="">{t("select_role_placeholder")}</option>
+              <option value="citizen">{t("citizen")}</option>
+              <option value="administrative">{t("administrative")}</option>
             </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm">{errors.role.message}</p>
+            )}
           </div>
 
           {/* Password Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+              {t("description_label_override")} {/* Translated "Password" */}
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                placeholder="••••••••"
+                placeholder={t("description_placeholder_override")}
               />
               <button
                 type="button"
@@ -190,13 +194,13 @@ const SignUp = () => {
             disabled={isSubmitting}
             className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
           >
-            {isSubmitting ? "Registering..." : "Create Account"}
+            {isSubmitting ? t("registering") : t("create_account")}
           </button>
         </form>
 
         <div className="my-6 flex items-center">
           <div className="flex-1 border-t border-gray-300"></div>
-          <span className="px-4 text-gray-500 text-sm">OR</span>
+          <span className="px-4 text-gray-500 text-sm">{t("or")}</span>
           <div className="flex-1 border-t border-gray-300"></div>
         </div>
 
@@ -207,17 +211,17 @@ const SignUp = () => {
         >
           <FaGoogle className="text-red-500" />
           <span className="text-gray-700 font-medium">
-            Continue with Google
+            {t("login_with_google")}
           </span>
         </button>
 
         <p className="text-center mt-6 text-gray-600">
-          Already have an account?{" "}
+          {t("already_have_account")}{" "}
           <Link
             to="/login"
             className="text-blue-600 hover:text-blue-800 font-semibold"
           >
-            Login here
+            {t("complainant_login_override")}
           </Link>
         </p>
       </div>

@@ -70,6 +70,29 @@ const resources = {
       error: "Error",
       submission_failed: "Failed to submit complaint",
       submit_complaint: "Submit Complaint",
+      complainant_login_override: "Please Login", // Renamed to avoid duplication
+      your_name_override: "Email", // Renamed to avoid duplication
+      description_label_override: "Password", // Renamed to avoid duplication
+      login_with_google: "Login with Google",
+      dont_have_account: "Don’t have an account?",
+      register: "Register",
+      or: "OR",
+      login_successful: "Login Successful",
+      submit_complaint_override: "Login", // Renamed to avoid duplication
+      name_placeholder_override: "Enter your email", // Renamed to avoid duplication
+      description_placeholder_override: "Enter your password",
+      create_account: "Create Account",
+      profile_image: "Profile Image",
+      select_role: "Select Role",
+      select_role_placeholder: "Select Role",
+      citizen: "Citizen",
+      administrative: "Administrative",
+      name_required: "Name is required",
+      email_required: "Email is required",
+      role_required: "Role selection is required",
+      registering: "Registering...",
+      already_have_account: "Already have an account?",
+      registration_successful: "Registration Successful!",
     },
   },
   bn: {
@@ -141,6 +164,29 @@ const resources = {
       error: "ত্রুটি",
       submission_failed: "অভিযোগ জমা দিতে ব্যর্থ হয়েছে",
       submit_complaint: "অভিযোগ জমা দিন",
+      complainant_login_override: "লগইন করুন", // Updated for "Please Login"
+      your_name_override: "ইমেইল", // Overriding for email context
+      description_label_override: "পাসওয়ার্ড", // Overriding for password context
+      login_with_google: "গুগল দিয়ে লগইন করুন",
+      dont_have_account: "অ্যাকাউন্ট নেই?",
+      register: "নিবন্ধন করুন",
+      or: "অথবা",
+      login_successful: "লগইন সফল",
+      submit_complaint_override: "লগইন", // Overriding for login context
+      name_placeholder_override: "আপনার ইমেইল লিখুন",
+      description_placeholder_override: "আপনার পাসওয়ার্ড লিখুন",
+      create_account: "অ্যাকাউন্ট তৈরি করুন",
+      profile_image: "প্রোফাইল ছবি",
+      select_role: "ভূমিকা নির্বাচন করুন",
+      select_role_placeholder: "ভূমিকা নির্বাচন করুন",
+      citizen: "নাগরিক",
+      administrative: "প্রশাসনিক",
+      name_required: "নাম আবশ্যক",
+      email_required: "ইমেইল আবশ্যক",
+      role_required: "ভূমিকা নির্বাচন আবশ্যক",
+      registering: "নিবন্ধন হচ্ছে...",
+      already_have_account: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+      registration_successful: "নিবন্ধন সফল!",
     },
   },
 };
