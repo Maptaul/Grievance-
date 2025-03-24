@@ -1,0 +1,15 @@
+{
+        "title": "Create Account",
+        "fullName": "Full Name",
+        "email": "Email",
+        "password": "Password",
+        "role": "Select Role",
+        "profileImage": "Profile Image",
+        "citizen": "Citizen",
+        "admin": "Administrative",
+        "submit": "Create Account",
+        "googleSignIn": "Continue with Google",
+        "alreadyAccount": "Already have an account?",
+        "loginHere": "Login here"
+      }
+      
