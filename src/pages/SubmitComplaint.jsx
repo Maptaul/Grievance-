@@ -120,7 +120,7 @@ const SubmitComplaint = () => {
 
       // Send to your server
       const response = await fetch(
-        "https://grievance-server.vercel.app/complaints",
+        "http://localhost:3000/complaints",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

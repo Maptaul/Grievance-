@@ -22,7 +22,6 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -45,31 +44,15 @@ const SignUp = () => {
     }
   };
 
-  // Password validation
-  const validatePassword = (password) => {
-    const upperCase = /[A-Z]/;
-    const lowerCase = /[a-z]/;
-    const minLength = 6;
-
-    if (!upperCase.test(password))
-      return "At least one uppercase letter required";
-    if (!lowerCase.test(password))
-      return "At least one lowercase letter required";
-    if (password.length < minLength) return "Minimum 6 characters required";
-    return true;
-  };
-
   // Form submission
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
       // Create user
-      const userCredential = await createUser(data.email, data.password);
-
-      // Update profile with image URL from state
+      await createUser(data.email, data.password);
       await updateUserProfile(data.name, image || data.photo);
 
-      // Prepare user data
+      // Save to database
       const newUser = {
         name: data.name,
         email: data.email,
@@ -78,15 +61,11 @@ const SignUp = () => {
         createdAt: new Date().toISOString(),
       };
 
-      // Save to database
-      const response = await fetch(
-        "https://grievance-server.vercel.app/users",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
-        }
-      );
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
 
       if (!response.ok) throw new Error("Database save failed");
 
@@ -105,38 +84,6 @@ const SignUp = () => {
     }
   };
 
-  // Google sign-in handler
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await googleSignIn();
-      const user = result.user;
-
-      const newUser = {
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-        role: "citizen",
-        createdAt: new Date().toISOString(),
-      };
-
-      const response = await fetch(
-        "https://grievance-server.vercel.app/users",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
-        }
-      );
-
-      if (!response.ok) throw new Error("Database save failed");
-
-      toast.success("Google registration successful!");
-      navigate("/");
-    } catch (error) {
-      toast.error(error.message || "Google sign-in failed");
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4">
       <div className="w-full md:w-1/2 max-w-md mb-8 md:mb-0">
@@ -147,97 +94,81 @@ const SignUp = () => {
         />
       </div>
 
-      <div className="w-full md:w-1/2 max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+      <div className="w-full md:w-1/2 max-w-md bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-200">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
           Create Account
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Name Field */}
-          <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
             </label>
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
               placeholder="John Doe"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+              <p className="text-red-500 text-sm">{errors.name.message}</p>
             )}
           </div>
 
           {/* Email Field */}
-          <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
             <input
               type="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
-                },
-              })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              {...register("email", { required: "Email is required" })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
               placeholder="john@example.com"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
           </div>
 
           {/* Image Upload */}
-          <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Profile Image
             </label>
             <input
               type="file"
               onChange={handleImageUpload}
-              className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              className="w-full file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition-all"
             />
-            {errors.photo && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.photo.message}
-              </p>
-            )}
           </div>
 
           {/* Role Selection */}
-          <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Select Role
             </label>
             <select
               {...register("role", { required: "Role selection is required" })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
             >
               <option value="">Select Role</option>
               <option value="citizen">Citizen</option>
               <option value="administrative">Administrative</option>
             </select>
-            {errors.role && (
-              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
-            )}
           </div>
 
           {/* Password Field */}
-          <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                {...register("password", { validate: validatePassword })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                {...register("password")}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
                 placeholder="••••••••"
               />
               <button
@@ -248,18 +179,13 @@ const SignUp = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
           >
             {isSubmitting ? "Registering..." : "Create Account"}
           </button>
@@ -273,8 +199,8 @@ const SignUp = () => {
 
         {/* Google Sign-In Button */}
         <button
-          onClick={handleGoogleLogin}
-          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          onClick={() => googleSignIn()}
+          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
         >
           <FaGoogle className="text-red-500" />
           <span className="text-gray-700 font-medium">

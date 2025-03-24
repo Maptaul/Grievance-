@@ -1,103 +1,129 @@
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaHome } from "react-icons/fa";
+import { TbWorld } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/original.png";
-import { AuthContext } from "../Providers/AuthProvider"; // Import your auth context
+import { AuthContext } from "../Providers/AuthProvider";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logOut } = useContext(AuthContext); // Get user and logout from context
+  const { user, logOut } = useContext(AuthContext);
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logOut()
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
+      .then(() => navigate("/"))
+      .catch((error) => console.error("Logout error:", error));
   };
 
-  const navOptions = (
-    <div className="flex flex-wrap gap-4">
-      {!user ? (
-        <>
-          <Link
-            to="/login"
-            className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
-          >
-            Complainant Login
-          </Link>
-          <Link
-            to="/login"
-            className="px-6 py-2 btn btn-outlines hover:btn-primary transition"
-          >
-            Administrative Login
-          </Link>
-        </>
-      ) : null}
-    </div>
-  );
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setIsOpen(false);
+  };
 
   return (
-    <nav className="navbar w-11/12 mx-auto sticky top-0 z-10  bg-base-200 bg-opacity-30  p-4 flex items-center justify-between">
-      {/* Left Side - Logo and Menu */}
-      <div className="flex items-center space-x-2">
-        <button
-          className="md:hidden btn btn-ghost"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <Menu size={24} />
-        </button>
-        <Link to="/" className="flex items-center gap-4">
-          <FaHome className="text-3xl" />
-          <img className="w-40 md:w-60" src={logo} alt="Logo" />
-        </Link>
-      </div>
+    <nav className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Left Section - Logo and Mobile Menu */}
+          <div className="flex items-center">
+            <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)}>
+              <Menu size={24} />
+            </button>
+            <Link to="/" className="flex items-center ml-2 md:ml-0">
+              <FaHome className="text-2xl mr-2 text-blue-600" />
+              <img className="h-8 md:h-10" src={logo} alt="Logo" />
+            </Link>
+          </div>
 
-      {/* Center - Navigation Links */}
-      <div className="hidden md:flex space-x-4">
-        <ul className="menu menu-horizontal px-1 text-xl flex space-x-4">
-          {navOptions}
-        </ul>
-      </div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            {!user && (
+              <>
+                <Link to="/login" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
+                  {t("complainant_login")}
+                </Link>
+                <Link to="/login" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">
+                  {t("admin_login")}
+                </Link>
+              </>
+            )}
+          </div>
 
-      {/* Right Side - Profile */}
-      {user ? (
-        <div className="flex items-center gap-4">
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-12 rounded-full">
-                <img
-                  src={user?.photoURL || user} // Use user's photo or default image
-                  alt="User"
-                  referrerPolicy="no-referrer" // For Google images
-                />
+          {/* Right Section - Language & Profile */}
+          <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle">
+                <TbWorld className="text-xl" />
+              </label>
+              <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40">
+                <li><button onClick={() => changeLanguage("en")}>🇺🇸 English</button></li>
+                <li><button onClick={() => changeLanguage("bn")}>🇧🇩 বাংলা</button></li>
+              </ul>
+            </div>
+
+            {/* Profile Dropdown */}
+            {user && (
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={user?.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png"} alt="Profile" />
+                  </div>
+                </label>
+                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40">
+                  <li><Link to="/dashboard">{t("dashboard")}</Link></li>
+                  <li><button onClick={handleLogout}>{t("logout")}</button></li>
+                </ul>
               </div>
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-200 bg-opacity-30 shadow-md rounded-box mt-3 w-auto p-4"
-            >
-              <li className="text-center mb-2 rounded-md bg-[#e9e2e222]">
-                <Link to="/dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <button className="bg-[#e9e2e222]" onClick={handleLogout}>
-                  Log Out
-                </button>
-              </li>
-            </ul>
+            )}
           </div>
         </div>
-      ) : null}
+      </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="absolute top-14 left-0 bg-base-200 bg-opacity-30 shadow-md p-4 space-y-2 grid grid-cols-1 md:hidden">
-          <ul className="menu menu-vertical text-lg">{navOptions}</ul>
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 md:hidden">
+          <div className="absolute left-0 top-0 h-full w-3/4 bg-white shadow-lg p-4">
+            <div className="flex justify-between items-center mb-6">
+              <img className="w-32" src={logo} alt="Logo" />
+              <button onClick={() => setIsOpen(false)}><X size={24} /></button>
+            </div>
+
+            <div className="space-y-4">
+              {!user && (
+                <>
+                  <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full px-4 py-2 text-left hover:bg-gray-100 rounded">
+                    {t("complainant_login")}
+                  </Link>
+                  <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full px-4 py-2 text-left hover:bg-gray-100 rounded">
+                    {t("admin_login")}
+                  </Link>
+                </>
+              )}
+
+              <div className="border-t pt-4">
+                <div className="flex flex-col gap-2">
+                  <button onClick={() => changeLanguage("en")} className="px-4 py-2 hover:bg-gray-100">🇺🇸 English</button>
+                  <button onClick={() => changeLanguage("bn")} className="px-4 py-2 hover:bg-gray-100">🇧🇩 বাংলা</button>
+                </div>
+              </div>
+
+              {user && (
+                <div className="border-t pt-4">
+                  <Link to="/dashboard" onClick={() => setIsOpen(false)} className="block px-4 py-2 hover:bg-gray-100 rounded">
+                    {t("dashboard")}
+                  </Link>
+                  <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded">
+                    {t("logout")}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </nav>
