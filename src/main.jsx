@@ -10,8 +10,8 @@ import "./index.css";
 import AuthProvider from "./Providers/AuthProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <I18nextProvider i18n={i18n}>
-    <StrictMode>
+  <StrictMode>
+    <I18nextProvider i18n={i18n}>
       <AuthProvider>
         <BrowserRouter>
           <ToastContainer
@@ -29,6 +29,6 @@ createRoot(document.getElementById("root")).render(
           <App />
         </BrowserRouter>
       </AuthProvider>
-    </StrictMode>
-  </I18nextProvider>
+    </I18nextProvider>
+  </StrictMode>
 );

@@ -1,13 +1,19 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className="footer footer-horizontal footer-center bg-base-200 text-base-content rounded p-10">
+      {/* Navigation Links */}
       <nav className="grid grid-flow-col gap-4">
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Press kit</a>
+        <a className="link link-hover">{t("about_us")}</a>
+        <a className="link link-hover">{t("contact")}</a>
+        <a className="link link-hover">{t("press_kit")}</a>
       </nav>
+
+      {/* Social Media Icons */}
       <nav>
         <div className="grid grid-flow-col gap-4">
           <a>
@@ -45,10 +51,12 @@ const Footer = () => {
           </a>
         </div>
       </nav>
+
+      {/* Copyright */}
       <aside>
         <p>
-          Copyright © {new Date().getFullYear()} - All right reserved by
-          Chittagong City Corporation
+          {t("copyright")} © {new Date().getFullYear()} -{" "}
+          {t("all_rights_reserved")}
         </p>
       </aside>
     </footer>

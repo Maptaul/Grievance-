@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 import {
   FiCamera,
   FiFile,
@@ -15,6 +16,7 @@ import Swal from "sweetalert2";
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SubmitComplaint = () => {
+  const { t, i18n } = useTranslation(); // Initialize translation hook
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -29,7 +31,6 @@ const SubmitComplaint = () => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
 
-    // File validation
     const validTypes = [
       "image/jpeg",
       "image/png",
@@ -40,15 +41,15 @@ const SubmitComplaint = () => {
 
     if (!validTypes.includes(selectedFile.type)) {
       Swal.fire(
-        "Invalid File Type",
-        "Please upload JPEG, PNG, MP4, or PDF files",
+        t("invalid_file_type"), // Use translation key
+        t("please_upload_valid_files"),
         "error"
       );
       return;
     }
 
     if (selectedFile.size > maxSize) {
-      Swal.fire("File Too Large", "Maximum file size is 10MB", "error");
+      Swal.fire(t("file_too_large"), t("max_file_size"), "error");
       return;
     }
 
@@ -65,24 +66,24 @@ const SubmitComplaint = () => {
           });
           Swal.fire({
             icon: "success",
-            title: "Location Captured!",
-            html: `Latitude: ${position.coords.latitude.toFixed(4)}<br>
-                  Longitude: ${position.coords.longitude.toFixed(4)}`,
+            title: t("location_captured"),
+            html: `${t("latitude")}: ${position.coords.latitude.toFixed(4)}<br>
+                  ${t("longitude")}: ${position.coords.longitude.toFixed(4)}`,
             timer: 2000,
             showConfirmButton: false,
           });
         },
         (error) => {
-          Swal.fire(
-            "Location Error",
-            "Please enable location services",
-            "error"
-          );
+          Swal.fire(t("location_error"), t("enable_location"), "error");
           console.error("Location error:", error);
         }
       );
     } else {
-      Swal.fire("Unsupported Feature", "Geolocation not supported", "error");
+      Swal.fire(
+        t("unsupported_feature"),
+        t("geolocation_unsupported"),
+        "error"
+      );
     }
   };
 
@@ -90,13 +91,12 @@ const SubmitComplaint = () => {
     e.preventDefault();
 
     if (!description.trim()) {
-      Swal.fire("Missing Information", "Please provide a description", "error");
+      Swal.fire(t("missing_info"), t("provide_description"), "error");
       return;
     }
 
     try {
       let fileUrl = "";
-      // Upload file if exists
       if (file) {
         const formData = new FormData();
         formData.append("image", file);
@@ -118,28 +118,28 @@ const SubmitComplaint = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // Send to your server
-      const response = await fetch(
-        "http://localhost:3000/complaints",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(complaintData),
-        }
-      );
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
 
       if (!response.ok) throw new Error("Failed to submit complaint");
 
       Swal.fire({
         icon: "success",
-        title: "Complaint Submitted!",
+        title: t("complaint_submitted"),
         html: `
           <div class="text-left">
-            <p class="font-semibold">Category: ${selectedCategory}</p>
-            <p class="mt-2">We've received your complaint and will process it shortly.</p>
+            <p class="font-semibold">${t(
+              "category_label"
+            )}: ${selectedCategory}</p>
+            <p class="mt-2">${t("complaint_received")}</p>
             ${
               location
-                ? `<p class="mt-2 text-sm">Location: ${location.latitude.toFixed(
+                ? `<p class="mt-2 text-sm">${t(
+                    "location_label"
+                  )}: ${location.latitude.toFixed(
                     4
                   )}, ${location.longitude.toFixed(4)}</p>`
                 : ""
@@ -149,7 +149,6 @@ const SubmitComplaint = () => {
         confirmButtonColor: "#3B82F6",
       });
 
-      // Reset form
       setName("");
       setDescription("");
       setFile(null);
@@ -157,7 +156,7 @@ const SubmitComplaint = () => {
       setIsAnonymous(false);
     } catch (error) {
       console.error("Submission Error:", error);
-      Swal.fire("Error", "Failed to submit complaint", "error");
+      Swal.fire(t("error"), t("submission_failed"), "error");
     }
   };
 
@@ -167,18 +166,17 @@ const SubmitComplaint = () => {
         {selectedCategory && (
           <div className="mt-4">
             <span className="font-bold text-lg bg-blue-100 text-fuchsia-600 px-4 py-2 rounded-full inline-block mt-2">
-              Selected Category: {selectedCategory}
+              {t("category_label")}: {t(`category.${selectedCategory}`)}
             </span>
           </div>
         )}
         <h1 className="text-2xl font-bold text-gray-800 mb-2">
-          Report an Issue
+          {t("report_issue")}
         </h1>
-        <p className="text-gray-600 text-sm">Help improve our community</p>
+        <p className="text-gray-600 text-sm">{t("improve_community")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Anonymous Toggle */}
         <div className="bg-gray-50 p-3 rounded-lg">
           <label className="flex items-center gap-3">
             <input
@@ -188,16 +186,15 @@ const SubmitComplaint = () => {
               className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
             />
             <span className="text-gray-700 font-medium">
-              Submit Anonymously
+              {t("submit_anonymously")}
             </span>
           </label>
         </div>
 
-        {/* Name Field */}
         {!isAnonymous && (
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">
-              Your Name
+              {t("your_name")}
             </label>
             <div className="relative">
               <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -205,7 +202,7 @@ const SubmitComplaint = () => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
+                placeholder={t("name_placeholder")}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
               />
@@ -213,26 +210,26 @@ const SubmitComplaint = () => {
           </div>
         )}
 
-        {/* Description Field */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-700">
-            Description
+            {t("description_label")}
           </label>
           <div className="relative">
             <FiMail className="absolute left-3 top-4 text-gray-400" />
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the issue in detail..."
+              placeholder={t("description_placeholder")}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-32"
               required
             />
           </div>
         </div>
 
-        {/* Media Upload Section */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Add Media</label>
+          <label className="text-sm font-medium text-gray-700">
+            {t("add_media")}
+          </label>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
@@ -240,20 +237,18 @@ const SubmitComplaint = () => {
               className="flex flex-col items-center justify-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
             >
               <FiCamera className="w-6 h-6 text-blue-600 mb-2" />
-              <span className="text-sm text-gray-700">Take Photo</span>
+              <span className="text-sm text-gray-700">{t("take_photo")}</span>
             </button>
-
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
               className="flex flex-col items-center justify-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
             >
               <FiImage className="w-6 h-6 text-purple-600 mb-2" />
-              <span className="text-sm text-gray-700">Choose File</span>
+              <span className="text-sm text-gray-700">{t("choose_file")}</span>
             </button>
           </div>
 
-          {/* Hidden Inputs */}
           <input
             type="file"
             ref={cameraInputRef}
@@ -270,7 +265,6 @@ const SubmitComplaint = () => {
             className="hidden"
           />
 
-          {/* File Preview */}
           {file && (
             <div className="p-3 bg-gray-50 rounded-lg flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -288,7 +282,6 @@ const SubmitComplaint = () => {
           )}
         </div>
 
-        {/* Location Section */}
         <div className="space-y-2">
           <button
             type="button"
@@ -297,7 +290,7 @@ const SubmitComplaint = () => {
           >
             <FiMapPin className="text-blue-600" />
             <span className="text-sm font-medium">
-              {location ? "Update Location" : "Add Current Location"}
+              {location ? t("update_location") : t("add_location")}
             </span>
           </button>
 
@@ -311,12 +304,11 @@ const SubmitComplaint = () => {
           )}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
         >
-          Submit Complaint
+          {t("submit_complaint")}
         </button>
       </form>
     </div>
