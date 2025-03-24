@@ -11,7 +11,7 @@ const ComplaintCategory = () => {
   const [languageChanged, setLanguageChanged] = useState(false); // State to force re-render
 
   useEffect(() => {
-    fetch("http://localhost:3000/category")
+    fetch("https://grievance-server.vercel.app/category")
       .then((response) => response.json())
       .then((data) => {
         setComplaints(data);

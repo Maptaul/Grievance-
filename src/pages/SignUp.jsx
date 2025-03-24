@@ -61,11 +61,14 @@ const SignUp = () => {
         createdAt: new Date().toISOString(),
       };
 
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-      });
+      const response = await fetch(
+        "https://grievance-server.vercel.app/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newUser),
+        }
+      );
 
       if (!response.ok) throw new Error("Database save failed");
 
