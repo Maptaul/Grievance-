@@ -2,19 +2,35 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-import en from "./locales/en.json";
-import bn from "./locales/bn.json";
-
 i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
+  .use(initReactI18next) // Initialize i18next
+  .use(LanguageDetector) // Detect browser language
   .init({
     resources: {
-      en: { translation: en },
-      bn: { translation: bn }
+      en: {
+        translation: {
+          home: "Home",
+          complainant_login: "Complainant Login",
+          admin_login: "Admin Login",
+          dashboard: "Dashboard",
+          logout: "Logout"
+        }
+      },
+      bn: {
+        translation: {
+          home: "হোম",
+          complainant_login: "অভিযোগকারীর লগইন",
+          admin_login: "অ্যাডমিন লগইন",
+          dashboard: "ড্যাশবোর্ড",
+          logout: "লগআউট"
+        }
+      }
     },
     fallbackLng: "en",
-    debug: false,
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"]
+    },
     interpolation: { escapeValue: false }
   });
 
