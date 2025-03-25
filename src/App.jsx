@@ -1,10 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Root from "./Layouts/Root";
-
 import ComplaintCategory from "./Components/ComplaintCategory";
-
 import Dashboard from "./Layouts/Dashboard";
+import Root from "./Layouts/Root";
+import Profile from "./pages/Dashboard/Profile";
+import Settings from "./pages/Dashboard/Settings";
+import UserHome from "./pages/Dashboard/UserHome"; // Added UserHome import
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -26,6 +27,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        {/* Dashboard Route with Nested Routes */}
         <Route
           path="/dashboard"
           element={
@@ -33,7 +35,13 @@ function App() {
               <Dashboard />
             </PrivateRoute>
           }
-        />
+        >
+          <Route index element={<UserHome />} />
+          <Route path="userhome" element={<UserHome />} />
+          <Route path="profile" element={<Profile />} />{" "}
+          <Route path="settings" element={<Settings />} />{" "}
+        </Route>
+
         <Route path="*" element={<ErrorPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
