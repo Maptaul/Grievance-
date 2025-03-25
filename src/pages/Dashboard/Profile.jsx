@@ -1,21 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Profile = () => {
-  // Mock user data
-  const user = {
-    name: "Jane Doe",
-    username: "@janedoe",
-    email: "jane.doe@example.com",
-    avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-    bio: "Web developer | Coffee enthusiast | Lifelong learner",
-    location: "San Francisco, CA",
-    joined: "March 2020",
-    stats: {
-      posts: 145,
-      followers: 892,
-      following: 245,
-    },
+  const [user, setUser] = useState(null); // State to hold user data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const data = await response.json();
+        // Assuming the API returns an array of users, we'll take the first one
+        // Adjust this if your API returns a single user based on auth
+        const userData = Array.isArray(data) ? data[0] : data;
+        setUser(userData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4 max-w-2xl">
+        <p className="text-center">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-4 max-w-2xl">
+        <p className="text-center text-red-500">Error: {error}</p>
+      </div>
+    );
+  }
+
+  // Default fallback data based on your server structure
+  const defaultUser = {
+    name: "Unknown User",
+    email: "unknown@example.com",
+    photo: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    role: "citizen",
+    createdAt: "Unknown Date",
   };
+
+  // Merge fetched user data with defaults
+  const userData = { ...defaultUser, ...user };
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -26,28 +64,31 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <div className="avatar">
               <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.avatar} alt="Profile" />
+                <img src={userData.photo} alt="Profile" />
               </div>
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-3xl font-bold">{user.name}</h1>
-              <p className="text-base-content/70">{user.username}</p>
+              <h1 className="text-3xl font-bold">{userData.name}</h1>
+              <p className="text-base-content/70">{userData.email}</p> {/* Using email as no username field */}
               <button className="btn btn-primary mt-4">Edit Profile</button>
             </div>
           </div>
 
           {/* Bio and Info */}
           <div className="mt-6">
-            <p className="text-lg mb-4">{user.bio}</p>
+            <p className="text-lg mb-4">
+              {userData.role === "citizen" ? "Citizen" : userData.role}
+            </p> {/* Using role as bio substitute */}
             <div className="flex flex-wrap gap-4 text-base-content/70">
               <span className="flex items-center gap-2">
-                <i className="fas fa-map-marker-alt"></i> {user.location}
+                <i className="fas fa-map-marker-alt"></i> Not specified {/* No location field */}
               </span>
               <span className="flex items-center gap-2">
-                <i className="fas fa-calendar"></i> Joined {user.joined}
+                <i className="fas fa-calendar"></i> Joined{" "}
+                {new Date(userData.createdAt).toLocaleDateString()}
               </span>
               <span className="flex items-center gap-2">
-                <i className="fas fa-envelope"></i> {user.email}
+                <i className="fas fa-envelope"></i> {userData.email}
               </span>
             </div>
           </div>
@@ -55,15 +96,15 @@ const Profile = () => {
           {/* Stats */}
           <div className="stats shadow my-6 w-full">
             <div className="stat">
-              <div className="stat-value">{user.stats.posts}</div>
+              <div className="stat-value">N/A</div> {/* No posts data */}
               <div className="stat-title">Posts</div>
             </div>
             <div className="stat">
-              <div className="stat-value">{user.stats.followers}</div>
+              <div className="stat-value">N/A</div> {/* No followers data */}
               <div className="stat-title">Followers</div>
             </div>
             <div className="stat">
-              <div className="stat-value">{user.stats.following}</div>
+              <div className="stat-value">N/A</div> {/* No following data */}
               <div className="stat-title">Following</div>
             </div>
           </div>
