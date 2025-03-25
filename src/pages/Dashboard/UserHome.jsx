@@ -12,7 +12,7 @@ const UserHome = () => {
   const [showAllComplaints, setShowAllComplaints] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/complaints")
+    fetch("https://grievance-server.vercel.app/complaints")
       .then((response) => response.json())
       .then((data) => {
         setComplaints(data);
@@ -169,7 +169,7 @@ const UserHome = () => {
                     <td className="p-3">
                       {formatLocation(complaint.location)}
                     </td>
-                    <td className="p-3">{complaint.status}</td>
+                    <td className="p-3 ">{complaint.status}</td>
                     <td className="p-3">
                       {new Date(complaint.timestamp).toLocaleDateString()}
                     </td>

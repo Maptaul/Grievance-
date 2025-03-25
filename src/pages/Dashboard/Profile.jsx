@@ -8,7 +8,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/users"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -69,19 +71,22 @@ const Profile = () => {
             </div>
             <div className="flex-1 text-center sm:text-left">
               <h1 className="text-3xl font-bold">{userData.name}</h1>
-              <p className="text-base-content/70">{userData.email}</p> {/* Using email as no username field */}
+              <p className="text-base-content/70">{userData.email}</p>
+              {/* Using email as no username field */}
               <button className="btn btn-primary mt-4">Edit Profile</button>
             </div>
           </div>
 
           {/* Bio and Info */}
           <div className="mt-6">
-            <p className="text-lg mb-4">
+            <p className="text-xl font-bold mb-4">
               {userData.role === "citizen" ? "Citizen" : userData.role}
-            </p> {/* Using role as bio substitute */}
-            <div className="flex flex-wrap gap-4 text-base-content/70">
+            </p>{" "}
+            {/* Using role as bio substitute */}
+            <div className="flex flex-wrap gap-4 text-lg text-base-content/70">
               <span className="flex items-center gap-2">
-                <i className="fas fa-map-marker-alt"></i> Not specified {/* No location field */}
+                <i className="fas fa-map-marker-alt"></i> Not specified{" "}
+                {/* No location field */}
               </span>
               <span className="flex items-center gap-2">
                 <i className="fas fa-calendar"></i> Joined{" "}
