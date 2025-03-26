@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loading from "../../Components/Loading";
 
 const Profile = () => {
   const [user, setUser] = useState(null); // State to hold user data
@@ -30,11 +31,7 @@ const Profile = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="container mx-auto p-4 max-w-2xl">
-        <p className="text-center">Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

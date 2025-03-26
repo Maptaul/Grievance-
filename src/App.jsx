@@ -3,6 +3,9 @@ import "./App.css";
 import ComplaintCategory from "./Components/ComplaintCategory";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
+import AdminHome from "./pages/Dashboard/AdminHome";
+import ManageComplaints from "./pages/Dashboard/ManageComplaints";
+import ManageUsers from "./pages/Dashboard/ManageUsers";
 import Profile from "./pages/Dashboard/Profile";
 import Settings from "./pages/Dashboard/Settings";
 import UserHome from "./pages/Dashboard/UserHome"; // Added UserHome import
@@ -36,10 +39,15 @@ function App() {
             </PrivateRoute>
           }
         >
+          {/* Citizen Routes */}
           <Route index element={<UserHome />} />
           <Route path="userhome" element={<UserHome />} />
-          <Route path="profile" element={<Profile />} />{" "}
-          <Route path="settings" element={<Settings />} />{" "}
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+          {/* Admin Routes */}
+          <Route path="AdminHome" element={<AdminHome />} />
+          <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="manage-complaints" element={<ManageComplaints />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />
