@@ -5,6 +5,7 @@ import {
   FaExclamationTriangle,
   FaUsers,
 } from "react-icons/fa";
+import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
 
 const AdminHome = () => {
@@ -57,11 +58,7 @@ const AdminHome = () => {
   }, [role]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Loading data...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

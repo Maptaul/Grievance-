@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "../../Components/Loading";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -99,11 +100,7 @@ const ManageUsers = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Loading users...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { FaBars, FaHome, FaTimes, FaUser } from "react-icons/fa";
+import { GrCompliance } from "react-icons/gr";
 import { IoLogOutOutline, IoSettings } from "react-icons/io5";
 import { TbReport } from "react-icons/tb";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
@@ -43,6 +44,20 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
+          to="/dashboard/ManageMyComplaints"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <GrCompliance className="mr-2 text-xl" />
+          <span className="md:inline">My Complaints</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
           to="/dashboard/profile"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
@@ -72,7 +87,7 @@ const Dashboard = () => {
     </>
   );
 
-  // Administrative Menu
+  // Administrative Menu (updated with All Complaints)
   const adminMenu = (
     <>
       <li>
@@ -115,6 +130,20 @@ const Dashboard = () => {
         >
           <TbReport className="mr-2 text-xl" />
           <span className="md:inline">Manage Complaints</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/all-complaints"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <TbReport className="mr-2 text-xl" />
+          <span className="md:inline">All Complaints</span>
         </NavLink>
       </li>
     </>

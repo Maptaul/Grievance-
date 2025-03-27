@@ -4,7 +4,10 @@ import ComplaintCategory from "./Components/ComplaintCategory";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
 import AdminHome from "./pages/Dashboard/AdminHome";
+import AllComplaints from "./pages/Dashboard/AllComplaints";
+import DashboardHome from "./pages/Dashboard/DashboardHome";
 import ManageComplaints from "./pages/Dashboard/ManageComplaints";
+import ManageMyComplaints from "./pages/Dashboard/ManageMyComplaints";
 import ManageUsers from "./pages/Dashboard/ManageUsers";
 import Profile from "./pages/Dashboard/Profile";
 import Settings from "./pages/Dashboard/Settings";
@@ -40,14 +43,16 @@ function App() {
           }
         >
           {/* Citizen Routes */}
-          <Route index element={<UserHome />} />
+          <Route index element={<DashboardHome />} />
           <Route path="userhome" element={<UserHome />} />
+          <Route path="ManageMyComplaints" element={<ManageMyComplaints />} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
           {/* Admin Routes */}
           <Route path="AdminHome" element={<AdminHome />} />
           <Route path="manage-users" element={<ManageUsers />} />
           <Route path="manage-complaints" element={<ManageComplaints />} />
+          <Route path="all-complaints" element={<AllComplaints />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />
