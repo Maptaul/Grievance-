@@ -24,13 +24,15 @@ const AdminHome = () => {
       const fetchData = async () => {
         try {
           // Fetch users
-          const usersResponse = await fetch("http://localhost:3000/users");
+          const usersResponse = await fetch(
+            "https://grievance-server.vercel.app/users"
+          );
           if (!usersResponse.ok) throw new Error("Failed to fetch users");
           const users = await usersResponse.json();
 
           // Fetch complaints
           const complaintsResponse = await fetch(
-            "http://localhost:3000/complaints"
+            "https://grievance-server.vercel.app/complaints"
           );
           if (!complaintsResponse.ok)
             throw new Error("Failed to fetch complaints");

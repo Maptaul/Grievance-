@@ -12,7 +12,7 @@ const ManageMyComplaints = () => {
   // Fetch user's complaints on mount
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/complaints/user/${user.email}`)
+      fetch(`https://grievance-server.vercel.app/complaints/user/${user.email}`)
         .then((response) => {
           if (!response.ok) throw new Error("Failed to fetch your complaints");
           return response.json();
@@ -42,9 +42,12 @@ const ManageMyComplaints = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/complaints/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (!response.ok) throw new Error("Failed to delete complaint");
 
         setComplaints(complaints.filter((complaint) => complaint._id !== id));

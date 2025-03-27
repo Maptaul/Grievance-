@@ -55,7 +55,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const response = await axios.get(
-            `http://localhost:3000/users/${currentUser.email}`
+            `https://grievance-server.vercel.app/users/${currentUser.email}`
           );
           setRole(response.data?.role || "unknown"); // Set role, fallback to "unknown"
           console.log("User role fetched:", response.data?.role);
