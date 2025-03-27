@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -16,6 +17,7 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null); // Add role state
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
 
@@ -36,6 +38,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setLoading(true);
+    setRole(null); // Reset role on logout
     return signOut(auth);
   };
 
@@ -47,17 +50,30 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      console.log("current user", currentUser);
+      if (currentUser) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/users/${currentUser.email}`
+          );
+          setRole(response.data?.role || "unknown"); // Set role, fallback to "unknown"
+          console.log("User role fetched:", response.data?.role);
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+          setRole("unknown");
+        }
+      } else {
+        setRole(null);
+      }
       setLoading(false);
     });
-    return () => {
-      return unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
+
   const authInfo = {
     user,
+    role, // Include role in context
     loading,
     createUser,
     signIn,
@@ -65,6 +81,7 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
     googleSignIn,
   };
+
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );

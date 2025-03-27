@@ -1,9 +1,14 @@
-import React from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProvider";
 
 const AdminHome = () => {
+  const { user, role } = useContext(AuthContext);
   return (
     <div>
-      <h1>AdminHome</h1>
+      <h2>Welcome, {user?.displayName}</h2>
+      {role === "administrative" && (
+        <p>Administrative dashboard content here.</p>
+      )}
     </div>
   );
 };

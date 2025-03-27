@@ -7,14 +7,14 @@ import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, logOut, loading } = useContext(AuthContext); // Added loading
+  const { user, role, logOut, loading } = useContext(AuthContext); // Added role
   const email = user?.email || null;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await logOut();
-      setIsSidebarOpen(false); // Close sidebar on logout
+      setIsSidebarOpen(false);
       navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -22,6 +22,102 @@ const Dashboard = () => {
   };
 
   if (loading) return <Loading />;
+
+  // Citizen Menu (unchanged)
+  const citizenMenu = (
+    <>
+      <li>
+        <NavLink
+          to="/dashboard/UserHome"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <FaHome className="mr-2 text-xl" />
+          <span className="md:inline">User Home</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/profile"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <FaUser className="mr-2 text-xl" />
+          <span className="md:inline">Profile</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/settings"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <IoSettings className="mr-2 text-xl" />
+          <span className="md:inline">Settings</span>
+        </NavLink>
+      </li>
+    </>
+  );
+
+  // Administrative Menu
+  const adminMenu = (
+    <>
+      <li>
+        <NavLink
+          to="/dashboard/AdminHome"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <FaHome className="mr-2 text-xl" />
+          <span className="md:inline">Admin Home</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/manage-users"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <FaUser className="mr-2 text-xl" />
+          <span className="md:inline">Manage Users</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/manage-complaints"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <FaUser className="mr-2 text-xl" />
+          <span className="md:inline">Manage Complaints</span>
+        </NavLink>
+      </li>
+    </>
+  );
 
   return (
     <div className="flex min-h-screen">
@@ -53,52 +149,14 @@ const Dashboard = () => {
       >
         <div className="p-4 h-full flex flex-col">
           <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-            Dashboard
+            {role === "administrative" ? "Admin Dashboard" : "Dashboard"}
           </h1>
           <nav className="flex-1">
             <ul className="space-y-2 text-xl font-bold">
-              <li>
-                <NavLink
-                  to="/dashboard/UserHome"
-                  onClick={() => setIsSidebarOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-                      isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
-                    }`
-                  }
-                >
-                  <FaHome className="mr-2 text-xl" />
-                  <span className="md:inline">User Home</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/dashboard/profile"
-                  onClick={() => setIsSidebarOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-                      isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
-                    }`
-                  }
-                >
-                  <FaUser className="mr-2 text-xl" />
-                  <span className="md:inline">Profile</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/dashboard/settings"
-                  onClick={() => setIsSidebarOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-                      isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
-                    }`
-                  }
-                >
-                  <IoSettings className="mr-2 text-xl" />
-                  <span className="md:inline">Settings</span>
-                </NavLink>
-              </li>
+              {/* Conditionally render menu based on role */}
+              {role === "administrative" ? adminMenu : citizenMenu}
+
+              {/* Common Menu Items */}
               <div className="divider"></div>
               <li>
                 <NavLink
