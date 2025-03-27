@@ -1,9 +1,172 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const ManageUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch all users on component mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/users");
+        if (!response.ok) throw new Error("Failed to fetch users");
+        const data = await response.json();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  // Handle role change
+  const handleRoleChange = async (email, newRole) => {
+    try {
+      const response = await fetch(`http://localhost:3000/users/${email}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: newRole }),
+      });
+      if (!response.ok) throw new Error("Failed to update role");
+
+      setUsers(
+        users.map((user) =>
+          user.email === email ? { ...user, role: newRole } : user
+        )
+      );
+
+      // Show success alert
+      Swal.fire({
+        icon: "success",
+        title: "Role Updated",
+        text: `User role has been changed to "${newRole}" successfully!`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (err) {
+      console.error("Error updating role:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to update user role. Please try again.",
+      });
+    }
+  };
+
+  // Handle user deletion
+  const handleDeleteUser = async (email) => {
+    // Show confirmation dialog
+    const result = await Swal.fire({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "This action will permanently delete the user. Do you want to proceed?",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3000/users/${email}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Failed to delete user");
+
+        setUsers(users.filter((user) => user.email !== email));
+
+        // Show success alert
+        Swal.fire({
+          icon: "success",
+          title: "User Deleted",
+          text: "The user has been deleted successfully!",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (err) {
+        console.error("Error deleting user:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete user. Please try again.",
+        });
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-600">Loading users...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-600">Error: {error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <h1>ManageUsers</h1>
+    <div className="p-6 md:p-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Manage Users</h1>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white rounded-lg shadow-md">
+          <thead className="bg-amber-100">
+            <tr>
+              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                Name
+              </th>
+              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                Email
+              </th>
+              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                Role
+              </th>
+              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.email} className="border-b hover:bg-amber-50">
+                <td className="py-3 px-4 text-gray-800">
+                  {user.name || "N/A"}
+                </td>
+                <td className="py-3 px-4 text-gray-800">{user.email}</td>
+                <td className="py-3 px-4">
+                  <select
+                    value={user.role || "citizen"}
+                    onChange={(e) =>
+                      handleRoleChange(user.email, e.target.value)
+                    }
+                    className="p-2 border rounded-md bg-amber-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  >
+                    <option value="citizen">Citizen</option>
+                    <option value="administrative">Administrative</option>
+                  </select>
+                </td>
+                <td className="py-3 px-4">
+                  <button
+                    onClick={() => handleDeleteUser(user.email)}
+                    className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

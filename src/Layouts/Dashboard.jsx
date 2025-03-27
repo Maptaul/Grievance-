@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { FaBars, FaHome, FaTimes, FaUser } from "react-icons/fa";
 import { IoLogOutOutline, IoSettings } from "react-icons/io5";
+import { TbReport } from "react-icons/tb";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
 import { AuthContext } from "../Providers/AuthProvider";
@@ -112,7 +113,7 @@ const Dashboard = () => {
             }`
           }
         >
-          <FaUser className="mr-2 text-xl" />
+          <TbReport className="mr-2 text-xl" />
           <span className="md:inline">Manage Complaints</span>
         </NavLink>
       </li>
