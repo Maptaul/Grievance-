@@ -50,9 +50,9 @@ function App() {
           <Route path="settings" element={<Settings />} />
           {/* Admin Routes */}
           <Route path="AdminHome" element={<AdminHome />} />
-          <Route path="manage-users" element={<ManageUsers />} />
-          <Route path="manage-complaints" element={<ManageComplaints />} />
-          <Route path="all-complaints" element={<AllComplaints />} />
+          <Route path="ManageUsers" element={<ManageUsers />} />
+          <Route path="ManageComplaints" element={<ManageComplaints />} />
+          <Route path="AllComplaints" element={<AllComplaints />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

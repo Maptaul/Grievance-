@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Loading from "../../Components/Loading";
+import { AuthContext } from "../../Providers/AuthProvider"; // Adjust the import path as needed
 
 const Profile = () => {
-  const [user, setUser] = useState(null); // State to hold user data
-  const [loading, setLoading] = useState(true); // Loading state
+  const { user, loading: authLoading } = useContext(AuthContext); // Get the current user and loading state from AuthContext
+  const [userData, setUserData] = useState(null); // State to hold the specific user's data
+  const [loading, setLoading] = useState(true); // Loading state for fetching
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(
-          "https://grievance-server.vercel.app/users"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
+    if (!authLoading && user) { // Ensure auth is loaded and user exists
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/users/${user.email}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+          const data = await response.json();
+          setUserData(data);
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
         }
-        const data = await response.json();
-        // Assuming the API returns an array of users, we'll take the first one
-        // Adjust this if your API returns a single user based on auth
-        const userData = Array.isArray(data) ? data[0] : data;
-        setUser(userData);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+      };
 
-    fetchUserData();
-  }, []);
+      fetchUserData();
+    } else if (!authLoading && !user) {
+      setError("No user is logged in");
+      setLoading(false);
+    }
+  }, [user, authLoading]); // Depend on user and authLoading to re-fetch if they change
 
-  if (loading) {
+  if (authLoading || loading) {
     return <Loading />;
   }
 
@@ -45,14 +47,14 @@ const Profile = () => {
   // Default fallback data based on your server structure
   const defaultUser = {
     name: "Unknown User",
-    email: "unknown@example.com",
+    email: user?.email || "unknown@example.com",
     photo: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     role: "citizen",
     createdAt: "Unknown Date",
   };
 
   // Merge fetched user data with defaults
-  const userData = { ...defaultUser, ...user };
+  const profileData = { ...defaultUser, ...userData };
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
@@ -63,12 +65,12 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <div className="avatar">
               <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={userData.photo} alt="Profile" />
+                <img src={profileData.photo} alt="Profile" />
               </div>
             </div>
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-3xl font-bold">{userData.name}</h1>
-              <p className="text-base-content/70">{userData.email}</p>
+              <h1 className="text-3xl font-bold">{profileData.name}</h1>
+              <p className="text-base-content/70">{profileData.email}</p>
               {/* Using email as no username field */}
               <button className="btn btn-primary mt-4">Edit Profile</button>
             </div>
@@ -77,7 +79,7 @@ const Profile = () => {
           {/* Bio and Info */}
           <div className="mt-6">
             <p className="text-xl font-bold mb-4">
-              {userData.role === "citizen" ? "Citizen" : userData.role}
+              {profileData.role === "citizen" ? "Citizen" : profileData.role}
             </p>{" "}
             {/* Using role as bio substitute */}
             <div className="flex flex-wrap gap-4 text-lg text-base-content/70">
@@ -87,10 +89,10 @@ const Profile = () => {
               </span>
               <span className="flex items-center gap-2">
                 <i className="fas fa-calendar"></i> Joined{" "}
-                {new Date(userData.createdAt).toLocaleDateString()}
+                {new Date(profileData.createdAt).toLocaleDateString()}
               </span>
               <span className="flex items-center gap-2">
-                <i className="fas fa-envelope"></i> {userData.email}
+                <i className="fas fa-envelope"></i> {profileData.email}
               </span>
             </div>
           </div>

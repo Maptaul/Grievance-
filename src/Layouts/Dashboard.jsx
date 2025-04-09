@@ -9,7 +9,7 @@ import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { user, role, logOut, loading } = useContext(AuthContext); // Added role
+  const { user, role, logOut, loading } = useContext(AuthContext);
   const email = user?.email || null;
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const Dashboard = () => {
 
   if (loading) return <Loading />;
 
-  // Citizen Menu (unchanged)
+  // Citizen Menu
   const citizenMenu = (
     <>
       <li>
@@ -58,7 +58,7 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/profile"
+          to="/dashboard/Profile"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
@@ -72,7 +72,7 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/settings"
+          to="/dashboard/Settings"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
@@ -87,7 +87,7 @@ const Dashboard = () => {
     </>
   );
 
-  // Administrative Menu (updated with All Complaints)
+  // Administrative Menu
   const adminMenu = (
     <>
       <li>
@@ -106,7 +106,7 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/manage-users"
+          to="/dashboard/ManageUsers"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
@@ -120,7 +120,7 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/manage-complaints"
+          to="/dashboard/ManageComplaints"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
@@ -134,7 +134,7 @@ const Dashboard = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/all-complaints"
+          to="/dashboard/AllComplaints"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
@@ -144,6 +144,20 @@ const Dashboard = () => {
         >
           <TbReport className="mr-2 text-xl" />
           <span className="md:inline">All Complaints</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/Settings"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
+              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            }`
+          }
+        >
+          <IoSettings className="mr-2 text-xl" />
+          <span className="md:inline">Settings</span>
         </NavLink>
       </li>
     </>
@@ -179,7 +193,7 @@ const Dashboard = () => {
       >
         <div className="p-4 h-full flex flex-col">
           <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-            {role === "administrative" ? "Admin Dashboard" : "Dashboard"}
+            {role === "administrative" ? "Admin Dashboard" : "User Dashboard"}
           </h1>
           <nav className="flex-1">
             <ul className="space-y-2 text-xl font-bold">

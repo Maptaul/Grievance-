@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useTranslation } from "react-i18next"; // Import useTranslation
 import {
   FiCamera,
@@ -12,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
@@ -26,6 +27,7 @@ const SubmitComplaint = () => {
   const [location, setLocation] = useState(null);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
+  const { user } = useContext(AuthContext); // Get the current user from AuthContext
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -95,6 +97,11 @@ const SubmitComplaint = () => {
       return;
     }
 
+    if (!user?.email) {
+      Swal.fire(t("error"), t("please_login_to_submit"), "error");
+      return;
+    }
+
     try {
       let fileUrl = "";
       if (file) {
@@ -116,16 +123,14 @@ const SubmitComplaint = () => {
         location,
         status: "Pending",
         timestamp: new Date().toISOString(),
+        email: user.email, // Add the user's email here
       };
 
-      const response = await fetch(
-        "https://grievance-server.vercel.app/complaints",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(complaintData),
-        }
-      );
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
 
       if (!response.ok) throw new Error("Failed to submit complaint");
 

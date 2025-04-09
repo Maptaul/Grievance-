@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
@@ -8,11 +9,11 @@ const ManageMyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // Fetch user's complaints on mount
   useEffect(() => {
     if (user?.email) {
-      fetch(`https://grievance-server.vercel.app/complaints/user/${user.email}`)
+      fetch(`http://localhost:3000/complaints/user/${user.email}`)
         .then((response) => {
           if (!response.ok) throw new Error("Failed to fetch your complaints");
           return response.json();
@@ -28,7 +29,6 @@ const ManageMyComplaints = () => {
     }
   }, [user]);
 
-  // Handle complaint deletion
   const handleDeleteComplaint = async (id) => {
     const result = await Swal.fire({
       icon: "warning",
@@ -42,12 +42,9 @@ const ManageMyComplaints = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `https://grievance-server.vercel.app/complaints/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:3000/complaints/${id}`, {
+          method: "DELETE",
+        });
         if (!response.ok) throw new Error("Failed to delete complaint");
 
         setComplaints(complaints.filter((complaint) => complaint._id !== id));
@@ -78,6 +75,12 @@ const ManageMyComplaints = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-red-600">Error: {error}</p>
+        <button
+          className="btn btn-secondary mt-4"
+          onClick={() => window.location.reload()} // Retry fetch
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -88,9 +91,17 @@ const ManageMyComplaints = () => {
         Manage My Complaints
       </h1>
       {complaints.length === 0 ? (
-        <p className="text-gray-600 text-center">
-          You haven’t submitted any complaints yet.
-        </p>
+        <div className="text-center">
+          <p className="text-gray-600">
+            You haven’t submitted any complaints yet.
+          </p>
+          <button
+            className="btn btn-primary mt-4"
+            onClick={() => navigate("/")} // Adjust route
+          >
+            Submit New Complaint
+          </button>
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg shadow-md">
@@ -104,6 +115,9 @@ const ManageMyComplaints = () => {
                 </th>
                 <th className="py-3 px-4 text-left text-gray-700 font-semibold">
                   Title
+                </th>
+                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                  Date
                 </th>
                 <th className="py-3 px-4 text-left text-gray-700 font-semibold">
                   Status
@@ -121,6 +135,9 @@ const ManageMyComplaints = () => {
                     {complaint.category}
                   </td>
                   <td className="py-3 px-4 text-gray-800">{complaint.name}</td>
+                  <td className="py-3 px-4 text-gray-800">
+                    {new Date(complaint.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="py-3 px-4">
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
