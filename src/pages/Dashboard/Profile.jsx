@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider"; // Adjust the import path as needed
 
@@ -9,10 +9,13 @@ const Profile = () => {
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
-    if (!authLoading && user) { // Ensure auth is loaded and user exists
+    if (!authLoading && user) {
+      // Ensure auth is loaded and user exists
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/users/${user.email}`);
+          const response = await fetch(
+            `https://grievance-server.vercel.app/users/${user.email}`
+          );
           if (!response.ok) {
             throw new Error("Failed to fetch user data");
           }

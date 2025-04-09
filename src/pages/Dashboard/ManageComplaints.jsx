@@ -10,7 +10,9 @@ const ManageComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch("http://localhost:3000/complaints");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/complaints"
+        );
         if (!response.ok) throw new Error("Failed to fetch complaints");
         const data = await response.json();
         setComplaints(data);
@@ -26,11 +28,14 @@ const ManageComplaints = () => {
   // Handle status change
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const response = await fetch(
+        `https://grievance-server.vercel.app/complaints/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
       if (!response.ok) throw new Error("Failed to update status");
 
       setComplaints(
@@ -70,9 +75,12 @@ const ManageComplaints = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/complaints/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (!response.ok) throw new Error("Failed to delete complaint");
 
         setComplaints(complaints.filter((complaint) => complaint._id !== id));

@@ -2,23 +2,24 @@ import axios from "axios";
 import Lottie from "lottie-react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useTranslation } from "react-i18next"; // Import useTranslation
 import registrationLottie from "../assets/lottie/register.json";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SignUp = () => {
-  const { createUser, googleSignIn, updateUserProfile } = useContext(AuthContext);
+  const { createUser, googleSignIn, updateUserProfile } =
+    useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
 
   const {
     register,
@@ -40,24 +41,25 @@ const SignUp = () => {
         formData
       );
       setImage(res.data.data.display_url);
+      toast.success(t("image_uploaded")); // Optional success feedback
     } catch (error) {
-      toast.error(t("submission_failed")); // Translated "Image upload failed"
+      toast.error(t("submission_failed"));
     }
   };
 
-  // Form submission
+  // Handle email/password sign-up
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      // Create user
+      // Create user in Firebase
       await createUser(data.email, data.password);
       await updateUserProfile(data.name, image || data.photo);
 
-      // Save to database
+      // Save to MongoDB
       const newUser = {
         name: data.name,
-        email: data.email,
-        photo: image || data.photo,
+        email: data.email.toLowerCase(), // Normalize email
+        photo: image || "https://via.placeholder.com/150", // Fallback if no image
         role: data.role,
         createdAt: new Date().toISOString(),
       };
@@ -76,13 +78,55 @@ const SignUp = () => {
       Swal.fire({
         position: "top-end",
         icon: "success",
-        title: t("registration_successful"), // Translated "Registration Successful!"
+        title: t("registration_successful"),
         showConfirmButton: false,
         timer: 1500,
       });
       navigate("/");
     } catch (error) {
-      toast.error(error.message || t("submission_failed")); // Translated fallback
+      toast.error(error.message || t("submission_failed"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handle Google sign-in
+  const handleGoogleSignIn = async () => {
+    setIsSubmitting(true);
+    try {
+      const result = await googleSignIn();
+      const user = result.user;
+
+      // Save Google user to MongoDB
+      const googleUser = {
+        name: user.displayName,
+        email: user.email.toLowerCase(), // Normalize email
+        photo: user.photoURL || "https://via.placeholder.com/150", // Fallback if no photo
+        role: "citizen", // Default role for Google sign-in
+        createdAt: new Date().toISOString(),
+      };
+
+      const response = await fetch(
+        "https://grievance-server.vercel.app/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(googleUser),
+        }
+      );
+
+      if (!response.ok) throw new Error(t("submission_failed"));
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: t("registration_successful"),
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message || t("submission_failed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -100,14 +144,14 @@ const SignUp = () => {
 
       <div className="w-full md:w-1/2 max-w-md bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-200">
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
-          {t("create_account")} {/* Translated "Create Account" */}
+          {t("create_account")}
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Name Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("your_name")} {/* Translated "Full Name" */}
+              {t("your_name")}
             </label>
             <input
               type="text"
@@ -123,7 +167,7 @@ const SignUp = () => {
           {/* Email Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("your_name_override")} {/* Translated "Email" */}
+              {t("your_name_override")}
             </label>
             <input
               type="email"
@@ -139,7 +183,7 @@ const SignUp = () => {
           {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("profile_image")} {/* Translated "Profile Image" */}
+              {t("profile_image")}
             </label>
             <input
               type="file"
@@ -151,7 +195,7 @@ const SignUp = () => {
           {/* Role Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("select_role")} {/* Translated "Select Role" */}
+              {t("select_role")}
             </label>
             <select
               {...register("role", { required: t("role_required") })}
@@ -169,12 +213,18 @@ const SignUp = () => {
           {/* Password Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("description_label_override")} {/* Translated "Password" */}
+              {t("description_label_override")}
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                {...register("password")}
+                {...register("password", {
+                  required: t("password_required"),
+                  minLength: {
+                    value: 6,
+                    message: t("password_min_length"),
+                  },
+                })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
                 placeholder={t("description_placeholder_override")}
               />
@@ -186,13 +236,16 @@ const SignUp = () => {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg disabled:opacity-50"
           >
             {isSubmitting ? t("registering") : t("create_account")}
           </button>
@@ -206,8 +259,9 @@ const SignUp = () => {
 
         {/* Google Sign-In Button */}
         <button
-          onClick={() => googleSignIn()}
-          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
+          onClick={handleGoogleSignIn}
+          disabled={isSubmitting}
+          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50"
         >
           <FaGoogle className="text-red-500" />
           <span className="text-gray-700 font-medium">

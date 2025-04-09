@@ -4,6 +4,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -17,9 +18,9 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); // Add role state
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Add error state for debugging
+  const [error, setError] = useState(null);
   const googleProvider = new GoogleAuthProvider();
 
   const createUser = (email, password) => {
@@ -39,8 +40,8 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setLoading(true);
-    setRole(null); // Reset role on logout
-    setError(null); // Reset error on logout
+    setRole(null);
+    setError(null);
     return signOut(auth);
   };
 
@@ -51,15 +52,21 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  const resetPassword = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         try {
-          const email = currentUser.email.toLowerCase(); // Normalize email to lowercase
+          const email = currentUser.email.toLowerCase();
           console.log("Fetching role for email:", email);
-
-          const response = await axios.get(`http://localhost:3000/users/${email}`);
+          const response = await axios.get(
+            `https://grievance-server.vercel.app/users/${email}`
+          );
           if (response.data && response.data.role) {
             setRole(response.data.role);
             console.log("User role fetched:", response.data.role);
@@ -84,14 +91,15 @@ const AuthProvider = ({ children }) => {
 
   const authInfo = {
     user,
-    role, // Include role in context
+    role,
     loading,
-    error, // Expose error for debugging
+    error,
     createUser,
     signIn,
     logOut,
     updateUserProfile,
     googleSignIn,
+    resetPassword,
   };
 
   return (
