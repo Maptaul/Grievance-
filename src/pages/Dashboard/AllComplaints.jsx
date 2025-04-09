@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loading from "../../Components/Loading";
 
 const AllComplaints = () => {
   const [complaints, setComplaints] = useState([]);
@@ -25,11 +26,7 @@ const AllComplaints = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Loading complaints...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Loading from "../../Components/Loading";
 
 const ManageComplaints = () => {
   const [complaints, setComplaints] = useState([]);
@@ -104,11 +105,7 @@ const ManageComplaints = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Loading complaints...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
