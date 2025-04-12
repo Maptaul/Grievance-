@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
 
@@ -28,47 +27,6 @@ const ManageMyComplaints = () => {
         });
     }
   }, [user]);
-
-  const handleDeleteComplaint = async (id) => {
-    const result = await Swal.fire({
-      icon: "warning",
-      title: "Are you sure?",
-      text: "This action will permanently delete your complaint. Do you want to proceed?",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(
-          `https://grievance-server.vercel.app/complaints/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (!response.ok) throw new Error("Failed to delete complaint");
-
-        setComplaints(complaints.filter((complaint) => complaint._id !== id));
-
-        Swal.fire({
-          icon: "success",
-          title: "Complaint Deleted",
-          text: "Your complaint has been deleted successfully!",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      } catch (err) {
-        console.error("Error deleting complaint:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to delete complaint. Please try again.",
-        });
-      }
-    }
-  };
 
   if (loading) {
     return <Loading />;
@@ -125,9 +83,6 @@ const ManageMyComplaints = () => {
                 <th className="py-3 px-4 text-left text-gray-700 font-semibold">
                   Status
                 </th>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -153,14 +108,6 @@ const ManageMyComplaints = () => {
                     >
                       {complaint.status}
                     </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <button
-                      onClick={() => handleDeleteComplaint(complaint._id)}
-                      className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
-                    >
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))}
