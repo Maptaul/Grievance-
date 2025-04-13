@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import ComplaintCategory from "./Components/ComplaintCategory";
+import EditComplaint from "./Components/EditComplaint";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
 import AdminHome from "./pages/Dashboard/AdminHome";
@@ -53,6 +54,7 @@ function App() {
           <Route path="ManageUsers" element={<ManageUsers />} />
           <Route path="ManageComplaints" element={<ManageComplaints />} />
           <Route path="AllComplaints" element={<AllComplaints />} />
+          <Route path="editComplaint/:id" element={<EditComplaint />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />
