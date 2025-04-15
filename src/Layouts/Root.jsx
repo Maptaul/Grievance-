@@ -5,23 +5,19 @@ import Navbar from "../Components/Navbar";
 
 const Root = () => {
   const location = useLocation();
-  console.log("Location object:", location);
-  const noHeaderFooter = location.pathname.includes("login", "signUp");
+  const noHeaderFooter =
+    location.pathname.includes("login") || location.pathname.includes("signUp");
   return (
-    <div className=" bg-base-200 min-h-screen ">
+    <div className="bg-base-200 min-h-screen">
       {noHeaderFooter || (
-        <header className="">
+        <header>
           <Navbar />
         </header>
       )}
       <main className="min-h-screen">
         <Outlet />
       </main>
-      {noHeaderFooter || (
-        <section className="bg-base-200 text-base-content">
-          <Footer />
-        </section>
-      )}
+      {noHeaderFooter || <Footer />}
     </div>
   );
 };

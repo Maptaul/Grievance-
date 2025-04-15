@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import {
   FaCheckCircle,
   FaClock,
-  FaEdit,
   FaExclamationTriangle,
+  FaEye,
   FaUsers,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -21,34 +21,26 @@ const AdminHome = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [viewMode, setViewMode] = useState("stats"); // State to track view: "stats", "pending", "ongoing", or "resolved"
-  const [complaints, setComplaints] = useState([]); // State to store all complaints
-
+  const [viewMode, setViewMode] = useState("stats");
+  const [complaints, setComplaints] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (role === "administrative") {
       const fetchData = async () => {
         try {
-          // Fetch users
-          const usersResponse = await fetch(
-            "https://grievance-server.vercel.app/users"
-          );
+          const usersResponse = await fetch("http://localhost:3000/users");
           if (!usersResponse.ok) throw new Error("Failed to fetch users");
           const users = await usersResponse.json();
 
-          // Fetch complaints
           const complaintsResponse = await fetch(
-            "https://grievance-server.vercel.app/complaints"
+            "http://localhost:3000/complaints"
           );
           if (!complaintsResponse.ok)
             throw new Error("Failed to fetch complaints");
           const complaintsData = await complaintsResponse.json();
 
-          // Store all complaints for later use
           setComplaints(complaintsData);
-
-          // Calculate stats based on fetched data
           setStats({
             totalUsers: users.length,
             pendingComplaints: complaintsData.filter(
@@ -72,26 +64,31 @@ const AdminHome = () => {
   }, [role]);
 
   const handlePendingClick = () => {
-    setViewMode("pending"); // Show pending complaints table
+    setViewMode("pending");
   };
 
   const handleOngoingClick = () => {
-    setViewMode("ongoing"); // Show ongoing complaints table
+    setViewMode("ongoing");
   };
 
   const handleResolvedClick = () => {
-    setViewMode("resolved"); // Show resolved complaints table
+    setViewMode("resolved");
   };
 
   const handleBackToStats = () => {
-    setViewMode("stats"); // Return to stats cards view
+    setViewMode("stats");
+  };
+
+  const handleViewClick = (complaint) => {
+    navigate(`/dashboard/editComplaint/${complaint._id}`, {
+      state: { complaint },
+    });
   };
 
   const handleEditClick = async (complaint) => {
     try {
-      // Update complaint status to "Ongoing" on the server
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: {
@@ -103,7 +100,6 @@ const AdminHome = () => {
 
       if (!response.ok) throw new Error("Failed to update complaint status");
 
-      // Show SweetAlert2 confirmation
       await Swal.fire({
         icon: "success",
         title: "Status Updated",
@@ -112,13 +108,10 @@ const AdminHome = () => {
         showConfirmButton: false,
       });
 
-      // Update local state to reflect the change
       const updatedComplaints = complaints.map((c) =>
         c._id === complaint._id ? { ...c, status: "Ongoing" } : c
       );
       setComplaints(updatedComplaints);
-
-      // Navigate to the edit page with the complaint data
       navigate(`/dashboard/editComplaint/${complaint._id}`, {
         state: { complaint },
       });
@@ -138,287 +131,189 @@ const AdminHome = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-600">Error: {error}</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <p className="text-red-500 text-xl font-semibold">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-8 min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 font-poppins">
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+          .font-poppins { font-family: 'Poppins', sans-serif; }
+          .animate-fade-in { animation: fadeIn 0.5s ease-in; }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .hover-scale:hover { transform: scale(1.03); transition: transform 0.2s ease; }
+          .hover-pulse:hover { animation: pulse 0.3s; }
+          @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+          }
+        `}
+      </style>
       {role === "administrative" && (
-        <div className="space-y-8">
+        <div className="space-y-8 max-w-7xl mx-auto">
           {/* Welcome Section */}
-          <div className="bg-amber-100 p-6 rounded-lg shadow-md flex items-center space-x-4">
+          <div className="bg-gradient-to-r from-amber-400 to-orange-500 p-6 rounded-xl shadow-lg flex items-center space-x-4 animate-fade-in">
             <img
               src={user?.photoURL || "https://via.placeholder.com/80"}
               alt="Profile"
-              className="w-20 h-20 rounded-full border-2 border-amber-300 object-cover"
+              className="w-20 h-20 rounded-full border-4 border-white object-cover transform hover:scale-110 transition-transform duration-300"
             />
             <div>
-              <h2 className="text-3xl font-bold text-gray-800">
+              <h2 className="text-3xl font-bold text-white drop-shadow-md">
                 Welcome, {user?.displayName || "Admin"}
               </h2>
-              <p className="mt-1 text-gray-600">
-                Your administrative dashboard for managing system activity.
+              <p className="mt-1 text-amber-100 text-lg">
+                Manage system activity with ease and efficiency.
               </p>
             </div>
           </div>
 
           {/* Stats Cards */}
           {viewMode === "stats" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-              {/* Total Users Card */}
-              <div className="bg-white p-6 rounded-lg shadow-md flex items-center space-x-4 hover:bg-amber-50 transition-colors">
-                <div className="p-3 bg-amber-200 rounded-full">
-                  <FaUsers className="text-3xl text-amber-600" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  title: "Total Users",
+                  value: stats.totalUsers,
+                  icon: <FaUsers className="text-4xl text-teal-600" />,
+                  gradient: "from-teal-400 to-teal-600",
+                },
+                {
+                  title: "Pending Complaints",
+                  value: stats.pendingComplaints,
+                  icon: (
+                    <FaExclamationTriangle className="text-4xl text-red-600" />
+                  ),
+                  gradient: "from-red-400 to-red-600",
+                  onClick: handlePendingClick,
+                },
+                {
+                  title: "Ongoing Complaints",
+                  value: stats.ongoingComplaints,
+                  icon: <FaClock className="text-4xl text-blue-600" />,
+                  gradient: "from-blue-400 to-blue-600",
+                  onClick: handleOngoingClick,
+                },
+                {
+                  title: "Resolved Complaints",
+                  value: stats.resolvedComplaints,
+                  icon: <FaCheckCircle className="text-4xl text-green-600" />,
+                  gradient: "from-green-400 to-green-600",
+                  onClick: handleResolvedClick,
+                },
+              ].map((card, index) => (
+                <div
+                  key={index}
+                  className={`bg-white p-6 rounded-xl shadow-md hover-scale cursor-pointer bg-gradient-to-br ${card.gradient} text-white animate-fade-in`}
+                  onClick={card.onClick}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white bg-opacity-30 rounded-full">
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">{card.title}</h3>
+                      <p className="text-3xl font-bold">{card.value}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    Total Users
-                  </h3>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.totalUsers}
-                  </p>
-                </div>
-              </div>
-
-              {/* Pending Complaints Card (Clickable) */}
-              <div
-                className="bg-white p-6 rounded-lg shadow-md flex items-center space-x-4 hover:bg-amber-50 transition-colors cursor-pointer"
-                onClick={handlePendingClick}
-              >
-                <div className="p-3 bg-amber-200 rounded-full">
-                  <FaExclamationTriangle className="text-3xl text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    Pending Complaints
-                  </h3>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.pendingComplaints}
-                  </p>
-                </div>
-              </div>
-
-              {/* Ongoing Complaints Card (Clickable) */}
-              <div
-                className="bg-white p-6 rounded-lg shadow-md flex items-center space-x-4 hover:bg-amber-50 transition-colors cursor-pointer"
-                onClick={handleOngoingClick}
-              >
-                <div className="p-3 bg-amber-200 rounded-full">
-                  <FaClock className="text-3xl text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    Ongoing Complaints
-                  </h3>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.ongoingComplaints}
-                  </p>
-                </div>
-              </div>
-
-              {/* Resolved Complaints Card (Clickable) */}
-              <div
-                className="bg-white p-6 rounded-lg shadow-md flex items-center space-x-4 hover:bg-amber-50 transition-colors cursor-pointer"
-                onClick={handleResolvedClick}
-              >
-                <div className="p-3 bg-amber-200 rounded-full">
-                  <FaCheckCircle className="text-3xl text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-700">
-                    Resolved Complaints
-                  </h3>
-                  <p className="text-3xl font-bold text-gray-800">
-                    {stats.resolvedComplaints}
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           )}
 
-          {/* Pending Complaints Table */}
-          {viewMode === "pending" && complaints.length > 0 && (
-            <div className="overflow-x-auto">
-              <button
-                className="btn btn-secondary mb-4"
-                onClick={handleBackToStats}
-              >
-                Back to Dashboard
-              </button>
-              <table className="min-w-full bg-white rounded-lg shadow-md">
-                <thead className="bg-amber-100">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Serial
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Category
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Title
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Status
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {complaints
-                    .filter((complaint) => complaint.status === "Pending")
-                    .map((complaint, index) => (
-                      <tr
-                        key={complaint._id}
-                        className="border-b hover:bg-amber-50"
-                      >
-                        <td className="py-3 px-4 text-gray-800">{index + 1}</td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.category}
-                        </td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.name}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="inline-block px-3 py-1 rounded-full bg-yellow-200 text-yellow-800 text-sm font-semibold">
-                            {complaint.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <button
-                            onClick={() => handleEditClick(complaint)}
-                            className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 transition-colors"
+          {/* Complaints Tables */}
+          {["pending", "ongoing", "resolved"].includes(viewMode) &&
+            complaints.length > 0 && (
+              <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                <button
+                  className="mb-4 px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-lg hover-pulse"
+                  onClick={handleBackToStats}
+                >
+                  Back to Dashboard
+                </button>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
+                      <tr>
+                        {[
+                          "Serial",
+                          "Category",
+                          "Title",
+                          "Status",
+                          "Actions",
+                        ].map((header) => (
+                          <th
+                            key={header}
+                            className="py-3 px-4 text-left text-white font-semibold text-sm uppercase tracking-wider"
                           >
-                            <FaEdit className="inline mr-1" /> Edit
-                          </button>
-                        </td>
+                            {header}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Ongoing Complaints Table */}
-          {viewMode === "ongoing" && complaints.length > 0 && (
-            <div className="overflow-x-auto">
-              <button
-                className="btn btn-secondary mb-4"
-                onClick={handleBackToStats}
-              >
-                Back to Dashboard
-              </button>
-              <table className="min-w-full bg-white rounded-lg shadow-md">
-                <thead className="bg-amber-100">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Serial
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Category
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Title
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Status
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {complaints
-                    .filter((complaint) => complaint.status === "Ongoing")
-                    .map((complaint, index) => (
-                      <tr
-                        key={complaint._id}
-                        className="border-b hover:bg-amber-50"
-                      >
-                        <td className="py-3 px-4 text-gray-800">{index + 1}</td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.category}
-                        </td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.name}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="inline-block px-3 py-1 rounded-full bg-blue-200 text-blue-800 text-sm font-semibold">
-                            {complaint.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <button
-                            onClick={() => handleEditClick(complaint)}
-                            className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 transition-colors"
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {complaints
+                        .filter(
+                          (complaint) =>
+                            complaint.status ===
+                            viewMode.charAt(0).toUpperCase() + viewMode.slice(1)
+                        )
+                        .map((complaint, index) => (
+                          <tr
+                            key={complaint._id}
+                            className={`hover:bg-amber-50 transition-colors ${
+                              index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                            }`}
                           >
-                            <FaEdit className="inline mr-1" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Resolved Complaints Table */}
-          {viewMode === "resolved" && complaints.length > 0 && (
-            <div className="overflow-x-auto">
-              <button
-                className="btn btn-secondary mb-4"
-                onClick={handleBackToStats}
-              >
-                Back to Dashboard
-              </button>
-              <table className="min-w-full bg-white rounded-lg shadow-md">
-                <thead className="bg-amber-100">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Serial
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Category
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Title
-                    </th>
-                    <th className="py-3 px-4 text-left text-gray-700 font-semibold">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {complaints
-                    .filter((complaint) => complaint.status === "Resolved")
-                    .map((complaint, index) => (
-                      <tr
-                        key={complaint._id}
-                        className="border-b hover:bg-amber-50"
-                      >
-                        <td className="py-3 px-4 text-gray-800">{index + 1}</td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.category}
-                        </td>
-                        <td className="py-3 px-4 text-gray-800">
-                          {complaint.name}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="inline-block px-3 py-1 rounded-full bg-green-200 text-green-800 text-sm font-semibold">
-                            {complaint.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                            <td className="py-4 px-4 text-gray-800">
+                              {index + 1}
+                            </td>
+                            <td className="py-4 px-4 text-gray-800">
+                              {complaint.category}
+                            </td>
+                            <td className="py-4 px-4 text-gray-800">
+                              {complaint.name}
+                            </td>
+                            <td className="py-4 px-4">
+                              <span
+                                className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+                                  complaint.status === "Pending"
+                                    ? "bg-red-200 text-red-800"
+                                    : complaint.status === "Ongoing"
+                                    ? "bg-blue-200 text-blue-800"
+                                    : "bg-green-200 text-green-800"
+                                }`}
+                              >
+                                {complaint.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4">
+                              <button
+                                onClick={() =>
+                                  viewMode === "pending"
+                                    ? handleEditClick(complaint)
+                                    : handleViewClick(complaint)
+                                }
+                                className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
+                              >
+                                <FaEye className="mr-1" /> View
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
         </div>
       )}
     </div>

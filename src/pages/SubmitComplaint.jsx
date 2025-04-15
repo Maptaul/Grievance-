@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useRef, useState } from "react";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 import {
   FiCamera,
   FiFile,
@@ -17,7 +17,7 @@ import { AuthContext } from "../Providers/AuthProvider";
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SubmitComplaint = () => {
-  const { t, i18n } = useTranslation(); // Initialize translation hook
+  const { t, i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -27,7 +27,7 @@ const SubmitComplaint = () => {
   const [location, setLocation] = useState(null);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
-  const { user } = useContext(AuthContext); // Get the current user from AuthContext
+  const { user, role } = useContext(AuthContext); // Add role from AuthContext
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -43,7 +43,7 @@ const SubmitComplaint = () => {
 
     if (!validTypes.includes(selectedFile.type)) {
       Swal.fire(
-        t("invalid_file_type"), // Use translation key
+        t("invalid_file_type"),
         t("please_upload_valid_files"),
         "error"
       );
@@ -123,17 +123,14 @@ const SubmitComplaint = () => {
         location,
         status: "Pending",
         timestamp: new Date().toISOString(),
-        email: user.email, // Add the user's email here
+        email: user.email,
       };
 
-      const response = await fetch(
-        "https://grievance-server.vercel.app/complaints",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(complaintData),
-        }
-      );
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
 
       if (!response.ok) throw new Error("Failed to submit complaint");
 
@@ -315,12 +312,20 @@ const SubmitComplaint = () => {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-        >
-          {t("submit_complaint")}
-        </button>
+        <div>
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={role !== "citizen"}
+          >
+            {t("submit_complaint")}
+          </button>
+          {role !== "citizen" && (
+            <p className="text-sm text-gray-500 mt-2 text-center">
+              {t("only_citizens_can_submit")}
+            </p>
+          )}
+        </div>
       </form>
     </div>
   );
