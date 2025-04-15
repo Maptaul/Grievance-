@@ -16,7 +16,7 @@ const UserHome = () => {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:3000/complaints/user/${user.email}`)
+      fetch(`https://grievance-server.vercel.app/complaints/user/${user.email}`)
         .then((response) => {
           if (!response.ok) throw new Error("Failed to fetch user complaints");
           return response.json();

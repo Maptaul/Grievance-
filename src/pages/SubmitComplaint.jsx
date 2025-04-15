@@ -126,11 +126,14 @@ const SubmitComplaint = () => {
         email: user.email,
       };
 
-      const response = await fetch("http://localhost:3000/complaints", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(complaintData),
-      });
+      const response = await fetch(
+        "https://grievance-server.vercel.app/complaints",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(complaintData),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to submit complaint");
 

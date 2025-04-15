@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
           const email = currentUser.email.toLowerCase();
           console.log("Fetching role for email:", email);
           const response = await axios.get(
-            `http://localhost:3000/users/${email}`
+            `https://grievance-server.vercel.app/users/${email}`
           );
           if (response.data && response.data.role) {
             setRole(response.data.role);

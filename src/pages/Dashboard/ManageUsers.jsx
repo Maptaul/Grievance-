@@ -11,7 +11,9 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/users"
+        );
         if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
         setUsers(data);
@@ -27,11 +29,14 @@ const ManageUsers = () => {
   // Handle role change
   const handleRoleChange = async (email, newRole) => {
     try {
-      const response = await fetch(`http://localhost:3000/users/${email}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: newRole }),
-      });
+      const response = await fetch(
+        `https://grievance-server.vercel.app/users/${email}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: newRole }),
+        }
+      );
       if (!response.ok) throw new Error("Failed to update role");
 
       setUsers(
@@ -73,9 +78,12 @@ const ManageUsers = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/users/${email}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/users/${email}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (!response.ok) throw new Error("Failed to delete user");
 
         setUsers(users.filter((user) => user.email !== email));

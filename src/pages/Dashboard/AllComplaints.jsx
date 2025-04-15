@@ -10,7 +10,9 @@ const AllComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch("http://localhost:3000/complaints");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/complaints"
+        );
         if (!response.ok) throw new Error("Failed to fetch complaints");
         const data = await response.json();
         setComplaints(data);
