@@ -1,7 +1,10 @@
+import { onMessage } from "firebase/messaging";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import ComplaintCategory from "./Components/ComplaintCategory";
 import EditComplaint from "./Components/EditComplaint";
+import { generateToken, messaging } from "./firebase/firebase.config";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
 import AdminHome from "./pages/Dashboard/AdminHome";
@@ -21,6 +24,12 @@ import SubmitComplaint from "./pages/SubmitComplaint";
 import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
+  useEffect(() => {
+    generateToken();
+    onMessage(messaging, (payload) => {
+      console.log("Message received. ", payload);
+    });
+  }, []);
   return (
     <Routes>
       <Route path="/" element={<Root />}>
@@ -35,13 +44,7 @@ function App() {
           }
         />
         {/* Dashboard Route with Nested Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
+        <Route path="/dashboard"element={<PrivateRoute><Dashboard /></PrivateRoute>}
         >
           {/* Citizen Routes */}
           <Route index element={<DashboardHome />} />
