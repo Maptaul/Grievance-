@@ -1,12 +1,12 @@
-import { onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import ComplaintCategory from "./Components/ComplaintCategory";
+
 import EditComplaint from "./Components/EditComplaint";
-import { generateToken, messaging } from "./firebase/firebase.config";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
+import ComplaintCategory from "./pages/ComplaintCategory";
+import Contact from "./pages/Contact";
 import AdminHome from "./pages/Dashboard/AdminHome";
 import AllComplaints from "./pages/Dashboard/AllComplaints";
 import DashboardHome from "./pages/Dashboard/DashboardHome";
@@ -19,22 +19,21 @@ import UserHome from "./pages/Dashboard/UserHome"; // Added UserHome import
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import OfficeLocations from "./pages/Office";
 import SignUp from "./pages/SignUp";
 import SubmitComplaint from "./pages/SubmitComplaint";
 import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
-  useEffect(() => {
-    generateToken();
-    onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
-    });
-  }, []);
+  useEffect(() => {});
+
   return (
     <Routes>
       <Route path="/" element={<Root />}>
         <Route index element={<Home />} />
-        <Route path="/complaint-category" element={<ComplaintCategory />} />
+        <Route path="complaint-category" element={<ComplaintCategory />} />
+        <Route path="locations" element={<OfficeLocations />} />
+        <Route path="contact" element={<Contact />} />
         <Route
           path="/submit-complaint"
           element={
@@ -44,7 +43,13 @@ function App() {
           }
         />
         {/* Dashboard Route with Nested Routes */}
-        <Route path="/dashboard"element={<PrivateRoute><Dashboard /></PrivateRoute>}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
         >
           {/* Citizen Routes */}
           <Route index element={<DashboardHome />} />

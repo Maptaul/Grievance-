@@ -1,15 +1,43 @@
 import React from "react";
 import Banner from "../Components/Banner";
-import ComplaintCategory from "../Components/ComplaintCategory";
+import GetInvolved from "../Components/GetInvolved";
+import KeyPillarsSection from "../Components/KeyPillarsSection";
+import MayorMessage from "../Components/MayorMessage";
+import Notice from "../Components/Notice";
+import OngoingProjects from "../Components/OngoingProjects";
+import ProgressSection from "../Components/ProgressSection";
+import Vision from "../Components/Vision";
+import Welcome from "../Components/Welcome";
 
 const Home = () => {
   return (
-    <div className="w-11/12 mx-auto">
+    <div className="">
       <section>
         <Banner />
       </section>
       <section>
-        <ComplaintCategory />
+        <Notice />
+      </section>
+      <section>
+        <Welcome />
+      </section>
+      <section>
+        <Vision />
+      </section>
+      <section>
+        <MayorMessage />
+      </section>
+      <section>
+        <ProgressSection />
+      </section>
+      <section>
+        <KeyPillarsSection />
+      </section>
+      <section>
+        <OngoingProjects />
+      </section>
+      <section>
+        <GetInvolved />
       </section>
     </div>
   );

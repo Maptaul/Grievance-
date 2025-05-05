@@ -58,7 +58,7 @@ const ManageMyComplaints = () => {
           </p>
           <button
             className="btn btn-primary mt-4"
-            onClick={() => navigate("/")} // Adjust route
+            onClick={() => navigate("/complaint-category")} // Adjust route
           >
             Submit New Complaint
           </button>

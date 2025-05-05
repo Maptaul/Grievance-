@@ -25,9 +25,10 @@ const SubmitComplaint = () => {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [location, setLocation] = useState(null);
+  const [ward, setWard] = useState(null); // New state for ward selection
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
-  const { user, role } = useContext(AuthContext); // Add role from AuthContext
+  const { user, role } = useContext(AuthContext);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -121,6 +122,7 @@ const SubmitComplaint = () => {
         description,
         fileUrl,
         location,
+        ward, // Include ward in complaint data
         status: "Pending",
         timestamp: new Date().toISOString(),
         email: user.email,
@@ -155,6 +157,11 @@ const SubmitComplaint = () => {
                   )}, ${location.longitude.toFixed(4)}</p>`
                 : ""
             }
+            ${
+              ward
+                ? `<p class="mt-2 text-sm">${t("ward_label")}: ${ward}</p>`
+                : ""
+            }
           </div>
         `,
         confirmButtonColor: "#3B82F6",
@@ -164,6 +171,7 @@ const SubmitComplaint = () => {
       setDescription("");
       setFile(null);
       setLocation(null);
+      setWard(null); // Reset ward
       setIsAnonymous(false);
     } catch (error) {
       console.error("Submission Error:", error);
@@ -294,25 +302,47 @@ const SubmitComplaint = () => {
         </div>
 
         <div className="space-y-2">
-          <button
-            type="button"
-            onClick={getLocation}
-            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            <FiMapPin className="text-blue-600" />
-            <span className="text-sm font-medium">
-              {location ? t("update_location") : t("add_location")}
-            </span>
-          </button>
-
-          {location && (
-            <div className="p-3 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">
-                <FiMapPin className="inline mr-2 text-blue-600" />
-                {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
-              </p>
+          <label className="text-sm font-medium text-gray-700">
+            {t("location_label")}
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="relative">
+              <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                value={ward || ""}
+                onChange={(e) => setWard(e.target.value || null)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">{t("Select ward")}</option>
+                {Array.from({ length: 41 }, (_, i) => (
+                  <option key={i + 1} value={`Ward-${i + 1}`}>
+                    Ward-{i + 1}
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
+            <div>
+              <button
+                type="button"
+                onClick={getLocation}
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              >
+                <FiMapPin className="text-blue-600" />
+                <span className="text-sm font-medium">
+                  {location ? t("update_location") : t("add_location")}
+                </span>
+              </button>
+              {location && (
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">
+                    <FiMapPin className="inline mr-2 text-blue-600" />
+                    {location.latitude.toFixed(4)},{" "}
+                    {location.longitude.toFixed(4)}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div>
