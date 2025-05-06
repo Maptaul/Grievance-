@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TbWorld } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
-
 import { AuthContext } from "../Providers/AuthProvider";
 
 const NavBar = () => {
@@ -12,11 +11,13 @@ const NavBar = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  // Load saved language
   useEffect(() => {
     const savedLanguage = localStorage.getItem("i18nextLng") || "en";
     i18n.changeLanguage(savedLanguage);
   }, [i18n]);
 
+  // Handle logout
   const handleLogout = () => {
     logOut()
       .then(() => navigate("/"))
@@ -24,15 +25,21 @@ const NavBar = () => {
     setIsOpen(false);
   };
 
+  // Change language
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
     setIsOpen(false);
   };
 
+  // Close menu on overlay click
+  const handleOverlayClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <header
-      className=" top-0 w-full bg-white shadow-lg z-50 py-2"
+      className="top-0 w-full bg-white shadow-lg z-50 py-2"
       style={{ position: "-webkit-sticky", position: "sticky" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,6 +49,7 @@ const NavBar = () => {
             <button
               className="lg:hidden p-2 text-gray-600 hover:text-teal-600"
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={t("toggle menu")}
             >
               <Menu size={28} />
             </button>
@@ -55,9 +63,7 @@ const NavBar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <ul
-            className={`hidden lg:flex justify-center items-center col-span-3 space-x-4`}
-          >
+          <ul className="hidden lg:flex justify-center items-center col-span-3 space-x-4">
             <li>
               <Link
                 to="/locations"
@@ -66,7 +72,6 @@ const NavBar = () => {
                 {t("Office Locations")}
               </Link>
             </li>
-
             <li>
               <Link
                 to="/contact"
@@ -108,6 +113,7 @@ const NavBar = () => {
               <label
                 tabIndex={0}
                 className="btn btn-ghost btn-circle bg-[#640D5F] hover:bg-teal-700 text-white p-2"
+                aria-label={t("select language")}
               >
                 <TbWorld className="text-xl" />
               </label>
@@ -138,6 +144,7 @@ const NavBar = () => {
                 <label
                   tabIndex={0}
                   className="btn btn-ghost btn-circle avatar hover:bg-teal-50 p-1"
+                  aria-label={t("user menu")}
                 >
                   <div className="w-8 rounded-full border border-gray-200">
                     <img
@@ -170,22 +177,33 @@ const NavBar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-70 lg:hidden transition-opacity duration-300">
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-70 lg:hidden transition-opacity duration-300"
+          onClick={handleOverlayClick}
+        >
           <div
-            className="absolute left-0 top-0 h-full w-3/4 bg-white shadow-2xl p-3 transform transition-transform duration-300 ease-in-out"
+            className="absolute left-0 top-0 h-full w-3/4 max-w-[300px] bg-white shadow-2xl p-4 transform transition-transform duration-300 ease-in-out will-change-transform"
             style={{
               transform: isOpen ? "translateX(0)" : "translateX(-100%)",
             }}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label={t("mobile navigation menu")}
           >
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-center mb-6">
               <Link to="/" onClick={() => setIsOpen(false)}>
-                <img className="h-10" src={logo} alt="Logo" />
+                <img
+                  className="h-10"
+                  src="https://i.ibb.co.com/BWyt7Dk/ccc.png"
+                  alt="Logo"
+                />
               </Link>
               <button
                 className="p-2 rounded-full text-gray-600 hover:text-teal-600 hover:bg-teal-50"
                 onClick={() => setIsOpen(false)}
+                aria-label={t("close menu")}
               >
-                <X size={32} />
+                <X size={28} />
               </button>
             </div>
 
@@ -195,9 +213,8 @@ const NavBar = () => {
                 className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
-                {t("office Locations")}
+                {t("Office Locations")}
               </Link>
-
               <Link
                 to="/contact"
                 className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"
@@ -205,7 +222,6 @@ const NavBar = () => {
               >
                 {t("contact")}
               </Link>
-
               <Link
                 to="/complaint-category"
                 className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"
@@ -249,7 +265,6 @@ const NavBar = () => {
                   </button>
                 </div>
               </div>
-
               {user && (
                 <div className="border-t border-gray-200 pt-4 mt-4">
                   <button
