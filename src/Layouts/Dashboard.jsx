@@ -1,7 +1,13 @@
 import { useContext, useState } from "react";
-import { FaBars, FaHome, FaTimes, FaUser } from "react-icons/fa";
+import {
+  FaBars,
+  FaHome,
+  FaMapMarkedAlt,
+  FaTimes,
+  FaUser,
+} from "react-icons/fa";
 import { GrCompliance } from "react-icons/gr";
-import { IoLogOutOutline, IoSettings } from "react-icons/io5";
+import { IoLogOutOutline } from "react-icons/io5";
 import { TbReport } from "react-icons/tb";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
@@ -33,12 +39,12 @@ const Dashboard = () => {
           to="/dashboard/UserHome"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <FaHome className="mr-2 text-xl" />
+          <FaHome className="mr-2 text-lg" />
           <span className="md:inline">User Home</span>
         </NavLink>
       </li>
@@ -47,12 +53,12 @@ const Dashboard = () => {
           to="/dashboard/ManageMyComplaints"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <GrCompliance className="mr-2 text-xl" />
+          <GrCompliance className="mr-2 text-lg" />
           <span className="md:inline">My Complaints</span>
         </NavLink>
       </li>
@@ -61,29 +67,29 @@ const Dashboard = () => {
           to="/dashboard/Profile"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <FaUser className="mr-2 text-xl" />
+          <FaUser className="mr-2 text-lg" />
           <span className="md:inline">Profile</span>
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink
           to="/dashboard/Settings"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <IoSettings className="mr-2 text-xl" />
+          <IoSettings className="mr-2 text-lg" />
           <span className="md:inline">Settings</span>
         </NavLink>
-      </li>
+      </li> */}
     </>
   );
 
@@ -95,27 +101,13 @@ const Dashboard = () => {
           to="/dashboard/AdminHome"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <FaHome className="mr-2 text-xl" />
+          <FaHome className="mr-2 text-lg" />
           <span className="md:inline">Admin Home</span>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/ManageUsers"
-          onClick={() => setIsSidebarOpen(false)}
-          className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
-            }`
-          }
-        >
-          <FaUser className="mr-2 text-xl" />
-          <span className="md:inline">Manage Users</span>
         </NavLink>
       </li>
       <li>
@@ -123,13 +115,13 @@ const Dashboard = () => {
           to="/dashboard/ManageComplaints"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <TbReport className="mr-2 text-xl" />
-          <span className="md:inline">Manage Complaints</span>
+          <TbReport className="mr-2 text-lg" />
+          <span className="md:inline">Complaints</span>
         </NavLink>
       </li>
       <li>
@@ -137,29 +129,57 @@ const Dashboard = () => {
           to="/dashboard/AllComplaints"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <TbReport className="mr-2 text-xl" />
+          <TbReport className="mr-2 text-lg" />
           <span className="md:inline">All Complaints</span>
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/dashboard/Settings"
+          to="/dashboard/WardWiseView"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
-            `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-              isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
             }`
           }
         >
-          <IoSettings className="mr-2 text-xl" />
-          <span className="md:inline">Settings</span>
+          <FaMapMarkedAlt className="mr-2 text-lg" />
+          <span className="md:inline">Ward Wise View</span>
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to="/dashboard/ManageUsers"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
+            }`
+          }
+        >
+          <FaUser className="mr-2 text-lg" />
+          <span className="md:inline">Manage Users</span>
+        </NavLink>
+      </li>
+      {/* <li>
+        <NavLink
+          to="/dashboard/Settings"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
+            }`
+          }
+        >
+          <IoSettings className="mr-2 text-lg" />
+          <span className="md:inline">Settings</span>
+        </NavLink>
+      </li> */}
     </>
   );
 
@@ -168,60 +188,60 @@ const Dashboard = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="md:hidden p-3 bg-amber-400 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
+        className="md:hidden p-2 bg-blue-500 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
       >
         {isSidebarOpen ? (
-          <FaTimes className="text-xl text-gray-800" />
+          <FaTimes className="text-lg text-white" />
         ) : (
-          <FaBars className="text-xl text-gray-800" />
+          <FaBars className="text-lg text-white" />
         )}
       </button>
 
       {/* Overlay for Mobile */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-amber-200 bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-gray-800 bg-opacity-50 z-30 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-amber-100 fixed top-0 left-0 h-full z-40 transition-transform duration-300 ease-in-out ${
+        className={`w-56 bg-gray-200 fixed top-0 left-0 h-full z-40 transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:w-1/5 lg:w-1/6 md:static md:h-auto md:min-h-screen`}
+        } md:translate-x-0 md:w-56 md:static md:h-auto md:min-h-screen`}
       >
         <div className="p-4 h-full flex flex-col">
-          <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          <h1 className="text-xl font-bold text-center mb-6 text-gray-800">
             {role === "administrative" ? "Admin Dashboard" : "User Dashboard"}
           </h1>
           <nav className="flex-1">
-            <ul className="space-y-2 text-xl font-bold">
+            <ul className="space-y-1 text-base font-bold">
               {/* Conditionally render menu based on role */}
               {role === "administrative" ? adminMenu : citizenMenu}
 
               {/* Common Menu Items */}
-              <div className="divider"></div>
+              <div className="my-4 border-t border-gray-300"></div>
               <li>
                 <NavLink
                   to="/"
                   onClick={() => setIsSidebarOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors ${
-                      isActive ? "bg-amber-400 text-gray-900" : "text-gray-700"
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <FaHome className="mr-2 text-xl" />
+                  <FaHome className="mr-2 text-lg" />
                   <span className="md:inline">Home</span>
                 </NavLink>
               </li>
               <li>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center p-3 rounded-lg hover:bg-amber-300 transition-colors text-gray-700 w-full text-left"
+                  className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
                 >
-                  <IoLogOutOutline className="mr-2 text-xl" />
+                  <IoLogOutOutline className="mr-2 text-lg" />
                   <span className="md:inline">Logout</span>
                 </button>
               </li>
@@ -231,7 +251,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-amber-200 min-h-screen p-6 md:p-8 transition-all duration-300">
+      <div className="flex-1 bg-gray-100 min-h-screen p-6 md:p-8 transition-all duration-300">
         <Outlet />
       </div>
     </div>

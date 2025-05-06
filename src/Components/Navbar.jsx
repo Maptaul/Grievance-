@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TbWorld } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/ccc_new_logo.png";
+
 import { AuthContext } from "../Providers/AuthProvider";
 
 const NavBar = () => {
@@ -32,7 +32,7 @@ const NavBar = () => {
 
   return (
     <header
-      className="sticky fixed top-0 w-full bg-white shadow-lg z-50 py-2"
+      className=" top-0 w-full bg-white shadow-lg z-50 py-2"
       style={{ position: "-webkit-sticky", position: "sticky" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,7 +47,7 @@ const NavBar = () => {
             </button>
             <Link to="/" className="flex items-center ml-2 lg:ml-0">
               <img
-                src={logo}
+                src="https://i.ibb.co.com/BWyt7Dk/ccc.png"
                 alt="Logo"
                 className="h-8 md:h-14 object-contain"
               />
@@ -66,16 +66,7 @@ const NavBar = () => {
                 {t("Office Locations")}
               </Link>
             </li>
-            <li>
-              <a
-                href="https://jobccc.gov.bd/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-800 font-medium hover:text-teal-600 px-4 py-2 rounded-lg"
-              >
-                {t("careers")}
-              </a>
-            </li>
+
             <li>
               <Link
                 to="/contact"
@@ -206,15 +197,7 @@ const NavBar = () => {
               >
                 {t("office Locations")}
               </Link>
-              <a
-                href="https://jobccc.gov.bd/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                {t("careers")}
-              </a>
+
               <Link
                 to="/contact"
                 className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"

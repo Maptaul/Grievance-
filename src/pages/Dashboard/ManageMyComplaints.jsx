@@ -37,8 +37,8 @@ const ManageMyComplaints = () => {
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-red-600">Error: {error}</p>
         <button
-          className="btn btn-secondary mt-4"
-          onClick={() => window.location.reload()} // Retry fetch
+          className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg ml-4"
+          onClick={() => window.location.reload()}
         >
           Retry
         </button>
@@ -47,7 +47,7 @@ const ManageMyComplaints = () => {
   }
 
   return (
-    <div className="p-6 md:p-8 min-h-screen bg-amber-50">
+    <div className="p-6 md:p-8 min-h-screen bg-gray-100">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Manage My Complaints
       </h1>
@@ -57,37 +57,40 @@ const ManageMyComplaints = () => {
             You haven’t submitted any complaints yet.
           </p>
           <button
-            className="btn btn-primary mt-4"
-            onClick={() => navigate("/complaint-category")} // Adjust route
+            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-4"
+            onClick={() => navigate("/complaint-category")}
           >
             Submit New Complaint
           </button>
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow-md">
-            <thead className="bg-amber-100">
+          <table className="min-w-full bg-gray-200 rounded-lg shadow-md">
+            <thead className="bg-gray-300">
               <tr>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                   Serial
                 </th>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                   Category
                 </th>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                   Title
                 </th>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                   Date
                 </th>
-                <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+                <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                   Status
                 </th>
               </tr>
             </thead>
             <tbody>
               {complaints.map((complaint, index) => (
-                <tr key={complaint._id} className="border-b hover:bg-amber-50">
+                <tr
+                  key={complaint._id}
+                  className="border-b border-gray-300 hover:bg-gray-300"
+                >
                   <td className="py-3 px-4 text-gray-800">{index + 1}</td>
                   <td className="py-3 px-4 text-gray-800">
                     {complaint.category}
@@ -100,10 +103,10 @@ const ManageMyComplaints = () => {
                     <span
                       className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
                         complaint.status === "Pending"
-                          ? "bg-yellow-200 text-yellow-800"
+                          ? "bg-yellow-100 text-yellow-800"
                           : complaint.status === "Ongoing"
-                          ? "bg-blue-200 text-blue-800"
-                          : "bg-green-200 text-green-800"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
                       }`}
                     >
                       {complaint.status}

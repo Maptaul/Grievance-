@@ -1,4 +1,7 @@
 import React from "react";
+import image1 from "/src/assets/image1.jpg";
+import image2 from "/src/assets/image2.jpg";
+import image3 from "/src/assets/image3.jpg";
 
 const Welcome = () => {
   return (
@@ -24,18 +27,18 @@ const Welcome = () => {
           <div>
             <div className="grid grid-cols-2 gap-5 mb-5">
               <img
-                src="/src/assets/image1.jpg"
+                src={image1}
                 alt="Chattogram"
                 className="h-[200px] w-full object-cover rounded-[20px]"
               />
               <img
-                src="/src/assets/image2.jpg"
+                src={image2}
                 alt="Chattogram"
                 className="h-[200px] w-full object-cover rounded-[20px]"
               />
             </div>
             <img
-              src="/src/assets/image3.jpg"
+              src={image3}
               alt="Chattogram"
               className="h-[300px] w-full object-cover rounded-[20px]"
             />

@@ -6,6 +6,8 @@ const ManageComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sortBy, setSortBy] = useState("none");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   // Fetch complaints on component mount
   useEffect(() => {
@@ -69,8 +71,8 @@ const ManageComplaints = () => {
       title: "Are you sure?",
       text: "This action will permanently delete the complaint. Do you want to proceed?",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#DC2626",
+      cancelButtonColor: "#6B7280",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -104,50 +106,95 @@ const ManageComplaints = () => {
     }
   };
 
+  // Sorting logic with null/undefined handling
+  const sortedComplaints = [...complaints].sort((a, b) => {
+    if (sortBy === "none") return 0; // Maintain original order
+    const valueA = String(
+      sortBy === "category" ? a.category ?? "" : a.status ?? ""
+    );
+    const valueB = String(
+      sortBy === "category" ? b.category ?? "" : b.status ?? ""
+    );
+    return sortDirection === "asc"
+      ? valueA.localeCompare(valueB)
+      : valueB.localeCompare(valueA);
+  });
+
+  // Toggle sort direction
+  const toggleSortDirection = () => {
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  };
+
   if (loading) {
     return <Loading />;
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <p className="text-red-600">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Manage Complaints
       </h1>
+      <div className="mb-4 bg-gray-200 p-4 rounded-lg border border-gray-300 flex gap-4 items-center">
+        <div>
+          <label htmlFor="sortBy" className="text-gray-800 font-semibold mr-2">
+            Sort By:
+          </label>
+          <select
+            id="sortBy"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="p-2 border rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="none">None</option>
+            <option value="category">Category</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+        <button
+          onClick={toggleSortDirection}
+          className="p-2 bg-gray-200 border border-gray-300 rounded-md text-gray-800 hover:bg-gray-300 transition-colors"
+        >
+          {sortDirection === "asc" ? "Sort Descending" : "Sort Ascending"}
+        </button>
+      </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
-          <thead className="bg-amber-100">
+        <table className="min-w-full bg-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-300">
             <tr>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Serial
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Category
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Name
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Status
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {complaints.map((complaint, index) => (
-              <tr key={complaint._id} className="border-b hover:bg-amber-50">
+            {sortedComplaints.map((complaint, index) => (
+              <tr
+                key={complaint._id}
+                className="border-b border-gray-300 hover:bg-gray-300"
+              >
                 <td className="py-3 px-4 text-gray-800">{index + 1}</td>
                 <td className="py-3 px-4 text-gray-800">
-                  {complaint.category}
+                  {complaint.category || "N/A"}
                 </td>
                 <td className="py-3 px-4 text-gray-800">{complaint.name}</td>
                 <td className="py-3 px-4">
@@ -156,7 +203,7 @@ const ManageComplaints = () => {
                     onChange={(e) =>
                       handleStatusChange(complaint._id, e.target.value)
                     }
-                    className="p-2 border rounded-md bg-amber-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="p-2 border rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Ongoing">Ongoing</option>
@@ -166,7 +213,7 @@ const ManageComplaints = () => {
                 <td className="py-3 px-4">
                   <button
                     onClick={() => handleDeleteComplaint(complaint._id)}
-                    className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
+                    className="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition-colors"
                   >
                     Delete
                   </button>

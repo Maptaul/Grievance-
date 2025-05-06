@@ -159,7 +159,7 @@ const SubmitComplaint = () => {
             }
             ${
               ward
-                ? `<p class="mt-2 text-sm">${t("ward_label")}: ${ward}</p>`
+                ? `<p class="mt-2 text-sm">${t("ward label")}: ${ward}</p>`
                 : ""
             }
           </div>

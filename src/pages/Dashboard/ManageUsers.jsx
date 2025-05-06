@@ -71,8 +71,8 @@ const ManageUsers = () => {
       title: "Are you sure?",
       text: "This action will permanently delete the user. Do you want to proceed?",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#DC2626",
+      cancelButtonColor: "#6B7280",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -113,39 +113,42 @@ const ManageUsers = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <p className="text-red-600">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Manage Users</h1>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-lg shadow-md">
-          <thead className="bg-amber-100">
+        <table className="min-w-full bg-gray-200 rounded-lg shadow-md">
+          <thead className="bg-gray-300">
             <tr>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Photo
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Name
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Email
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Role
               </th>
-              <th className="py-3 px-4 text-left text-gray-700 font-semibold">
+              <th className="py-3 px-4 text-left text-gray-800 font-semibold">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.email} className="border-b hover:bg-amber-50">
+              <tr
+                key={user.email}
+                className="border-b border-gray-300 hover:bg-gray-300"
+              >
                 <td className="py-3 px-4 text-gray-800">
                   <img
                     src={user.photo || "https://via.placeholder.com/40"}
@@ -153,7 +156,7 @@ const ManageUsers = () => {
                     className="w-10 h-10 rounded-full object-cover"
                     onError={(e) =>
                       (e.target.src = "https://via.placeholder.com/40")
-                    } // Fallback if image fails to load
+                    }
                   />
                 </td>
                 <td className="py-3 px-4 text-gray-800">
@@ -166,7 +169,7 @@ const ManageUsers = () => {
                     onChange={(e) =>
                       handleRoleChange(user.email, e.target.value)
                     }
-                    className="p-2 border rounded-md bg-amber-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="p-2 border rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   >
                     <option value="citizen">Citizen</option>
                     <option value="administrative">Administrative</option>
@@ -175,7 +178,7 @@ const ManageUsers = () => {
                 <td className="py-3 px-4">
                   <button
                     onClick={() => handleDeleteUser(user.email)}
-                    className="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
+                    className="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition-colors"
                   >
                     Delete
                   </button>

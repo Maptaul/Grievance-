@@ -1,5 +1,6 @@
 import React from "react";
-import data from "/public/data.json"; // Adjust the path as necessary
+import data from "/public/data.json";
+ // Adjust the path as necessary
 
 const KeyPillarsSection = () => {
   return (

@@ -66,26 +66,26 @@ const UserHome = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-6 md:p-8">
+    <div className="w-full min-h-screen bg-gray-100 p-6 md:p-8">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
+        <h1 className="text-4xl font-extrabold text-gray-800 mb-2 tracking-tight">
           Welcome Back, {user?.displayName || "User"}!
         </h1>
-        <p className="text-lg text-gray-500">
+        <p className="text-lg text-gray-600">
           Your dashboard overview at a glance
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div className="flex items-center">
-            <div className="p-4 bg-amber-50 rounded-full mr-4">
-              <FaFileAlt className="text-3xl text-amber-500" />
+            <div className="p-4 bg-blue-100 rounded-full mr-4">
+              <FaFileAlt className="text-3xl text-blue-500" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
                 Total Complaints
               </p>
               <h3 className="text-3xl font-bold text-gray-800">
@@ -95,13 +95,13 @@ const UserHome = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div className="flex items-center">
-            <div className="p-4 bg-amber-50 rounded-full mr-4">
-              <FaClock className="text-3xl text-amber-500" />
+            <div className="p-4 bg-blue-100 rounded-full mr-4">
+              <FaClock className="text-3xl text-blue-500" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
                 Pending Reviews
               </p>
               <h3 className="text-3xl font-bold text-gray-800">
@@ -111,13 +111,13 @@ const UserHome = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div className="bg-gray-200 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div className="flex items-center">
-            <div className="p-4 bg-amber-50 rounded-full mr-4">
-              <FaUser className="text-3xl text-amber-500" />
+            <div className="p-4 bg-blue-100 rounded-full mr-4">
+              <FaUser className="text-3xl text-blue-500" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
                 Profile Completion
               </p>
               <h3 className="text-3xl font-bold text-gray-800">
@@ -129,14 +129,14 @@ const UserHome = () => {
       </div>
 
       {/* All Complaints Table */}
-      <div className="mt-10 bg-white p-6 rounded-xl shadow-md">
+      <div className="mt-10 bg-gray-200 p-6 rounded-xl shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold text-gray-800">
             All Your Complaints
           </h2>
           <button
             onClick={handleViewAllComplaints}
-            className="text-amber-600 hover:text-amber-700 font-medium transition-colors"
+            className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
           >
             {showAllComplaints ? "Hide" : "Show All"}
           </button>
@@ -145,7 +145,7 @@ const UserHome = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-gray-700 border-separate border-spacing-y-2">
               <thead>
-                <tr className="bg-amber-100 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                <tr className="bg-gray-300 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">
                   <th className="p-4 rounded-tl-lg">Complaint ID</th>
                   <th className="p-4">Category</th>
                   <th className="p-4">Title</th>
@@ -160,7 +160,7 @@ const UserHome = () => {
                 {complaints.map((complaint) => (
                   <tr
                     key={complaint._id}
-                    className="bg-gray-50 hover:bg-amber-50 transition-colors duration-200 rounded-lg shadow-sm"
+                    className="bg-gray-50 hover:bg-gray-300 transition-colors duration-200 rounded-lg shadow-sm"
                   >
                     <td className="p-4 text-gray-800 font-medium">
                       #{complaint._id.slice(-4)}
@@ -176,7 +176,7 @@ const UserHome = () => {
                           href={complaint.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-amber-600 hover:text-amber-800 hover:underline"
+                          className="text-blue-600 hover:text-blue-800 hover:underline"
                         >
                           View
                         </a>
@@ -212,14 +212,14 @@ const UserHome = () => {
       </div>
 
       {/* Recent Activity Table */}
-      <div className="mt-10 bg-white p-6 rounded-xl shadow-md">
+      <div className="mt-10 bg-gray-200 p-6 rounded-xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Your Recent Activity
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-gray-700 border-separate border-spacing-y-2">
             <thead>
-              <tr className="bg-amber-100 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
+              <tr className="bg-gray-300 text-left text-sm font-semibold text-gray-800 uppercase tracking-wider">
                 <th className="p-4 rounded-tl-lg">Serial</th>
                 <th className="p-4">Title</th>
                 <th className="p-4 rounded-tr-lg">Date</th>
@@ -229,7 +229,7 @@ const UserHome = () => {
               {complaints.slice(0, 3).map((complaint, index) => (
                 <tr
                   key={complaint._id}
-                  className="bg-gray-50 hover:bg-amber-50 transition-colors duration-200 rounded-lg shadow-sm"
+                  className="bg-gray-50 hover:bg-gray-300 transition-colors duration-200 rounded-lg shadow-sm"
                 >
                   <td className="p-4 text-gray-800 font-medium">{index + 1}</td>
                   <td className="p-4 text-gray-700">{complaint.name}</td>

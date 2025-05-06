@@ -4,9 +4,20 @@ import locations from "../../public/locations.json";
 const OfficeLocations = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSelectLocation = (location) => {
+    setDropdownOpen(false);
+    setLoading(true);
+    // Simulate loading time (e.g., 1s)
+    setTimeout(() => {
+      setSelectedLocation(location);
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
-    <section className=" min-h-[70vh] pt-20 pb-8 text-center">
+    <section className="min-h-[70vh] pt-20 pb-8 text-center">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="font-black text-2xl mb-6">Select an Office Location</h1>
 
@@ -21,14 +32,11 @@ const OfficeLocations = () => {
 
           {isDropdownOpen && (
             <div className="absolute top-14 left-1/2 -translate-x-1/2 bg-white p-4 rounded-xl shadow-lg z-10 w-64 max-h-60 overflow-y-auto">
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 {locations.map((location) => (
                   <li
                     key={location.id}
-                    onClick={() => {
-                      setSelectedLocation(location);
-                      setDropdownOpen(false);
-                    }}
+                    onClick={() => handleSelectLocation(location)}
                     className="cursor-pointer border-b border-gray-200 last:border-b-0 font-bold text-sm hover:text-blue-600 transition"
                   >
                     {location.name}
@@ -39,8 +47,16 @@ const OfficeLocations = () => {
           )}
         </div>
 
-        {/* Details */}
-        {selectedLocation && (
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="mt-12">
+            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="mt-4 text-sm font-medium text-gray-600">Loading...</p>
+          </div>
+        )}
+
+        {/* Location Details */}
+        {!loading && selectedLocation && (
           <div className="mt-12 bg-white shadow-lg p-10 rounded-3xl">
             <h2 className="text-3xl font-bold mb-6">{selectedLocation.name}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -203,7 +203,7 @@ const SignUp = () => {
             >
               <option value="">{t("select_role_placeholder")}</option>
               <option value="citizen">{t("citizen")}</option>
-              <option value="administrative">{t("administrative")}</option>
+              {/* <option value="administrative">{t("administrative")}</option> */}
             </select>
             {errors.role && (
               <p className="text-red-500 text-sm">{errors.role.message}</p>

@@ -118,7 +118,7 @@ export default function Contact() {
                 </div>
                 <div className="mt-6">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.8551362531143!2d91.82484629999999!3d22.3590981!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30ad275a8c7f0c33%3A0x6b3b4785e8c9c4f7!2sChittagong%20City%20Corporation!5e0!3m2!1sen!2sbd!4v1741508227253!5m2!1sen!2sbd"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48818.870990924726!2d91.7761292743164!3d22.3443623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30ad275c1e17be6b%3A0x3800d2f36b60300c!2sChattogram%20City%20Corporation!5e1!3m2!1sen!2sbd!4v1746514689526!5m2!1sen!2sbd"
                     width="100%"
                     height="200"
                     className="rounded-lg border-0 w-full"

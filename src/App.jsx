@@ -14,8 +14,8 @@ import ManageComplaints from "./pages/Dashboard/ManageComplaints";
 import ManageMyComplaints from "./pages/Dashboard/ManageMyComplaints";
 import ManageUsers from "./pages/Dashboard/ManageUsers";
 import Profile from "./pages/Dashboard/Profile";
-import Settings from "./pages/Dashboard/Settings";
 import UserHome from "./pages/Dashboard/UserHome"; // Added UserHome import
+import WardWiseView from "./pages/Dashboard/WardWiseView";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -56,13 +56,14 @@ function App() {
           <Route path="userhome" element={<UserHome />} />
           <Route path="ManageMyComplaints" element={<ManageMyComplaints />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="settings" element={<Settings />} />
+          {/* <Route path="settings" element={<Settings />} /> */}
           {/* Admin Routes */}
           <Route path="AdminHome" element={<AdminHome />} />
           <Route path="ManageUsers" element={<ManageUsers />} />
           <Route path="ManageComplaints" element={<ManageComplaints />} />
           <Route path="AllComplaints" element={<AllComplaints />} />
           <Route path="editComplaint/:id" element={<EditComplaint />} />
+          <Route path="WardWiseView" element={<WardWiseView />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

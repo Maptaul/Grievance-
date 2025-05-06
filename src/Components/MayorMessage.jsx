@@ -1,4 +1,5 @@
 import React from "react";
+import mayor from "/src/assets/mayor.jpg";
 
 const MayorMessage = () => {
   return (
@@ -16,7 +17,7 @@ const MayorMessage = () => {
           {/* Image */}
           <div className="text-center">
             <img
-              src="/src/assets/mayor.jpg"
+              src={mayor}
               alt="Mayor"
               className="w-[60%] mx-auto rounded-[20px]"
             />
