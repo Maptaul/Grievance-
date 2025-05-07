@@ -23,9 +23,30 @@ const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const googleProvider = new GoogleAuthProvider();
 
-  const createUser = (email, password) => {
+  const createUser = async (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const newUser = userCredential.user;
+      const userData = {
+        email: email.toLowerCase(),
+        role: "citizen",
+        createdAt: new Date().toISOString(),
+      };
+      await axios.post("https://grievance-server.vercel.app/users", userData);
+      setRole("citizen");
+      return userCredential;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      setError(error.message || "Failed to create user");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signIn = (email, password) => {
@@ -71,13 +92,18 @@ const AuthProvider = ({ children }) => {
             setRole(response.data.role);
             console.log("User role fetched:", response.data.role);
           } else {
-            setRole("unknown");
-            console.warn("No role found for user, defaulting to 'unknown'");
+            setRole("citizen");
+            console.warn("No role found, defaulting to 'citizen'");
+            await axios.post("https://grievance-server.vercel.app/users", {
+              email,
+              role: "citizen",
+              createdAt: new Date().toISOString(),
+            });
           }
         } catch (error) {
           console.error("Error fetching user role:", error);
           setError(error.message || "Failed to fetch user role");
-          setRole("unknown");
+          setRole("citizen");
         }
       } else {
         setRole(null);
