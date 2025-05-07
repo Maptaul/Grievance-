@@ -1,10 +1,10 @@
+import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TbWorld } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProvider";
-import { motion } from "framer-motion";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,13 +12,11 @@ const NavBar = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  // Load saved language
   useEffect(() => {
     const savedLanguage = localStorage.getItem("i18nextLng") || "en";
     i18n.changeLanguage(savedLanguage);
   }, [i18n]);
 
-  // Handle logout
   const handleLogout = () => {
     logOut()
       .then(() => navigate("/"))
@@ -26,23 +24,20 @@ const NavBar = () => {
     setIsOpen(false);
   };
 
-  // Change language
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
     setIsOpen(false);
   };
 
-  // Close menu on overlay click
   const handleOverlayClick = () => {
     setIsOpen(false);
   };
 
-  // Framer Motion variants for the Complaints button
   const buttonVariants = {
     idle: {
-      scale: [1, 1.05, 1], // Gentle pulse effect
-      opacity: [1, 0.7, 1], // Blinking effect
+      scale: [1, 1.05, 1],
+      opacity: [1, 0.7, 1],
       transition: {
         duration: 2,
         repeat: Infinity,
@@ -51,8 +46,8 @@ const NavBar = () => {
     },
     hover: {
       scale: 1.1,
-      opacity: 1, // Ensure full opacity on hover
-      backgroundColor: "#0f766e", // teal-700
+      opacity: 1,
+      backgroundColor: "#0f766e",
       transition: {
         duration: 0.3,
         ease: "easeInOut",
@@ -60,7 +55,7 @@ const NavBar = () => {
     },
     tap: {
       scale: 0.95,
-      opacity: 1, // Ensure full opacity on tap
+      opacity: 1,
       transition: {
         duration: 0.1,
       },
@@ -68,10 +63,7 @@ const NavBar = () => {
   };
 
   return (
-    <header
-      className="top-0 w-full bg-white shadow-lg z-50 py-2"
-      style={{ position: "-webkit-sticky", position: "sticky" }}
-    >
+    <header className="fixed top-0 left-0 w-full bg-white shadow-lg z-50 py-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo and Hamburger */}

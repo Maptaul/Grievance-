@@ -4,42 +4,44 @@ import banner from "/src/assets/finalvideo.mp4";
 
 const BannerSection = () => {
   return (
-    <section className="relative mt-3 max-w-7xl mx-auto w-full h-[500px] overflow-hidden">
-      <video
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        src={banner}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-        <motion.div
-          className="flex flex-col items-center"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
-          <motion.img
-            title="Chittagong City Corporation Logo"
-            src="https://i.ibb.co.com/BWyt7Dk/ccc.png"
-            alt="Chittagong City Corporation Logo"
-            className="w-24 h-24 mb-4 rounded-full shadow-md"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
-
-          <motion.h1
-            className="text-white text-4xl text-center md:text-4xl font-bold"
-            initial={{ opacity: 0, y: 20 }}
+    <section className="relative pt-20 mt-3 max-w-7xl mx-auto w-full h-[500px] overflow-hidden">
+      <div>
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          src={banner}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <motion.div
+            className="flex flex-col items-center"
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
-            Welcome to the Central Grievance Platform <br /> of the Chittagong
-            City Corporation
-          </motion.h1>
-        </motion.div>
+            <motion.img
+              title="Chittagong City Corporation Logo"
+              src="https://i.ibb.co.com/BWyt7Dk/ccc.png"
+              alt="Chittagong City Corporation Logo"
+              className="w-24 h-24 mb-4 rounded-full shadow-md"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            />
+
+            <motion.h1
+              className="text-white text-4xl text-center md:text-4xl font-bold"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              Welcome to the Central Grievance Platform <br /> of the Chittagong
+              City Corporation
+            </motion.h1>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
