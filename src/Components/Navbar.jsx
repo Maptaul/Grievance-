@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { TbWorld } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProvider";
+import { motion } from "framer-motion";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,35 @@ const NavBar = () => {
   // Close menu on overlay click
   const handleOverlayClick = () => {
     setIsOpen(false);
+  };
+
+  // Framer Motion variants for the Complaints button
+  const buttonVariants = {
+    idle: {
+      scale: [1, 1.05, 1], // Gentle pulse effect
+      opacity: [1, 0.7, 1], // Blinking effect
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut",
+      },
+    },
+    hover: {
+      scale: 1.1,
+      opacity: 1, // Ensure full opacity on hover
+      backgroundColor: "#0f766e", // teal-700
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    tap: {
+      scale: 0.95,
+      opacity: 1, // Ensure full opacity on tap
+      transition: {
+        duration: 0.1,
+      },
+    },
   };
 
   return (
@@ -103,12 +133,20 @@ const NavBar = () => {
 
           {/* Buttons and Dropdowns */}
           <div className="flex items-center justify-end gap-4">
-            <Link
-              to="/complaint-category"
-              className="hidden lg:block bg-[#640D5F] text-white font-bold py-2 px-5 rounded-lg hover:bg-teal-700"
+            <motion.div
+              className="hidden lg:block"
+              variants={buttonVariants}
+              initial="idle"
+              whileHover="hover"
+              whileTap="tap"
             >
-              {t("Complaints")}
-            </Link>
+              <Link
+                to="/complaint-category"
+                className="bg-[#640D5F] text-white font-bold py-2 px-5 rounded-lg"
+              >
+                {t("Complaints")}
+              </Link>
+            </motion.div>
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
@@ -222,13 +260,20 @@ const NavBar = () => {
               >
                 {t("contact")}
               </Link>
-              <Link
-                to="/complaint-category"
-                className="block px-4 py-3 text-lg font-semibold text-gray-800 hover:bg-teal-100 hover:text-teal-600 rounded-xl transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
+              <motion.div
+                variants={buttonVariants}
+                initial="idle"
+                whileHover="hover"
+                whileTap="tap"
               >
-                {t("Complaints")}
-              </Link>
+                <Link
+                  to="/complaint-category"
+                  className="block px-4 py-3 text-lg font-semibold text-white bg-[#640D5F] hover:bg-teal-700 rounded-xl transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {t("Complaints")}
+                </Link>
+              </motion.div>
               {!user ? (
                 <Link
                   to="/login"

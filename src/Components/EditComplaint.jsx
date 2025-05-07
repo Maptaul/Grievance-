@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FiFile, FiImage, FiMapPin, FiX } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; // Ensure SweetAlert2 is installed and properly imported
+import Loading from "./Loading";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
@@ -146,11 +147,7 @@ const EditComplaint = () => {
   }
 
   if (!complaint) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        Loading...
-      </div>
-    );
+    return <Loading />;
   }
 
   const isResolved = complaint.status === "Resolved";
