@@ -14,7 +14,6 @@ const resources = {
       complaints: "Complaints",
       language: "Language",
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
-
       // Existing Translations
       complainant_login: "Complainant Login",
       admin_login: "Admin Login",
@@ -41,7 +40,6 @@ const resources = {
       press_kit: "Press Kit",
       copyright: "Copyright",
       all_rights_reserved: "All rights reserved by Chittagong City Corporation",
-
       // SubmitComplaint Translations
       report_issue: "Report an Issue",
       improve_community: "Help improve our community",
@@ -99,6 +97,222 @@ const resources = {
       registering: "Registering...",
       already_have_account: "Already have an account?",
       registration_successful: "Registration Successful!",
+      // Notice Translations
+      notice_1: "We're Hiring: Data Analyst Needed!",
+      notice_2: "New Feature: Digital Chattogram Platform Live Now!",
+      notice_3: "Internship Opportunities Available – Apply Today!",
+      notice_4: "Join the Green City Initiative: Plant a Tree!",
+      notice_5: "Smart Traffic System Launching Soon – Stay Tuned!",
+      notice_6: "Share Your Ideas: Public Feedback Portal Open!",
+      notice_7: "Job Opening: Sustainability Specialist – Apply Now!",
+      notice_8: "Workshop Alert: Learn About Smart City Technologies!",
+      notice_9: "Emergency Services App Now Available – Download Today!",
+      notice_10: "Follow Us on Social Media for Latest Updates!",
+      // Welcome Translations
+      welcome_title: "A Smart and Sustainable City",
+      welcome_description:
+        "Chattogram, the bustling port city of Bangladesh, is on a transformative journey to become a smart and sustainable urban hub. With its rich history, strategic location, and economic significance, Chattogram is embracing innovation, technology, and eco-friendly practices to enhance the quality of life for its residents and create a model city for the future.",
+      welcome_image_alt: "Chattogram",
+      // Vision Translations
+      vision_title: "Our Vision",
+      vision_description:
+        "To transform Chattogram into a globally recognized smart and sustainable city that leverages cutting-edge technology, promotes environmental stewardship, and ensures inclusive growth for all its citizens.",
+      // MayorMessage Translations
+      mayor_message_header: "A Message from the City Mayor",
+      mayor_name: "Dr. Shahadat Hossain",
+      mayor_title: "Honorable Mayor <br /> Chittagong City Corporation",
+      mayor_message:
+        '"Chattogram is not just a city; it is the heartbeat of Bangladesh\'s economy and a symbol of resilience and progress. As we embark on this ambitious journey to transform our city into a smart and sustainable urban center, I am committed to ensuring that every citizen benefits from this transformation. Together, we will build a city that is not only technologically advanced but also environmentally responsible and socially inclusive. Let us work hand in hand to create a brighter, greener, and smarter future for Chattogram."',
+      mayor_image_alt: "Mayor",
+      // ProgressSection Translations
+      progress_title: "Chattogram’s Progress Under Leadership",
+      progress_video1_title: "Dr. Shahadat Hossain’s Speech on Mosquito Spray",
+      progress_video2_title:
+        "Dr. Shahadat Hossain on City Corporation Politics",
+      // KeyPillarsSection Translations
+      key_pillars_title: "Key Pillars of Transformation",
+      key_pillars: {
+        smart_infrastructure: {
+          title: "Smart Infrastructure",
+          description:
+            "Developing intelligent systems to improve urban living.",
+          alt: "Smart Infrastructure",
+          items: {
+            item1:
+              "Developing intelligent transportation systems to reduce traffic congestion and improve mobility.",
+            item2:
+              "Implementing smart grids for efficient energy management and distribution.",
+            item3:
+              "Building resilient and eco-friendly urban infrastructure to withstand climate challenges.",
+          },
+        },
+        digital_innovation: {
+          title: "Digital Innovation",
+          description: "Leveraging technology for a smarter city.",
+          alt: "Digital Innovation",
+          items: {
+            item1:
+              "Establishing a city-wide digital network to enable real-time data collection and analysis.",
+            item2:
+              "Introducing e-governance platforms for transparent and efficient public services.",
+            item3:
+              "Promoting digital literacy and access to technology for all residents.",
+          },
+        },
+        sustainable_environment: {
+          title: "Sustainable Environment",
+          description: "Creating a greener and cleaner urban ecosystem.",
+          alt: "Sustainable Environment",
+          items: {
+            item1:
+              "Expanding green spaces, parks, and urban forests to improve air quality and biodiversity.",
+            item2:
+              "Implementing waste management systems that prioritize recycling and reduce landfill dependency.",
+            item3:
+              "Encouraging the use of renewable energy sources like solar and wind power.",
+          },
+        },
+        economic_growth: {
+          title: "Economic Growth and Inclusivity",
+          description: "Fostering a thriving and inclusive economy.",
+          alt: "Economic Growth and Inclusivity",
+          items: {
+            item1:
+              "Supporting local businesses and startups through innovation hubs and funding opportunities.",
+            item2:
+              "Creating job opportunities in emerging sectors like IT, green energy, and sustainable manufacturing.",
+            item3:
+              "Ensuring equitable access to resources and services for all communities.",
+          },
+        },
+        resilient_planning: {
+          title: "Resilient Urban Planning",
+          description: "Designing cities to withstand future challenges.",
+          alt: "Resilient Urban Planning",
+          items: {
+            item1:
+              "Designing climate-resilient housing and infrastructure to address flooding and other natural disasters.",
+            item2:
+              "Promoting mixed-use developments to reduce urban sprawl and enhance community living.",
+            item3:
+              "Integrating smart water management systems to ensure sustainable water use.",
+          },
+        },
+        licensing_system: {
+          title: "Licensing System",
+          description: "Simplifying and modernizing licensing processes.",
+          alt: "Licensing System",
+          items: {
+            item1:
+              "Streamlining the process for business licenses, vehicle registrations, and construction permits.",
+            item2:
+              "Introducing an online licensing portal for quick and hassle-free approvals.",
+            item3:
+              "Ensuring transparency and accountability in the licensing process to reduce corruption.",
+          },
+        },
+        transportation_services: {
+          title: "Transportation Services",
+          description:
+            "Revolutionizing urban mobility for a sustainable future.",
+          alt: "Transportation Services",
+          items: {
+            item1:
+              "Developing a modern, integrated public transportation system, including buses, trains, and ferries.",
+            item2:
+              "Introducing smart ticketing systems for seamless travel across different modes of transport.",
+            item3:
+              "Promoting eco-friendly transportation options like electric vehicles and bicycle-sharing programs.",
+          },
+        },
+      },
+      // OngoingProjects Translations
+      ongoing_projects_title: "Ongoing Projects",
+      ongoing_projects: {
+        smart_traffic: {
+          title: "Smart Traffic Management System",
+          description:
+            "Reducing congestion and improving road safety through AI-powered traffic control.",
+        },
+        green_city: {
+          title: "Chattogram Green City Initiative",
+          description:
+            "Planting 1 million trees and creating urban green belts.",
+        },
+        renewable_energy: {
+          title: "Renewable Energy Adoption",
+          description:
+            "Installing solar panels on public buildings and promoting rooftop solar for households.",
+        },
+        digital_platform: {
+          title: "Digital Chattogram Platform",
+          description:
+            "A one-stop portal for citizens to access government services, pay bills, and report issues.",
+        },
+        properties_management: {
+          title: "Properties Management",
+          description:
+            "Digitizing property records and enabling online management of land and real estate transactions.",
+        },
+        waste_management: {
+          title: "Waste Management",
+          description:
+            "Implementing smart waste collection systems and promoting recycling initiatives to reduce landfill dependency.",
+        },
+        utility_services: {
+          title: "Utility Services",
+          description:
+            "Upgrading water, electricity, and gas distribution networks to ensure reliable and efficient service delivery.",
+        },
+        infrastructure_maintenance: {
+          title: "Infrastructure Maintenance",
+          description:
+            "Using IoT and AI to monitor and maintain roads, bridges, and public buildings for safety and longevity.",
+        },
+      },
+      // GetInvolved Translations
+      get_involved_title: "Get Involved",
+      get_involved_description:
+        "Transforming Chattogram into a smart and sustainable city is a collective effort. Here’s how you can contribute:",
+      get_involved: {
+        residents: {
+          title: "Residents",
+          description:
+            "Adopt sustainable practices, participate in community programs, and stay informed about city initiatives.",
+        },
+        businesses: {
+          title: "Businesses",
+          description:
+            "Invest in green technologies, support local innovation, and collaborate with the government on smart city projects.",
+        },
+        government_ngos: {
+          title: "Government and NGOs",
+          description:
+            "Partner with stakeholders to implement policies and programs that drive sustainable development.",
+        },
+      },
+      get_involved_image_alt: "Get Involved",
+      // Footer Translations
+      footer_contact_title: "Contact Us",
+      footer_contact_description:
+        "Have questions or ideas? We’d love to hear from you!",
+      footer_contact: {
+        email_label: "Email",
+        phone_label: "Phone",
+        address_label: "Address",
+      },
+      footer_copyright:
+        "Copyright © {year} - All rights reserved by Chittagong City Corporation",
+      // Chatbot Translations
+      chatbot_title: "Smart AI Chatbot",
+      chatbot_initial_message: "Hello! How can I help you today?",
+      chatbot_followup_message: "How are you?",
+      chatbot_input_placeholder: "Type a message...",
+      chatbot_input_label: "Chatbot message input",
+      chatbot_input_description:
+        "Enter your message to chat with the Smart AI Chatbot",
+      chatbot_send_label: "Send message",
+      chatbot_toggle_label: "Toggle chatbot",
     },
   },
   bn: {
@@ -112,7 +326,6 @@ const resources = {
       complaints: "অভিযোগ",
       language: "ভাষা",
       welcome_to_ccc: "চট্টগ্রাম সিটি কর্পোরেশনে স্বাগতম",
-
       // Existing Translations
       complainant_login: "অভিযোগকারীর লগইন",
       admin_login: "অ্যাডমিন লগইন",
@@ -140,7 +353,6 @@ const resources = {
       copyright: "কপিরাইট",
       all_rights_reserved:
         "সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
-
       // SubmitComplaint Translations
       report_issue: "সমস্যা রিপোর্ট করুন",
       improve_community: "আমাদের সম্প্রদায় উন্নত করতে সাহায্য করুন",
@@ -167,11 +379,8 @@ const resources = {
       unsupported_feature: "অসমর্থিত বৈশিষ্ট্য",
       geolocation_unsupported: "জিওলোকেশন সমর্থিত নয়",
       missing_info: "তথ্য অনুপস্থিত",
-      provide_description: "দয়া করে একটি বিবরণ প্রদান করুন",
-      complaint_submitted: "অভিযোগ জমা দেওয়া হয়েছে!",
-      category_label: "বিভাগ",
       complaint_received:
-        "আমরা আপনার অভিযোগ গ্রহণ করেছি এবং শীঘ্রই এটি প্রক্রিয়া করব।",
+        "আপনার অভিযোগ গ্রহণ করেছি এবং শীঘ্রই এটি প্রক্রিয়া করব।",
       location_label: "অবস্থান",
       error: "ত্রুটি",
       submission_failed: "অভিযোগ জমা দিতে ব্যর্থ হয়েছে",
@@ -199,6 +408,221 @@ const resources = {
       registering: "নিবন্ধন হচ্ছে...",
       already_have_account: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
       registration_successful: "নিবন্ধন সফল!",
+      // Notice Translations
+      notice_1: "আমরা নিয়োগ করছি: ডেটা বিশ্লেষক প্রয়োজন!",
+      notice_2: "নতুন ফিচার: ডিজিটাল চট্টগ্রাম প্ল্যাটফর্ম এখন চালু!",
+      notice_3: "ইন্টার্নশিপ সুযোগ উপলব্ধ – আজই আবেদন করুন!",
+      notice_4: "গ্রিন সিটি উদ্যোগে যোগ দিন: একটি গাছ লাগান!",
+      notice_5: "স্মার্ট ট্রাফিক সিস্টেম শীঘ্রই চালু হচ্ছে – অপেক্ষা করুন!",
+      notice_6: "আপনার ধারণা শেয়ার করুন: পাবলিক ফিডব্যাক পোর্টাল খোলা!",
+      notice_7: "চাকরির সুযোগ: সাসটেইনেবিলিটি বিশেষজ্ঞ – এখন আবেদন করুন!",
+      notice_8: "ওয়ার্কশপ সতর্কতা: স্মার্ট সিটি প্রযুক্তি সম্পর্কে জানুন!",
+      notice_9: "জরুরি সেবা অ্যাপ এখন উপলব্ধ – আজই ডাউনলোড করুন!",
+      notice_10: "সর্বশেষ আপডেটের জন্য আমাদের সোশ্যাল মিডিয়ায় ফলো করুন!",
+      // Welcome Translations
+      welcome_title: "একটি স্মার্ট এবং টেকসই শহর",
+      welcome_description:
+        "চট্টগ্রাম, বাংলাদেশের ব্যস্ত বন্দর শহর, একটি স্মার্ট এবং টেকসই নগর কেন্দ্র হওয়ার জন্য একটি রূপান্তরকারী যাত্রায় রয়েছে। এর সমৃদ্ধ ইতিহাস, কৌশলগত অবস্থান এবং অর্থনৈতিক গুরুত্ব সহ, চট্টগ্রাম উদ্ভাবন, প্রযুক্তি এবং পরিবেশ-বান্ধব অনুশীলন গ্রহণ করছে যাতে বাসিন্দাদের জীবনমান উন্নত হয় এবং ভবিষ্যতের জন্য একটি মডেল শহর তৈরি হয়।",
+      welcome_image_alt: "চট্টগ্রাম",
+      // Vision Translations
+      vision_title: "আমাদের দৃষ্টিভঙ্গি",
+      vision_description:
+        "চট্টগ্রামকে বিশ্বব্যাপী স্বীকৃত একটি স্মার্ট এবং টেকসই শহরে রূপান্তর করা, যা অত্যাধুনিক প্রযুক্তি ব্যবহার করে, পরিবেশ সংরক্ষণকে উৎসাহিত করে এবং এর সকল নাগরিকের জন্য সমান্তরাল উন্নয়ন নিশ্চিত করে।",
+      // MayorMessage Translations
+      mayor_message_header: "নগর মেয়রের বার্তা",
+      mayor_name: "ড. শাহাদাত হোসেন",
+      mayor_title: "সম্মানিত মেয়র <br /> চট্টগ্রাম সিটি কর্পোরেশন",
+      mayor_message:
+        '"চট্টগ্রাম শুধু একটি শহর নয়; এটি বাংলাদেশের অর্থনীতির হৃদস্পন্দন এবং স্থিতিস্থাপকতা ও অগ্রগতির প্রতীক। আমরা আমাদের শহরকে একটি স্মার্ট এবং টেকসই নগর কেন্দ্রে রূপান্তরিত করার এই উচ্চাভিলাষী যাত্রায় যাত্রা শুরু করেছি, আমি প্রতিশ্রুতিবদ্ধ যে প্রতিটি নাগরিক এই রূপান্তর থেকে উপকৃত হবে। একসাথে, আমরা এমন একটি শহর গড়ে তুলব যা কেবল প্রযুক্তিগতভাবে উন্নত নয়, পরিবেশগতভাবে দায়িত্বশীল এবং সামাজিকভাবে অন্তর্ভুক্তিমূলক। আসুন আমরা হাতে হাত রেখে চট্টগ্রামের জন্য একটি উজ্জ্বল, সবুজ এবং স্মার্ট ভবিষ্যত গড়ে তুলি।"',
+      mayor_image_alt: "মেয়র",
+      // ProgressSection Translations
+      progress_title: "নেতৃত্বে চট্টগ্রামের অগ্রগতি",
+      progress_video1_title:
+        "এমন কোন স্প্রে আমি চাইনা যা দিলে মশা লাফ দিয়ে উঠে যাবে: ডাঃ শাহাদাত হোসেন",
+      progress_video2_title:
+        "সিটি করপোরেশনে রাজনীতির আলাপ নিয়ে আসবেন না : ডাঃ শাহাদাত হোসেন",
+      // KeyPillarsSection Translations
+      key_pillars_title: "রূপান্তরের মূল স্তম্ভ",
+      key_pillars: {
+        smart_infrastructure: {
+          title: "স্মার্ট অবকাঠামো",
+          description: "নগর জীবন উন্নত করতে বুদ্ধিমান সিস্টেম উন্নয়ন।",
+          alt: "স্মার্ট অবকাঠামো",
+          items: {
+            item1:
+              "ট্রাফিক জটিলতা কমাতে এবং গতিশীলতা উন্নত করতে বুদ্ধিমান পরিবহন সিস্টেম উন্নয়ন।",
+            item2:
+              "দক্ষ শক্তি ব্যবস্থাপনা এবং বিতরণের জন্য স্মার্ট গ্রিড বাস্তবায়ন।",
+            item3:
+              "জলবায়ু চ্যালেঞ্জ সহ্য করার জন্য স্থিতিস্থাপক এবং পরিবেশ-বান্ধব নগর অবকাঠামো নির্মাণ।",
+          },
+        },
+        digital_innovation: {
+          title: "ডিজিটাল উদ্ভাবন",
+          description: "একটি স্মার্ট শহরের জন্য প্রযুক্তি ব্যবহার।",
+          alt: "ডিজিটাল উদ্ভাবন",
+          items: {
+            item1:
+              "রিয়েল-টাইম ডেটা সংগ্রহ এবং বিশ্লেষণ সক্ষম করতে শহর-ব্যাপী ডিজিটাল নেটওয়ার্ক স্থাপন।",
+            item2:
+              "স্বচ্ছ এবং দক্ষ পাবলিক সার্ভিসের জন্য ই-গভর্নেন্স প্ল্যাটফর্ম প্রবর্তন।",
+            item3:
+              "সকল বাসিন্দার জন্য ডিজিটাল সাক্ষরতা এবং প্রযুক্তি অ্যাক্সেস প্রচার।",
+          },
+        },
+        sustainable_environment: {
+          title: "টেকসই পরিবেশ",
+          description: "একটি সবুজ এবং পরিষ্কার নগর ইকোসিস্টেম তৈরি।",
+          alt: "টেকসই পরিবেশ",
+          items: {
+            item1:
+              "বায়ুর গুণমান এবং জীববৈচিত্র্য উন্নত করতে সবুজ স্থান, পার্ক এবং নগর বন সম্প্রসারণ।",
+            item2:
+              "পুনর্ব্যবহারকে অগ্রাধিকার দেয় এবং ল্যান্ডফিল নির্ভরতা কমায় এমন বর্জ্য ব্যবস্থাপনা সিস্টেম বাস্তবায়ন।",
+            item3:
+              "সৌর এবং বায়ু শক্তির মতো নবায়নযোগ্য শক্তির উৎস ব্যবহার উৎসাহিত করা।",
+          },
+        },
+        economic_growth: {
+          title: "অর্থনৈতিক প্রবৃদ্ধি এবং অন্তর্ভুক্তি",
+          description: "একটি সমৃদ্ধ এবং অন্তর্ভুক্তিমূলক অর্থনীতি গড়ে তোলা।",
+          alt: "অর্থনৈতিক প্রবৃদ্ধি এবং অন্তর্ভুক্তি",
+          items: {
+            item1:
+              "উদ্ভাবন হাব এবং অর্থায়নের সুযোগের মাধ্যমে স্থানীয় ব্যবসা এবং স্টার্টআপ সমর্থন।",
+            item2:
+              "আইটি, সবুজ শক্তি এবং টেকসই উৎপাদনের মতো উদীয়মান খাতে চাকরির সুযোগ সৃষ্টি।",
+            item3:
+              "সকল সম্প্রদায়ের জন্য সম্পদ এবং পরিষেবার ন্যায়সঙ্গত অ্যাক্সেস নিশ্চিত করা।",
+          },
+        },
+        resilient_planning: {
+          title: "স্থিতিস্থাপক নগর পরিকল্পনা",
+          description: "ভবিষ্যতের চ্যালেঞ্জ মোকাবিলার জন্য শহর ডিজাইন।",
+          alt: "স্থিতিস্থাপক নগর পরিকল্পনা",
+          items: {
+            item1:
+              "বন্যা এবং অন্যান্য প্রাকৃতিক দুর্যোগ মোকাবিলার জন্য জলবায়ু-স্থিতিস্থাপক আবাসন এবং অবকাঠামো ডিজাইন।",
+            item2:
+              "নগর বিস্তৃতি কমাতে এবং সম্প্রদায় জীবনযাত্রা উন্নত করতে মিশ্র-ব্যবহার উন্নয়ন প্রচার।",
+            item3:
+              "টেকসই জল ব্যবহার নিশ্চিত করতে স্মার্ট জল ব্যবস্থাপনা সিস্টেম সংহত করা।",
+          },
+        },
+        licensing_system: {
+          title: "লাইসেন্সিং সিস্টেম",
+          description: "লাইসেন্সিং প্রক্রিয়া সরলীকরণ এবং আধুনিকীকরণ।",
+          alt: "লাইসেন্সিং সিস্টেম",
+          items: {
+            item1:
+              "ব্যবসায়িক লাইসেন্স, যানবাহন নিবন্ধন এবং নির্মাণ পারমিটের জন্য প্রক্রিয়া স্ট্রিমলাইন।",
+            item2:
+              "দ্রুত এবং ঝামেলা-মুক্ত অনুমোদনের জন্য অনলাইন লাইসেন্সিং পোর্টাল প্রবর্তন।",
+            item3:
+              "দুর্নীতি কমাতে লাইসেন্সিং প্রক্রিয়ায় স্বচ্ছতা এবং জবাবদিহিতা নিশ্চিত করা।",
+          },
+        },
+        transportation_services: {
+          title: "পরিবহন পরিষেবা",
+          description: "টেকসই ভবিষ্যতের জন্য নগর গতিশীলতা বিপ্লব।",
+          alt: "পরিবহন পরিষেবা",
+          items: {
+            item1:
+              "বাস, ট্রেন এবং ফেরি সহ আধুনিক, সমন্বিত পাবলিক পরিবহন সিস্টেম উন্নয়ন।",
+            item2:
+              "বিভিন্ন পরিবহন মাধ্যমে নির্বিঘ্ন ভ্রমণের জন্য স্মার্ট টিকিটিং সিস্টেম প্রবর্তন।",
+            item3:
+              "ইলেকট্রিক যানবাহন এবং সাইকেল-শেয়ারিং প্রোগ্রামের মতো পরিবেশ-বান্ধব পরিবহন বিকল্প প্রচার।",
+          },
+        },
+      },
+      // OngoingProjects Translations
+      ongoing_projects_title: "চলমান প্রকল্প",
+      ongoing_projects: {
+        smart_traffic: {
+          title: "স্মার্ট ট্রাফিক ব্যবস্থাপনা সিস্টেম",
+          description:
+            "এআই-চালিত ট্রাফিক নিয়ন্ত্রণের মাধ্যমে জটিলতা হ্রাস এবং রাস্তার নিরাপত্তা উন্নতি।",
+        },
+        green_city: {
+          title: "চট্টগ্রাম গ্রিন সিটি উদ্যোগ",
+          description: "১০ লক্ষ গাছ রোপণ এবং নগর সবুজ বেল্ট তৈরি।",
+        },
+        renewable_energy: {
+          title: "নবায়নযোগ্য শক্তি গ্রহণ",
+          description:
+            "পাবলিক ভবনগুলিতে সোলার প্যানেল স্থাপন এবং গৃহস্থালির জন্য ছাদে সোলার প্রচার।",
+        },
+        digital_platform: {
+          title: "ডিজিটাল চট্টগ্রাম প্ল্যাটফর্ম",
+          description:
+            "নাগরিকদের জন্য সরকারি পরিষেবা, বিল পরিশোধ এবং সমস্যা রিপোর্ট করার জন্য একটি একক পোর্টাল।",
+        },
+        properties_management: {
+          title: "সম্পত্তি ব্যবস্থাপনা",
+          description:
+            "সম্পত্তির রেকর্ড ডিজিটাইজ করা এবং জমি ও রিয়েল এস্টেট লেনদেনের অনলাইন ব্যবস্থাপনা সক্ষম করা।",
+        },
+        waste_management: {
+          title: "বর্জ্য ব্যবস্থাপনা",
+          description:
+            "স্মার্ট বর্জ্য সংগ্রহ সিস্টেম বাস্তবায়ন এবং ল্যান্ডফিল নির্ভরতা কমাতে পুনর্ব্যবহার উদ্যোগ প্রচার।",
+        },
+        utility_services: {
+          title: "ইউটিলিটি পরিষেবা",
+          description:
+            "নির্ভরযোগ্য এবং দক্ষ পরিষেবা প্রদানের জন্য পানি, বিদ্যুৎ এবং গ্যাস বিতরণ নেটওয়ার্ক আপগ্রেড।",
+        },
+        infrastructure_maintenance: {
+          title: "অবকাঠামো রক্ষণাবেক্ষণ",
+          description:
+            "নিরাপত্তা এবং দীর্ঘায়ুর জন্য রাস্তা, সেতু এবং পাবলিক ভবন পর্যবেক্ষণ এবং রক্ষণাবেক্ষণের জন্য আইওটি এবং এআই ব্যবহার।",
+        },
+      },
+      // GetInvolved Translations
+      get_involved_title: "অংশগ্রহণ করুন",
+      get_involved_description:
+        "চট্টগ্রামকে একটি স্মার্ট এবং টেকসই শহরে রূপান্তর করা একটি সম্মিলিত প্রচেষ্টা। আপনি কীভাবে অবদান রাখতে পারেন তা এখানে:",
+      get_involved: {
+        residents: {
+          title: "বাসিন্দা",
+          description:
+            "টেকসই অনুশীলন গ্রহণ করুন, সম্প্রদায়ের কর্মসূচিতে অংশগ্রহণ করুন এবং শহরের উদ্যোগ সম্পর্কে অবগত থাকুন।",
+        },
+        businesses: {
+          title: "ব্যবসা",
+          description:
+            "সবুজ প্রযুক্তিতে বিনিয়োগ করুন, স্থানীয় উদ্ভাবন সমর্থন করুন এবং স্মার্ট সিটি প্রকল্পে সরকারের সাথে সহযোগিতা করুন।",
+        },
+        government_ngos: {
+          title: "সরকার এবং এনজিও",
+          description:
+            "টেকসই উন্নয়ন চালিত নীতি এবং কর্মসূচি বাস্তবায়নের জন্য স্টেকহোল্ডারদের সাথে অংশীদারিত্ব করুন।",
+        },
+      },
+      get_involved_image_alt: "অংশগ্রহণ করুন",
+      // Footer Translations
+      footer_contact_title: "যোগাযোগ করুন",
+      footer_contact_description:
+        "প্রশ্ন বা ধারণা আছে? আমরা আপনার কাছ থেকে শুনতে চাই!",
+      footer_contact: {
+        email_label: "ইমেইল",
+        phone_label: "ফোন",
+        address_label: "ঠিকানা",
+      },
+      footer_copyright:
+        "কপিরাইট © {year} - সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
+      // Chatbot Translations
+      chatbot_title: "স্মার্ট এআই চ্যাটবট",
+      chatbot_initial_message:
+        "হ্যালো! আমি আজ আপনাকে কীভাবে সাহায্য করতে পারি?",
+      chatbot_followup_message: "আপনি কেমন আছেন?",
+      chatbot_input_placeholder: "একটি বার্তা টাইপ করুন...",
+      chatbot_input_label: "চ্যাটবট বার্তা ইনপুট",
+      chatbot_input_description:
+        "স্মার্ট এআই চ্যাটবটের সাথে চ্যাট করতে আপনার বার্তা লিখুন",
+      chatbot_send_label: "বার্তা পাঠান",
+      chatbot_toggle_label: "চ্যাটবট টগল করুন",
     },
   },
 };

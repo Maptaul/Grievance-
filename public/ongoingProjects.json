@@ -1,43 +1,42 @@
 [
-        {
-          "title": "Smart Traffic Management System",
-          "description": "Reducing congestion and improving road safety through AI-powered traffic control.",
-          "icon": "FaTrafficLight"
-        },
-        {
-          "title": "Chattogram Green City Initiative",
-          "description": "Planting 1 million trees and creating urban green belts.",
-          "icon": "FaTree"
-        },
-        {
-          "title": "Renewable Energy Adoption",
-          "description": "Installing solar panels on public buildings and promoting rooftop solar for households.",
-          "icon": "FaSolarPanel"
-        },
-        {
-          "title": "Digital Chattogram Platform",
-          "description": "A one-stop portal for citizens to access government services, pay bills, and report issues.",
-          "icon": "FaGlobe"
-        },
-        {
-          "title": "Properties Management",
-          "description": "Digitizing property records and enabling online management of land and real estate transactions.",
-          "icon": "FaBuilding"
-        },
-        {
-          "title": "Waste Management",
-          "description": "Implementing smart waste collection systems and promoting recycling initiatives to reduce landfill dependency.",
-          "icon": "FaRecycle"
-        },
-        {
-          "title": "Utility Services",
-          "description": "Upgrading water, electricity, and gas distribution networks to ensure reliable and efficient service delivery.",
-          "icon": "FaPlug"
-        },
-        {
-          "title": "Infrastructure Maintenance",
-          "description": "Using IoT and AI to monitor and maintain roads, bridges, and public buildings for safety and longevity.",
-          "icon": "FaTools"
-        }
-      ]
-      
+  {
+    "titleKey": "ongoing_projects.smart_traffic.title",
+    "descriptionKey": "ongoing_projects.smart_traffic.description",
+    "icon": "FaTrafficLight"
+  },
+  {
+    "titleKey": "ongoing_projects.green_city.title",
+    "descriptionKey": "ongoing_projects.green_city.description",
+    "icon": "FaTree"
+  },
+  {
+    "titleKey": "ongoing_projects.renewable_energy.title",
+    "descriptionKey": "ongoing_projects.renewable_energy.description",
+    "icon": "FaSolarPanel"
+  },
+  {
+    "titleKey": "ongoing_projects.digital_platform.title",
+    "descriptionKey": "ongoing_projects.digital_platform.description",
+    "icon": "FaGlobe"
+  },
+  {
+    "titleKey": "ongoing_projects.properties_management.title",
+    "descriptionKey": "ongoing_projects.properties_management.description",
+    "icon": "FaBuilding"
+  },
+  {
+    "titleKey": "ongoing_projects.waste_management.title",
+    "descriptionKey": "ongoing_projects.waste_management.description",
+    "icon": "FaRecycle"
+  },
+  {
+    "titleKey": "ongoing_projects.utility_services.title",
+    "descriptionKey": "ongoing_projects.utility_services.description",
+    "icon": "FaPlug"
+  },
+  {
+    "titleKey": "ongoing_projects.infrastructure_maintenance.title",
+    "descriptionKey": "ongoing_projects.infrastructure_maintenance.description",
+    "icon": "FaTools"
+  }
+]

@@ -1,12 +1,14 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ProgressSection = () => {
+  const { t } = useTranslation();
+
   return (
-    <section className="pt-[100px] md:pt-[50px]">
+    <section className="pt-[48px] sm:pt-[56px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <h2 className="text-center mb-[50px] md:mb-[30px] text-3xl font-semibold">
-          Chattogram’s Progress Under Leadership
+        <h2 className="text-center mb-12 sm:mb-8 text-3xl font-semibold whitespace-normal">
+          {t("progress_title")}
         </h2>
 
         {/* Row */}
@@ -15,7 +17,7 @@ const ProgressSection = () => {
           <div className="w-full aspect-video">
             <iframe
               src="https://www.youtube.com/embed/O4ctN7FdHQk"
-              title="এমন কোন স্প্রে আমি চাইনা যা দিলে মশা লাফ দিয়ে উঠে যাবে: ডাঃ শাহাদাত হোসেন | Dr. Shahadat Hossain"
+              title={t("progress_video1_title")}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
@@ -25,10 +27,10 @@ const ProgressSection = () => {
           </div>
 
           {/* Video 2 */}
-          <div className="videos">
+          <div className="w-full aspect-video">
             <iframe
               src="https://www.youtube.com/embed/KacMxL8ylsE"
-              title="সিটি করপোরেশনে রাজনীতির আলাপ নিয়ে আসবেন না : ডাঃ শাহাদাত হোসেন | Dr. Shahadat Hossain | Channel 24"
+              title={t("progress_video2_title")}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"

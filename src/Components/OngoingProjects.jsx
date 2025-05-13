@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   FaBuilding,
   FaGlobe,
@@ -23,25 +24,33 @@ const iconMap = {
 };
 
 const OngoingProjects = () => {
+  const { t } = useTranslation();
+
   return (
-    <section className=" bg-[#f4f4f4]">
-      <div className="max-w-7xl py-[100px] md:py-[50px] container mx-auto px-4">
-        <div className="text-center pb-[50px] md:pb-[30px]">
-          <h2 className="text-3xl font-bold">Ongoing Projects</h2>
+    <section className="bg-[#f4f4f4] mt-10 mb-10">
+      <div className="max-w-7xl mx-auto px-4 pt-[48px] sm:pt-[56px]">
+        <div className="text-center pb-12 sm:pb-8">
+          <h2 className="text-3xl font-bold whitespace-normal">
+            {t("ongoing_projects_title")}
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {ongoingProjects.map((project, index) => (
             <div
               key={index}
-              className="flex  p-5 bg-white border border-[#ddd] shadow-[0px_10px_21.25px_3.75px_rgba(0,0,0,0.06)] "
+              className="flex p-5 bg-white border border-[#ddd] shadow-[0px_10px_21.25px_3.75px_rgba(0,0,0,0.06)]"
             >
-              <div className="icon">{iconMap[project.icon]}</div>
+              <div className="icon mr-4" aria-label={t(project.titleKey)}>
+                {iconMap[project.icon]}
+              </div>
               <div className="content">
-                <h3 className="text-[20px] font-extrabold mb-2">
-                  {project.title}
+                <h3 className="text-[20px] font-extrabold mb-2 whitespace-normal">
+                  {t(project.titleKey)}
                 </h3>
-                <p className="text-gray-600">{project.description}</p>
+                <p className="text-gray-600 whitespace-normal">
+                  {t(project.descriptionKey)}
+                </p>
               </div>
             </div>
           ))}
