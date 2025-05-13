@@ -14,7 +14,7 @@ const BannerSection = () => {
           muted
           playsInline
         />
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+        {/* <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <motion.div
             className="flex flex-col items-center"
             initial={{ opacity: 0, y: 40 }}
@@ -41,7 +41,7 @@ const BannerSection = () => {
               City Corporation
             </motion.h1>
           </motion.div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

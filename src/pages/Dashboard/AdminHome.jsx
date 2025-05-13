@@ -10,6 +10,21 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+const COLORS = ["#640D5F", "#0f766e", "#f59e0b", "#4b5563"]; // purple-900, teal-600, amber-500, gray-600
 
 const AdminHome = () => {
   const { user, role } = useContext(AuthContext);
@@ -64,6 +79,23 @@ const AdminHome = () => {
       fetchData();
     }
   }, [role]);
+
+  // Process chart data
+  const categoryData = complaints.reduce((acc, complaint) => {
+    const category = complaint.category || "Others";
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  }, {});
+  const categoryChartData = Object.entries(categoryData).map(([name, complaints]) => ({
+    name,
+    complaints,
+  }));
+
+  const statusChartData = [
+    { name: "Pending", value: stats.pendingComplaints },
+    { name: "Ongoing", value: stats.ongoingComplaints },
+    { name: "Resolved", value: stats.resolvedComplaints },
+  ].filter((entry) => entry.value > 0); // Remove zero values for cleaner pie chart
 
   const handlePendingClick = () => {
     setViewMode("pending");
@@ -316,6 +348,74 @@ const AdminHome = () => {
                 </div>
               </div>
             )}
+
+          {/* Charts Section */}
+          {viewMode === "stats" && (
+            <div className="space-y-8 mt-8">
+              <h2 className="text-2xl font-bold text-gray-800">
+                Complaint Analytics
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Bar Chart: Complaints by Category */}
+                <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                  <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                    Complaints by Category
+                  </h3>
+                  {categoryChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart
+                        data={categoryChartData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="complaints" fill="#640D5F" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="text-gray-500">No category data available.</p>
+                  )}
+                </div>
+
+                {/* Pie Chart: Complaint Status */}
+                <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                  <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                    Complaint Status Distribution
+                  </h3>
+                  {statusChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={statusChartData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) =>
+                            `${name} (${(percent * 100).toFixed(0)}%)`
+                          }
+                          outerRadius={100}
+                          dataKey="value"
+                        >
+                          {statusChartData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p className="text-gray-500">No status data available.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

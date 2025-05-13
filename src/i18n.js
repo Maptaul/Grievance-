@@ -5,12 +5,19 @@ import LanguageDetector from "i18next-browser-languagedetector";
 const resources = {
   en: {
     translation: {
-      // Existing translations
+      // Navbar Menu Items
+      office_locations: "Office Locations",
+      contact: "Contact",
+      dashboard: "Dashboard",
+      login: "Login",
+      logout: "Logout",
+      complaints: "Complaints",
+      language: "Language",
+      welcome_to_ccc: "Welcome to the Chittagong City Corporation",
+
+      // Existing Translations
       complainant_login: "Complainant Login",
       admin_login: "Admin Login",
-      dashboard: "Dashboard",
-      logout: "Logout",
-      language: "Language",
       welcome_message:
         "Welcome to the Central Grievance Platform of the Chittagong City Corporation, Bangladesh. We are dedicated to ensuring transparency, accountability, and responsiveness in government services.",
       submit_grievance: "Submit Grievance",
@@ -31,12 +38,11 @@ const resources = {
         Others: "Others",
       },
       about_us: "About Us",
-      contact: "Contact",
       press_kit: "Press Kit",
       copyright: "Copyright",
       all_rights_reserved: "All rights reserved by Chittagong City Corporation",
 
-      // New translations for SubmitComplaint
+      // SubmitComplaint Translations
       report_issue: "Report an Issue",
       improve_community: "Help improve our community",
       submit_anonymously: "Submit Anonymously",
@@ -70,16 +76,16 @@ const resources = {
       error: "Error",
       submission_failed: "Failed to submit complaint",
       submit_complaint: "Submit Complaint",
-      complainant_login_override: "Please Login", // Renamed to avoid duplication
-      your_name_override: "Email", // Renamed to avoid duplication
-      description_label_override: "Password", // Renamed to avoid duplication
+      complainant_login_override: "Please Login",
+      your_name_override: "Email",
+      description_label_override: "Password",
       login_with_google: "Login with Google",
       dont_have_account: "Don’t have an account?",
       register: "Register",
       or: "OR",
       login_successful: "Login Successful",
-      submit_complaint_override: "Login", // Renamed to avoid duplication
-      name_placeholder_override: "Enter your email", // Renamed to avoid duplication
+      submit_complaint_override: "Login",
+      name_placeholder_override: "Enter your email",
       description_placeholder_override: "Enter your password",
       create_account: "Create Account",
       profile_image: "Profile Image",
@@ -97,12 +103,19 @@ const resources = {
   },
   bn: {
     translation: {
-      // Existing translations
+      // Navbar Menu Items
+      office_locations: "অফিসের অবস্থান",
+      contact: "যোগাযোগ",
+      dashboard: "ড্যাশবোর্ড",
+      login: "লগইন",
+      logout: "লগআউট",
+      complaints: "অভিযোগ",
+      language: "ভাষা",
+      welcome_to_ccc: "চট্টগ্রাম সিটি কর্পোরেশনে স্বাগতম",
+
+      // Existing Translations
       complainant_login: "অভিযোগকারীর লগইন",
       admin_login: "অ্যাডমিন লগইন",
-      dashboard: "ড্যাশবোর্ড",
-      logout: "লগআউট",
-      language: "ভাষা",
       welcome_message:
         "চট্টগ্রাম সিটি কর্পোরেশনের কেন্দ্রীয় অভিযোগ প্ল্যাটফর্মে স্বাগতম। আমরা সরকারি সেবার স্বচ্ছতা, জবাবদিহিতা এবং প্রতিক্রিয়াশীলতা নিশ্চিত করতে প্রতিশ্রুতিবদ্ধ।",
       submit_grievance: "অভিযোগ জমা দিন",
@@ -123,13 +136,12 @@ const resources = {
         Others: "অন্যান্য",
       },
       about_us: "আমাদের সম্পর্কে",
-      contact: "যোগাযোগ",
       press_kit: "প্রেস কিট",
       copyright: "কপিরাইট",
       all_rights_reserved:
         "সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
 
-      // New translations for SubmitComplaint
+      // SubmitComplaint Translations
       report_issue: "সমস্যা রিপোর্ট করুন",
       improve_community: "আমাদের সম্প্রদায় উন্নত করতে সাহায্য করুন",
       submit_anonymously: "নাম প্রকাশ না করে জমা দিন",
@@ -164,15 +176,15 @@ const resources = {
       error: "ত্রুটি",
       submission_failed: "অভিযোগ জমা দিতে ব্যর্থ হয়েছে",
       submit_complaint: "অভিযোগ জমা দিন",
-      complainant_login_override: "লগইন করুন", // Updated for "Please Login"
-      your_name_override: "ইমেইল", // Overriding for email context
-      description_label_override: "পাসওয়ার্ড", // Overriding for password context
+      complainant_login_override: "লগইন করুন",
+      your_name_override: "ইমেইল",
+      description_label_override: "পাসওয়ার্ড",
       login_with_google: "গুগল দিয়ে লগইন করুন",
       dont_have_account: "অ্যাকাউন্ট নেই?",
       register: "নিবন্ধন করুন",
       or: "অথবা",
       login_successful: "লগইন সফল",
-      submit_complaint_override: "লগইন", // Overriding for login context
+      submit_complaint_override: "লগইন",
       name_placeholder_override: "আপনার ইমেইল লিখুন",
       description_placeholder_override: "আপনার পাসওয়ার্ড লিখুন",
       create_account: "অ্যাকাউন্ট তৈরি করুন",
