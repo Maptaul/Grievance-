@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+  const [submissionStatus, setSubmissionStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,28 +21,39 @@ export default function Contact() {
     e.preventDefault();
     console.log("Form submitted:", formData);
     setFormData({ name: "", email: "", subject: "", message: "" });
+    setSubmissionStatus("success");
+    setTimeout(() => setSubmissionStatus(null), 3000); // Clear after 3s
   };
 
   return (
     <>
-      <main className=" min-h-screen">
-        <section className="pt-24 md:pt-20 pb-5 text-center">
+      <main className="min-h-screen">
+        <section className="py-16 sm:py-12 text-center">
           <div className="max-w-screen-xl mx-auto px-4">
             <div className="max-w-3xl mx-auto mb-12">
               <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-                Contact Us
+                {t("contact_title")}
               </h1>
-              <p className="text-gray-600 text-lg">
-                Reach out to us for any inquiries or assistance. We're here to
-                help you with our e-Services and more.
+              <p className="text-gray-600 text-lg whitespace-normal">
+                {t("contact_description")}
               </p>
             </div>
+
+            {submissionStatus === "success" && (
+              <div className="max-w-3xl mx-auto mb-6 text-green-600 font-semibold">
+                {t("contact_form_success")}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Contact Form */}
               <div className="bg-white rounded-2xl shadow-md p-8 text-left">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                  Send Us a Message
+                <h2
+                  className="text-2xl font-bold text-gray-800 mb-6"
+                  role="heading"
+                  aria-level="2"
+                >
+                  {t("contact_form_heading")}
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <input
@@ -47,72 +61,90 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Your Name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder={t("contact_form.name_placeholder")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#640D5F]"
                     required
+                    aria-label={t("contact_form.name_label")}
                   />
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Your Email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder={t("contact_form.email_placeholder")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#640D5F]"
                     required
+                    aria-label={t("contact_form.email_label")}
                   />
                   <input
                     type="text"
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    placeholder="Subject"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder={t("contact_form.subject_placeholder")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#640D5F]"
                     required
+                    aria-label={t("contact_form.subject_label")}
                   />
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="Your Message"
+                    placeholder={t("contact_form.message_placeholder")}
                     rows="5"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#640D5F] resize-none"
                     required
+                    aria-label={t("contact_form.message_label")}
                   ></textarea>
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="w-full bg-[#640D5F] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#4a0947] transition-colors"
+                    aria-label={t("contact_form_submit_label")}
                   >
-                    Submit
+                    {t("contact_form_submit")}
                   </button>
                 </form>
               </div>
 
               {/* Contact Info */}
               <div className="bg-white rounded-2xl shadow-md p-8 text-left">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                  Contact Information
+                <h2
+                  className="text-2xl font-bold text-gray-800 mb-6"
+                  role="heading"
+                  aria-level="2"
+                >
+                  {t("contact_info_heading")}
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-center">
-                    <FaPhone className="text-blue-600 text-xl mr-3" />
-                    <p className="text-gray-800">
-                      Phone: <a href="tel:+8801234567890">+880 123 456 7890</a>
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <FaEnvelope className="text-blue-600 text-xl mr-3" />
-                    <p className="text-gray-800">
-                      Email:{" "}
-                      <a href="mailto:support@eservices.com">
-                        support@eservices.com
+                    <FaPhone className="text-[#640D5F] text-xl mr-3" />
+                    <p className="text-gray-800 whitespace-normal">
+                      {t("contact_info.phone_label")}:{" "}
+                      <a
+                        href="tel:+971569258166"
+                        aria-label={t("contact_info.phone_link_label")}
+                      >
+                        +971569258166
                       </a>
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <FaMapMarkerAlt className="text-blue-600 text-xl mr-3" />
-                    <p className="text-gray-800">
-                      Address: Chattogram City Corporation, Chattogram,
-                      Bangladesh
+                    <FaEnvelope className="text-[#640D5F] text-xl mr-3" />
+                    <p className="text-gray-800 whitespace-normal">
+                      {t("contact_info.email_label")}:{" "}
+                      <a
+                        href="mailto:contact@jionex.com"
+                        aria-label={t("contact_info.email_link_label")}
+                      >
+                        contact@jionex.com
+                      </a>
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <FaMapMarkerAlt className="text-[#640D5F] text-xl mr-3" />
+                    <p className="text-gray-800 whitespace-normal">
+                      {t("contact_info.address_label")}: IPL City Centre, 4th
+                      Floor, 162 O.R. Nizam Rd, Chattogram-4317, Bangladesh.
                     </p>
                   </div>
                 </div>
@@ -124,6 +156,7 @@ export default function Contact() {
                     className="rounded-lg border-0 w-full"
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    title={t("contact_map_title")}
                   ></iframe>
                 </div>
               </div>

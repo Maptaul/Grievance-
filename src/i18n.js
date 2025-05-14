@@ -6,16 +6,19 @@ const resources = {
   en: {
     translation: {
       // Navbar Menu Items
+      Home: "Home",
       office_locations: "Office Locations",
       contact: "Contact",
+      forgot_password: "Forgot Password",
       dashboard: "Dashboard",
       login: "Login",
       logout: "Logout",
       complaints: "Complaints",
       language: "Language",
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
+
       // Existing Translations
-      complainant_login: "Complainant Login",
+      complainant_login: "Login",
       admin_login: "Admin Login",
       welcome_message:
         "Welcome to the Central Grievance Platform of the Chittagong City Corporation, Bangladesh. We are dedicated to ensuring transparency, accountability, and responsiveness in government services.",
@@ -40,6 +43,7 @@ const resources = {
       press_kit: "Press Kit",
       copyright: "Copyright",
       all_rights_reserved: "All rights reserved by Chittagong City Corporation",
+
       // SubmitComplaint Translations
       report_issue: "Report an Issue",
       improve_community: "Help improve our community",
@@ -91,12 +95,14 @@ const resources = {
       select_role_placeholder: "Select Role",
       citizen: "Citizen",
       administrative: "Administrative",
+      employee: "Employee", // Added as per SignUp component
       name_required: "Name is required",
       email_required: "Email is required",
       role_required: "Role selection is required",
       registering: "Registering...",
       already_have_account: "Already have an account?",
       registration_successful: "Registration Successful!",
+
       // Notice Translations
       notice_1: "We're Hiring: Data Analyst Needed!",
       notice_2: "New Feature: Digital Chattogram Platform Live Now!",
@@ -108,15 +114,18 @@ const resources = {
       notice_8: "Workshop Alert: Learn About Smart City Technologies!",
       notice_9: "Emergency Services App Now Available – Download Today!",
       notice_10: "Follow Us on Social Media for Latest Updates!",
+
       // Welcome Translations
       welcome_title: "A Smart and Sustainable City",
       welcome_description:
         "Chattogram, the bustling port city of Bangladesh, is on a transformative journey to become a smart and sustainable urban hub. With its rich history, strategic location, and economic significance, Chattogram is embracing innovation, technology, and eco-friendly practices to enhance the quality of life for its residents and create a model city for the future.",
       welcome_image_alt: "Chattogram",
+
       // Vision Translations
       vision_title: "Our Vision",
       vision_description:
         "To transform Chattogram into a globally recognized smart and sustainable city that leverages cutting-edge technology, promotes environmental stewardship, and ensures inclusive growth for all its citizens.",
+
       // MayorMessage Translations
       mayor_message_header: "A Message from the City Mayor",
       mayor_name: "Dr. Shahadat Hossain",
@@ -124,11 +133,13 @@ const resources = {
       mayor_message:
         '"Chattogram is not just a city; it is the heartbeat of Bangladesh\'s economy and a symbol of resilience and progress. As we embark on this ambitious journey to transform our city into a smart and sustainable urban center, I am committed to ensuring that every citizen benefits from this transformation. Together, we will build a city that is not only technologically advanced but also environmentally responsible and socially inclusive. Let us work hand in hand to create a brighter, greener, and smarter future for Chattogram."',
       mayor_image_alt: "Mayor",
+
       // ProgressSection Translations
       progress_title: "Chattogram’s Progress Under Leadership",
       progress_video1_title: "Dr. Shahadat Hossain’s Speech on Mosquito Spray",
       progress_video2_title:
         "Dr. Shahadat Hossain on City Corporation Politics",
+
       // KeyPillarsSection Translations
       key_pillars_title: "Key Pillars of Transformation",
       key_pillars: {
@@ -226,6 +237,7 @@ const resources = {
           },
         },
       },
+
       // OngoingProjects Translations
       ongoing_projects_title: "Ongoing Projects",
       ongoing_projects: {
@@ -270,6 +282,7 @@ const resources = {
             "Using IoT and AI to monitor and maintain roads, bridges, and public buildings for safety and longevity.",
         },
       },
+
       // GetInvolved Translations
       get_involved_title: "Get Involved",
       get_involved_description:
@@ -292,6 +305,7 @@ const resources = {
         },
       },
       get_involved_image_alt: "Get Involved",
+
       // Footer Translations
       footer_contact_title: "Contact Us",
       footer_contact_description:
@@ -303,6 +317,7 @@ const resources = {
       },
       footer_copyright:
         "Copyright © {year} - All rights reserved by Chittagong City Corporation",
+
       // Chatbot Translations
       chatbot_title: "Smart AI Chatbot",
       chatbot_initial_message: "Hello! How can I help you today?",
@@ -313,21 +328,84 @@ const resources = {
         "Enter your message to chat with the Smart AI Chatbot",
       chatbot_send_label: "Send message",
       chatbot_toggle_label: "Toggle chatbot",
+
+      // Contact Translations
+      contact_title: "Contact Us",
+      contact_description:
+        "Reach out to us for any inquiries or assistance. We're here to help you with our e-Services and more.",
+      contact_form_heading: "Send Us a Message",
+      contact_form: {
+        name_placeholder: "Your Name",
+        email_placeholder: "Your Email",
+        subject_placeholder: "Subject",
+        message_placeholder: "Your Message",
+        name_label: "Your name",
+        email_label: "Your email address",
+        subject_label: "Message subject",
+        message_label: "Your message",
+      },
+      contact_form_submit: "Submit",
+      contact_form_submit_label: "Submit contact form",
+      contact_form_success: "Your message has been sent successfully!",
+      contact_info_heading: "Contact Information",
+      contact_info: {
+        phone_label: "Phone",
+        email_label: "Email",
+        address_label: "Address",
+        phone_link_label: "Call our phone number",
+        email_link_label: "Send us an email",
+      },
+      contact_map_title: "Map of Chattogram City Corporation",
+
+      // New Translations from Login Component
+      logo_alt: "Jionex Logo",
+      chattogram_city_corporation: "Chattogram City Corporation",
+      grievance_portal: "Grievance Portal",
+      welcome_to_grievance_portal: "Welcome to Grievance Portal",
+      hide_password: "Hide password",
+      show_password: "Show password",
+      remember_me: "Remember Me On This Device",
+      reset_email_sent: "Reset Email Sent",
+      check_email_reset: "Check your email for a password reset link",
+      reset_failed: "Failed to send reset email",
+      reset_unavailable: "Password reset service unavailable",
+      login_failed: "Login Failed",
+      login_form: "Login form",
+      technical_partner: "Technical Partner",
+
+      // New Formal Translations from SignUp Component
+      register_account: "Register an Account",
+      full_name: "Full Name",
+      email_address: "Email Address",
+      email_placeholder: "Enter your email address",
+      password: "Password",
+      password_placeholder: "Enter your password",
+      password_required: "Please enter a password",
+      password_min_length: "Password must be at least 6 characters long",
+      image_uploaded_successfully: "Profile photograph uploaded successfully",
+      submission_failed: "Registration submission failed. Please try again",
+      already_registered: "Already registered?",
+      sign_in_with_google: "Sign In with Google",
+      upload_profile_image: "Upload Profile Photograph",
+      signup_form: "Registration Form",
     },
   },
   bn: {
     translation: {
       // Navbar Menu Items
+      Home: "হোম",
       office_locations: "অফিসের অবস্থান",
       contact: "যোগাযোগ",
+      forgot_password: "পাসওয়ার্ড ভুলে গেছেন",
       dashboard: "ড্যাশবোর্ড",
       login: "লগইন",
       logout: "লগআউট",
       complaints: "অভিযোগ",
       language: "ভাষা",
       welcome_to_ccc: "চট্টগ্রাম সিটি কর্পোরেশনে স্বাগতম",
+
       // Existing Translations
-      complainant_login: "অভিযোগকারীর লগইন",
+      complainant_login: "লগইন",
       admin_login: "অ্যাডমিন লগইন",
       welcome_message:
         "চট্টগ্রাম সিটি কর্পোরেশনের কেন্দ্রীয় অভিযোগ প্ল্যাটফর্মে স্বাগতম। আমরা সরকারি সেবার স্বচ্ছতা, জবাবদিহিতা এবং প্রতিক্রিয়াশীলতা নিশ্চিত করতে প্রতিশ্রুতিবদ্ধ।",
@@ -353,6 +431,7 @@ const resources = {
       copyright: "কপিরাইট",
       all_rights_reserved:
         "সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
+
       // SubmitComplaint Translations
       report_issue: "সমস্যা রিপোর্ট করুন",
       improve_community: "আমাদের সম্প্রদায় উন্নত করতে সাহায্য করুন",
@@ -379,8 +458,11 @@ const resources = {
       unsupported_feature: "অসমর্থিত বৈশিষ্ট্য",
       geolocation_unsupported: "জিওলোকেশন সমর্থিত নয়",
       missing_info: "তথ্য অনুপস্থিত",
+      provide_description: "দয়া করে একটি বিবরণ প্রদান করুন",
+      complaint_submitted: "অভিযোগ জমা দেওয়া হয়েছে!",
+      category_label: "বিভাগ",
       complaint_received:
-        "আপনার অভিযোগ গ্রহণ করেছি এবং শীঘ্রই এটি প্রক্রিয়া করব।",
+        "আমরা আপনার অভিযোগ গ্রহণ করেছি এবং শীঘ্রই এটি প্রক্রিয়া করব।",
       location_label: "অবস্থান",
       error: "ত্রুটি",
       submission_failed: "অভিযোগ জমা দিতে ব্যর্থ হয়েছে",
@@ -402,12 +484,14 @@ const resources = {
       select_role_placeholder: "ভূমিকা নির্বাচন করুন",
       citizen: "নাগরিক",
       administrative: "প্রশাসনিক",
+      employee: "কর্মচারী", // Added as per SignUp component
       name_required: "নাম আবশ্যক",
       email_required: "ইমেইল আবশ্যক",
       role_required: "ভূমিকা নির্বাচন আবশ্যক",
       registering: "নিবন্ধন হচ্ছে...",
       already_have_account: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
       registration_successful: "নিবন্ধন সফল!",
+
       // Notice Translations
       notice_1: "আমরা নিয়োগ করছি: ডেটা বিশ্লেষক প্রয়োজন!",
       notice_2: "নতুন ফিচার: ডিজিটাল চট্টগ্রাম প্ল্যাটফর্ম এখন চালু!",
@@ -419,15 +503,18 @@ const resources = {
       notice_8: "ওয়ার্কশপ সতর্কতা: স্মার্ট সিটি প্রযুক্তি সম্পর্কে জানুন!",
       notice_9: "জরুরি সেবা অ্যাপ এখন উপলব্ধ – আজই ডাউনলোড করুন!",
       notice_10: "সর্বশেষ আপডেটের জন্য আমাদের সোশ্যাল মিডিয়ায় ফলো করুন!",
+
       // Welcome Translations
       welcome_title: "একটি স্মার্ট এবং টেকসই শহর",
       welcome_description:
         "চট্টগ্রাম, বাংলাদেশের ব্যস্ত বন্দর শহর, একটি স্মার্ট এবং টেকসই নগর কেন্দ্র হওয়ার জন্য একটি রূপান্তরকারী যাত্রায় রয়েছে। এর সমৃদ্ধ ইতিহাস, কৌশলগত অবস্থান এবং অর্থনৈতিক গুরুত্ব সহ, চট্টগ্রাম উদ্ভাবন, প্রযুক্তি এবং পরিবেশ-বান্ধব অনুশীলন গ্রহণ করছে যাতে বাসিন্দাদের জীবনমান উন্নত হয় এবং ভবিষ্যতের জন্য একটি মডেল শহর তৈরি হয়।",
       welcome_image_alt: "চট্টগ্রাম",
+
       // Vision Translations
       vision_title: "আমাদের দৃষ্টিভঙ্গি",
       vision_description:
         "চট্টগ্রামকে বিশ্বব্যাপী স্বীকৃত একটি স্মার্ট এবং টেকসই শহরে রূপান্তর করা, যা অত্যাধুনিক প্রযুক্তি ব্যবহার করে, পরিবেশ সংরক্ষণকে উৎসাহিত করে এবং এর সকল নাগরিকের জন্য সমান্তরাল উন্নয়ন নিশ্চিত করে।",
+
       // MayorMessage Translations
       mayor_message_header: "নগর মেয়রের বার্তা",
       mayor_name: "ড. শাহাদাত হোসেন",
@@ -435,12 +522,14 @@ const resources = {
       mayor_message:
         '"চট্টগ্রাম শুধু একটি শহর নয়; এটি বাংলাদেশের অর্থনীতির হৃদস্পন্দন এবং স্থিতিস্থাপকতা ও অগ্রগতির প্রতীক। আমরা আমাদের শহরকে একটি স্মার্ট এবং টেকসই নগর কেন্দ্রে রূপান্তরিত করার এই উচ্চাভিলাষী যাত্রায় যাত্রা শুরু করেছি, আমি প্রতিশ্রুতিবদ্ধ যে প্রতিটি নাগরিক এই রূপান্তর থেকে উপকৃত হবে। একসাথে, আমরা এমন একটি শহর গড়ে তুলব যা কেবল প্রযুক্তিগতভাবে উন্নত নয়, পরিবেশগতভাবে দায়িত্বশীল এবং সামাজিকভাবে অন্তর্ভুক্তিমূলক। আসুন আমরা হাতে হাত রেখে চট্টগ্রামের জন্য একটি উজ্জ্বল, সবুজ এবং স্মার্ট ভবিষ্যত গড়ে তুলি।"',
       mayor_image_alt: "মেয়র",
+
       // ProgressSection Translations
       progress_title: "নেতৃত্বে চট্টগ্রামের অগ্রগতি",
       progress_video1_title:
         "এমন কোন স্প্রে আমি চাইনা যা দিলে মশা লাফ দিয়ে উঠে যাবে: ডাঃ শাহাদাত হোসেন",
       progress_video2_title:
         "সিটি করপোরেশনে রাজনীতির আলাপ নিয়ে আসবেন না : ডাঃ শাহাদাত হোসেন",
+
       // KeyPillarsSection Translations
       key_pillars_title: "রূপান্তরের মূল স্তম্ভ",
       key_pillars: {
@@ -536,6 +625,7 @@ const resources = {
           },
         },
       },
+
       // OngoingProjects Translations
       ongoing_projects_title: "চলমান প্রকল্প",
       ongoing_projects: {
@@ -579,6 +669,7 @@ const resources = {
             "নিরাপত্তা এবং দীর্ঘায়ুর জন্য রাস্তা, সেতু এবং পাবলিক ভবন পর্যবেক্ষণ এবং রক্ষণাবেক্ষণের জন্য আইওটি এবং এআই ব্যবহার।",
         },
       },
+
       // GetInvolved Translations
       get_involved_title: "অংশগ্রহণ করুন",
       get_involved_description:
@@ -601,6 +692,7 @@ const resources = {
         },
       },
       get_involved_image_alt: "অংশগ্রহণ করুন",
+
       // Footer Translations
       footer_contact_title: "যোগাযোগ করুন",
       footer_contact_description:
@@ -612,6 +704,7 @@ const resources = {
       },
       footer_copyright:
         "কপিরাইট © {year} - সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
+
       // Chatbot Translations
       chatbot_title: "স্মার্ট এআই চ্যাটবট",
       chatbot_initial_message:
@@ -623,6 +716,67 @@ const resources = {
         "স্মার্ট এআই চ্যাটবটের সাথে চ্যাট করতে আপনার বার্তা লিখুন",
       chatbot_send_label: "বার্তা পাঠান",
       chatbot_toggle_label: "চ্যাটবট টগল করুন",
+
+      // Contact Translations
+      contact_title: "যোগাযোগ করুন",
+      contact_description:
+        "যেকোনো জিজ্ঞাসা বা সহায়তার জন্য আমাদের সাথে যোগাযোগ করুন। আমরা আমাদের ই-সেবা এবং আরও অনেক কিছু নিয়ে আপনাকে সাহায্য করতে এখানে আছি।",
+      contact_form_heading: "আমাদের একটি বার্তা পাঠান",
+      contact_form: {
+        name_placeholder: "আপনার নাম",
+        email_placeholder: "আপনার ইমেইল",
+        subject_placeholder: "বিষয়",
+        message_placeholder: "আপনার বার্তা",
+        name_label: "আপনার নাম",
+        email_label: "আপনার ইমেইল ঠিকানা",
+        subject_label: "বার্তার বিষয়",
+        message_label: "আপনার বার্তা",
+      },
+      contact_form_submit: "জমা দিন",
+      contact_form_submit_label: "যোগাযোগ ফর্ম জমা দিন",
+      contact_form_success: "আপনার বার্তা সফলভাবে পাঠানো হয়েছে!",
+      contact_info_heading: "যোগাযোগের তথ্য",
+      contact_info: {
+        phone_label: "ফোন",
+        email_label: "ইমেইল",
+        address_label: "ঠিকানা",
+        phone_link_label: "আমাদের ফোন নম্বরে কল করুন",
+        email_link_label: "আমাদের একটি ইমেইল পাঠান",
+      },
+      contact_map_title: "চট্টগ্রাম সিটি কর্পোরেশনের মানচিত্র",
+
+      // New Translations from Login Component
+      logo_alt: "জিওনেক্স লোগো",
+      chattogram_city_corporation: "চট্টগ্রাম সিটি কর্পোরেশন",
+      grievance_portal: "গ্রিভান্স পোর্টাল",
+      welcome_to_grievance_portal: "গ্রিভান্স পোর্টালে স্বাগতম",
+      hide_password: "পাসওয়ার্ড লুকান",
+      show_password: "পাসওয়ার্ড দেখান",
+      remember_me: "এই ডিভাইসে আমাকে মনে রাখুন",
+      reset_email_sent: "রিসেট ইমেইল পাঠানো হয়েছে",
+      check_email_reset: "পাসওয়ার্ড রিসেট লিঙ্কের জন্য আপনার ইমেইল চেক করুন",
+      reset_failed: "রিসেট ইমেইল পাঠাতে ব্যর্থ হয়েছে",
+      reset_unavailable: "পাসওয়ার্ড রিসেট পরিষেবা অনুপলব্ধ",
+      login_failed: "লগইন ব্যর্থ",
+      login_form: "লগইন ফর্ম",
+      technical_partner: "প্রযুক্তিগত পার্টনার",
+
+      // New Formal Translations from SignUp Component
+      register_account: "একটি অ্যাকাউন্ট নিবন্ধন করুন",
+      full_name: "পূর্ণ নাম",
+      email_address: "ইমেইল ঠিকানা",
+      email_placeholder: "আপনার ইমেইল ঠিকানা লিখুন",
+      password: "পাসওয়ার্ড",
+      password_placeholder: "আপনার পাসওয়ার্ড লিখুন",
+      password_required: "অনুগ্রহ করে একটি পাসওয়ার্ড লিখুন",
+      password_min_length: "পাসওয়ার্ড কমপক্ষে ৬ অক্ষর লম্বা হতে হবে",
+      image_uploaded_successfully: "প্রোফাইল ছবি সফলভাবে আপলোড করা হয়েছে",
+      submission_failed:
+        "নিবন্ধন জমা দেওয়া ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন",
+      already_registered: "ইতিমধ্যে নিবন্ধিত?",
+      sign_in_with_google: "গুগল দিয়ে সাইন ইন করুন",
+      upload_profile_image: "প্রোফাইল ছবি আপলোড করুন",
+      signup_form: "নিবন্ধন ফর্ম",
     },
   },
 };

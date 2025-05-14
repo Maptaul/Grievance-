@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import image5 from "/src/assets/image5.jpg";
 
@@ -6,7 +5,10 @@ const GetInvolved = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="get-involved" className="pt-[48px] sm:pt-[56px] bg-white">
+    <section
+      id="get-involved"
+      className="pt-[48px] sm:pt-[56px] bg-white mb-10"
+    >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Heading */}
         <div className="text-center pb-12 sm:pb-8">

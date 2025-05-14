@@ -99,6 +99,15 @@ const NavBar = () => {
               <ul className="menu dropdown-content bg-white rounded-box z-10 w-48 sm:w-52 p-2 shadow-lg border border-gray-200 mt-2">
                 <li>
                   <Link
+                    to="/"
+                    className="text-gray-800 font-medium hover:bg-teal-100 hover:text-teal-600 px-4 py-2 rounded-lg text-sm sm:text-base"
+                    onClick={() => dropdownRef.current.removeAttribute("open")}
+                  >
+                    {t("Home")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/locations"
                     className="text-gray-800 font-medium hover:bg-teal-100 hover:text-teal-600 px-4 py-2 rounded-lg text-sm sm:text-base"
                     onClick={() => dropdownRef.current.removeAttribute("open")}

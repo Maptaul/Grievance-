@@ -1,5 +1,4 @@
 import axios from "axios";
-import Lottie from "lottie-react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -7,7 +6,6 @@ import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import registrationLottie from "../assets/lottie/register.json";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
@@ -41,7 +39,7 @@ const SignUp = () => {
         formData
       );
       setImage(res.data.data.display_url);
-      toast.success(t("image_uploaded")); // Optional success feedback
+      toast.success(t("image_uploaded_successfully"));
     } catch (error) {
       toast.error(t("submission_failed"));
     }
@@ -51,15 +49,13 @@ const SignUp = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      // Create user in Firebase
       await createUser(data.email, data.password);
       await updateUserProfile(data.name, image || data.photo);
 
-      // Save to MongoDB
       const newUser = {
         name: data.name,
-        email: data.email.toLowerCase(), // Normalize email
-        photo: image || "https://via.placeholder.com/150", // Fallback if no image
+        email: data.email.toLowerCase(),
+        photo: image || "https://via.placeholder.com/150",
         role: data.role,
         createdAt: new Date().toISOString(),
       };
@@ -97,12 +93,11 @@ const SignUp = () => {
       const result = await googleSignIn();
       const user = result.user;
 
-      // Save Google user to MongoDB
       const googleUser = {
         name: user.displayName,
-        email: user.email.toLowerCase(), // Normalize email
-        photo: user.photoURL || "https://via.placeholder.com/150", // Fallback if no photo
-        role: "citizen", // Default role for Google sign-in
+        email: user.email.toLowerCase(),
+        photo: user.photoURL || "https://via.placeholder.com/150",
+        role: "citizen",
         createdAt: new Date().toISOString(),
       };
 
@@ -133,153 +128,253 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row items-center justify-center bg-gray-50 p-4">
-      <div className="w-full md:w-1/2 max-w-md mb-8 md:mb-0">
-        <Lottie
-          animationData={registrationLottie}
-          loop
-          className="rounded-lg"
-        />
-      </div>
-
-      <div className="w-full md:w-1/2 max-w-md bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-200">
-        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
-          {t("create_account")}
-        </h2>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Name Field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("your_name")}
-            </label>
-            <input
-              type="text"
-              {...register("name", { required: t("name_required") })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              placeholder={t("name_placeholder")}
+    <section
+      className="min-h-screen flex justify-center items-center"
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="max-w-5xl mx-auto py-6 w-full">
+        <div className="flex flex-col md:flex-row rounded-xl overflow-hidden shadow-md bg-white/90">
+          {/* Left Panel */}
+          <div className="bg-[#640D5F] md:w-1/2 flex flex-col justify-center items-center text-center text-white">
+            <img
+              src="https://i.ibb.co/BWyt7Dk/ccc.png"
+              alt={t("logo_alt_ccc", {
+                defaultValue: "Chattogram City Corporation Logo",
+              })}
+              className="w-40 mb-8"
             />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
+            <h2 className="text-2xl font-semibold mb-4">
+              {t("chattogram_city_corporation")}
+            </h2>
+            <p className="text-base text-gray-200">{t("grievance_portal")}</p>
           </div>
-
-          {/* Email Field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("your_name_override")}
-            </label>
-            <input
-              type="email"
-              {...register("email", { required: t("email_required") })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              placeholder={t("name_placeholder_override")}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-          </div>
-
-          {/* Image Upload */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("profile_image")}
-            </label>
-            <input
-              type="file"
-              onChange={handleImageUpload}
-              className="w-full file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 transition-all"
-            />
-          </div>
-
-          {/* Role Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("select_role")}
-            </label>
-            <select
-              {...register("role", { required: t("role_required") })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+          {/* Right Panel */}
+          <div className="bg-gray-50 md:w-1/2 p-8 flex flex-col justify-center">
+            <h3 className="text-2xl font-semibold mb-2 text-center text-[#4A2C5A]">
+              {t("register_account")}
+            </h3>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-2"
+              aria-label={t("signup_form", {
+                defaultValue: "Registration Form",
+              })}
+              autoComplete="off"
             >
-              <option value="">{t("select_role_placeholder")}</option>
-              <option value="citizen">{t("citizen")}</option>
-              {/* <option value="administrative">{t("administrative")}</option> */}
-            </select>
-            {errors.role && (
-              <p className="text-red-500 text-sm">{errors.role.message}</p>
-            )}
-          </div>
+              {/* Name Field */}
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block mb-1 text-base font-medium text-gray-900"
+                >
+                  {t("full_name")}
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  {...register("name", { required: t("name_required") })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white shadow-md"
+                  placeholder={t("name_placeholder")}
+                  required
+                  aria-required="true"
+                  autoComplete="name"
+                />
+                {errors.name && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
 
-          {/* Password Field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("description_label_override")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password", {
-                  required: t("password_required"),
-                  minLength: {
-                    value: 6,
-                    message: t("password_min_length"),
-                  },
-                })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                placeholder={t("description_placeholder_override")}
-              />
+              {/* Email Field */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-base font-medium text-gray-900"
+                >
+                  {t("email_address")}
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  {...register("email", { required: t("email_required") })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white shadow-md"
+                  placeholder={t("email_placeholder")}
+                  required
+                  aria-required="true"
+                  autoComplete="email"
+                />
+                {errors.email && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label
+                  htmlFor="image"
+                  className="block mb-2 text-base font-medium text-gray-900"
+                >
+                  {t("profile_image")}
+                </label>
+                <input
+                  id="image"
+                  type="file"
+                  onChange={handleImageUpload}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-700 file:px-4 file:py-2 hover:file:bg-gray-200 shadow-md"
+                  aria-label={t("upload_profile_image")}
+                />
+              </div>
+
+              {/* Role Selection */}
+              <div>
+                <label
+                  htmlFor="role"
+                  className="block mb-2 text-base font-medium text-gray-900"
+                >
+                  {t("select_role")}
+                </label>
+                <select
+                  id="role"
+                  {...register("role", { required: t("role_required") })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white shadow-md"
+                  required
+                  aria-required="true"
+                >
+                  <option value="">{t("select_role_placeholder")}</option>
+                  <option value="citizen">{t("citizen")}</option>
+                  <option value="employee">{t("employee")}</option>
+                  <option value="administrative">{t("administrative")}</option>
+                </select>
+                {errors.role && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.role.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-base font-medium text-gray-900"
+                >
+                  {t("password")}
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    {...register("password", {
+                      required: t("password_required"),
+                      minLength: {
+                        value: 6,
+                        message: t("password_min_length"),
+                      },
+                    })}
+                    className="w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white pr-12 shadow-md"
+                    placeholder={t("password_placeholder")}
+                    required
+                    aria-required="true"
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#4A2C5A] focus:outline-none"
+                    aria-label={
+                      showPassword ? t("hide_password") : t("show_password")
+                    }
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-2 bg-[#640D5F] text-white rounded-lg font-medium hover:bg-[#3A1F45] transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                aria-label={t("register_account")}
+              >
+                {isSubmitting ? (
+                  <span className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin inline-block"></span>
+                ) : (
+                  t("register_account")
+                )}
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center my-6">
+                <div className="flex-grow border-t border-gray-300"></div>
+                <span className="mx-4 text-gray-600 text-sm">{t("or")}</span>
+                <div className="flex-grow border-t border-gray-300"></div>
+              </div>
+
+              {/* Google Sign-In */}
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                onClick={handleGoogleSignIn}
+                disabled={isSubmitting}
+                className="w-full py-2 bg-white border border-[#4A2C5A] text-[#4A2C5A] rounded-lg font-medium hover:bg-[#640D5F] hover:text-white transition-all flex items-center justify-center gap-2 shadow-md disabled:bg-gray-200 disabled:cursor-not-allowed"
+                aria-label={t("sign_in_with_google")}
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {isSubmitting ? (
+                  <span className="w-5 h-5 border-2 border-t-transparent border-[#4A2C5A] rounded-full animate-spin inline-block"></span>
+                ) : (
+                  <>
+                    <FaGoogle /> {t("sign_in_with_google")}
+                  </>
+                )}
               </button>
+            </form>
+
+            <p className="text-center text-sm mt-2 text-gray-600">
+              {t("already_registered")}{" "}
+              <Link
+                to="/login"
+                className="text-[#4A2C5A] hover:underline font-medium"
+              >
+                {t("login")}
+              </Link>
+            </p>
+
+            <div className="text-center text-xs mt-4 text-gray-600">
+              {t("technical_partner")}{" "}
+              <a
+                href="https://www.jionex.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block align-middle transition-all duration-200 hover:scale-105 hover:opacity-90"
+                aria-label={t("technical_partner_link_aria", {
+                  defaultValue: "Visit Jionex website, the technical partner",
+                })}
+              >
+                <img
+                  src="https://i.ibb.co/XMXd54n/jionex-logo.png"
+                  alt={t("logo_alt")}
+                  className="inline h-6 ml-2"
+                />
+              </a>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
           </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg font-semibold transition-all hover:shadow-lg disabled:opacity-50"
-          >
-            {isSubmitting ? t("registering") : t("create_account")}
-          </button>
-        </form>
-
-        <div className="my-6 flex items-center">
-          <div className="flex-1 border-t border-gray-300"></div>
-          <span className="px-4 text-gray-500 text-sm">{t("or")}</span>
-          <div className="flex-1 border-t border-gray-300"></div>
         </div>
-
-        {/* Google Sign-In Button */}
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={isSubmitting}
-          className="w-full py-2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50"
-        >
-          <FaGoogle className="text-red-500" />
-          <span className="text-gray-700 font-medium">
-            {t("login_with_google")}
-          </span>
-        </button>
-
-        <p className="text-center mt-6 text-gray-600">
-          {t("already_have_account")}{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 hover:text-blue-800 font-semibold"
-          >
-            {t("complainant_login_override")}
-          </Link>
-        </p>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../Components/Footer";
 import Loading from "../Components/Loading";
@@ -37,15 +37,14 @@ const Root = () => {
 
   return (
     <div className="bg-base-200 min-h-screen">
-      {noHeaderFooter || (
-        <header>
-          <Navbar />
-        </header>
-      )}
+      <header>
+        <Navbar />
+      </header>
+
       <main className="min-h-screen pt-20">
         <Outlet />
       </main>
-      {noHeaderFooter || <Footer />}
+      <Footer />
     </div>
   );
 };
