@@ -14,7 +14,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gray-800 text-sm text-white mt-2 ">
+    <footer className="bg-gray-800 text-sm text-white mt-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-gray-300">
           {/* Logo Section */}
@@ -69,15 +69,15 @@ const Footer = () => {
               <li className="mb-1">
                 {t("phone_label", { defaultValue: "Phone" })}:{" "}
                 <a href="tel:02333388817" className="hover:text-[#640D5F]">
-                  02333388817
+                  {t("phone_1", { defaultValue: "02333388817" })}
                 </a>
                 ,{" "}
                 <a href="tel:02333388818" className="hover:text-[#640D5F]">
-                  02333388818
+                  {t("phone_2", { defaultValue: "02333388818" })}
                 </a>
                 ,{" "}
                 <a href="tel:02333388819" className="hover:text-[#640D5F]">
-                  02333388819
+                  {t("phone_3", { defaultValue: "02333388819" })}
                 </a>
               </li>
               <li className="mb-1">
@@ -98,30 +98,36 @@ const Footer = () => {
                   })}
                 </a>
               </li>
-              <li>{t("fax_label", { defaultValue: "Fax" })}: 02333388803</li>
+              <li>
+                {t("fax_label", { defaultValue: "Fax" })}:{" "}
+                {t("fax_number", { defaultValue: "02333388803" })}
+              </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm py-4">
-          <p>
-            Copyright © {new Date().getFullYear()} - All right reserved by
-            Chattogram City Corporation
+          <p className="text-center md:text-left">
+            {t("footer_copyright", {
+              year: currentYear,
+              defaultValue: `Copyright © ${currentYear} - All rights reserved by Chattogram City Corporation`,
+            })}
           </p>
+
           <div className="flex items-center mt-2 md:mt-0">
-            <span className="mr-2">{t("technical_partner")}</span>
+            <span className="mr-2">{t("innovated_by")} </span>
             <a
               href="https://www.jionex.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:scale-105 hover:opacity-90"
-              aria-label={t("technical_partner_link_aria", {
-                defaultValue: "Visit the technical partner Jionex website",
+              aria-label={t("innovated_by_link_aria", {
+                defaultValue: "Visit Jionex website, innovated by",
               })}
             >
               <img
-                src="https://i.ibb.co/XMXd54n/jionex-logo.png"
+                src="https://i.ibb.co/TM90bP8L/jionex-logo-white.png"
                 alt={t("logo_alt")}
                 className="h-6"
               />

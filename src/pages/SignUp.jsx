@@ -251,8 +251,8 @@ const SignUp = () => {
                 >
                   <option value="">{t("select_role_placeholder")}</option>
                   <option value="citizen">{t("citizen")}</option>
-                  <option value="employee">{t("employee")}</option>
-                  <option value="administrative">{t("administrative")}</option>
+                  {/* <option value="employee">{t("employee")}</option>
+                  <option value="administrative">{t("administrative")}</option> */}
                 </select>
                 {errors.role && (
                   <p className="text-red-600 text-sm mt-1">
@@ -353,21 +353,21 @@ const SignUp = () => {
               </Link>
             </p>
 
-            <div className="text-center text-xs mt-4 text-gray-600">
-              {t("technical_partner")}{" "}
+            <div className="text-center text-xs mt-6 opacity-70">
+              {t("innovated_by")}{" "}
               <a
                 href="https://www.jionex.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block align-middle transition-all duration-200 hover:scale-105 hover:opacity-90"
-                aria-label={t("technical_partner_link_aria", {
-                  defaultValue: "Visit Jionex website, the technical partner",
+                aria-label={t("innovated_by_link_aria", {
+                  defaultValue: "Visit Jionex website, innovated by",
                 })}
               >
                 <img
                   src="https://i.ibb.co/XMXd54n/jionex-logo.png"
                   alt={t("logo_alt")}
-                  className="inline h-6 ml-2"
+                  className="inline h-6 ml-1"
                 />
               </a>
             </div>

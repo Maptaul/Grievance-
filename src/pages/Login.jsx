@@ -310,14 +310,14 @@ const Login = () => {
               </Link>
             </p>
             <div className="text-center text-xs mt-6 opacity-70">
-              {t("technical_partner")}{" "}
+              {t("innovated_by")}{" "}
               <a
                 href="https://www.jionex.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block align-middle transition-all duration-200 hover:scale-105 hover:opacity-90"
-                aria-label={t("technical_partner_link_aria", {
-                  defaultValue: "Visit Jionex website, the technical partner",
+                aria-label={t("innovated_by_link_aria", {
+                  defaultValue: "Visit Jionex website, innovated by",
                 })}
               >
                 <img

@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaBars,
   FaHome,
@@ -14,6 +15,7 @@ import Loading from "../Components/Loading";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
+  const { t, i18n } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, role, logOut, loading } = useContext(AuthContext);
   const email = user?.email || null;
@@ -45,7 +47,7 @@ const Dashboard = () => {
           }
         >
           <FaHome className="mr-2 text-lg" />
-          <span className="md:inline">User Home</span>
+          <span className="md:inline">{t("user_home")}</span>
         </NavLink>
       </li>
       <li>
@@ -59,7 +61,7 @@ const Dashboard = () => {
           }
         >
           <GrCompliance className="mr-2 text-lg" />
-          <span className="md:inline">My Complaints</span>
+          <span className="md:inline">{t("my_complaints")}</span>
         </NavLink>
       </li>
       <li>
@@ -73,32 +75,18 @@ const Dashboard = () => {
           }
         >
           <FaUser className="mr-2 text-lg" />
-          <span className="md:inline">Profile</span>
+          <span className="md:inline">{t("profile")}</span>
         </NavLink>
       </li>
-      {/* <li>
-        <NavLink
-          to="/dashboard/Settings"
-          onClick={() => setIsSidebarOpen(false)}
-          className={({ isActive }) =>
-            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
-              isActive ? "bg-blue-500 text-white" : "text-gray-800"
-            }`
-          }
-        >
-          <IoSettings className="mr-2 text-lg" />
-          <span className="md:inline">Settings</span>
-        </NavLink>
-      </li> */}
     </>
   );
 
-  // Administrative Menu
-  const adminMenu = (
+  // Administrative and Employee Menu (shared base)
+  const adminAndEmployeeMenu = (
     <>
       <li>
         <NavLink
-          to="/dashboard/AdminHome"
+          to={role === "administrative" ? "/dashboard/AdminHome" : "/dashboard/EmployeeHome"}
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
@@ -107,7 +95,7 @@ const Dashboard = () => {
           }
         >
           <FaHome className="mr-2 text-lg" />
-          <span className="md:inline">Admin Home</span>
+          <span className="md:inline">{role === "administrative" ? t("admin_home") : t("employee_home")}</span>
         </NavLink>
       </li>
       <li>
@@ -121,7 +109,7 @@ const Dashboard = () => {
           }
         >
           <TbReport className="mr-2 text-lg" />
-          <span className="md:inline">Complaints</span>
+          <span className="md:inline">{t("complaints")}</span>
         </NavLink>
       </li>
       <li>
@@ -135,7 +123,7 @@ const Dashboard = () => {
           }
         >
           <TbReport className="mr-2 text-lg" />
-          <span className="md:inline">All Complaints</span>
+          <span className="md:inline">{t("all_complaints")}</span>
         </NavLink>
       </li>
       <li>
@@ -149,9 +137,15 @@ const Dashboard = () => {
           }
         >
           <FaMapMarkedAlt className="mr-2 text-lg" />
-          <span className="md:inline">Ward Wise View</span>
+          <span className="md:inline">{t("ward_wise_view")}</span>
         </NavLink>
       </li>
+    </>
+  );
+
+  // Add "Manage Users" and "Employees" for administrative role only
+  const adminSpecificMenu = (
+    <>
       <li>
         <NavLink
           to="/dashboard/ManageUsers"
@@ -163,12 +157,12 @@ const Dashboard = () => {
           }
         >
           <FaUser className="mr-2 text-lg" />
-          <span className="md:inline">Manage Users</span>
+          <span className="md:inline">{t("manage_users")}</span>
         </NavLink>
       </li>
-      {/* <li>
+      <li>
         <NavLink
-          to="/dashboard/Settings"
+          to="/dashboard/Employees"
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
@@ -176,10 +170,10 @@ const Dashboard = () => {
             }`
           }
         >
-          <IoSettings className="mr-2 text-lg" />
-          <span className="md:inline">Settings</span>
+          <FaUser className="mr-2 text-lg" />
+          <span className="md:inline">{t("employees")}</span>
         </NavLink>
-      </li> */}
+      </li>
     </>
   );
 
@@ -213,12 +207,23 @@ const Dashboard = () => {
       >
         <div className="p-4 h-full flex flex-col">
           <h1 className="text-xl font-bold text-center mb-6 text-gray-800">
-            {role === "administrative" ? "Admin Dashboard" : "User Dashboard"}
+            {role === "administrative"
+              ? t("admin_dashboard")
+              : role === "employee"
+              ? t("employee_dashboard")
+              : t("user_dashboard")}
           </h1>
           <nav className="flex-1">
             <ul className="space-y-1 text-base font-bold">
               {/* Conditionally render menu based on role */}
-              {role === "administrative" ? adminMenu : citizenMenu}
+              {role === "citizen" ? (
+                citizenMenu
+              ) : (
+                <>
+                  {adminAndEmployeeMenu}
+                  {role === "administrative" && adminSpecificMenu}
+                </>
+              )}
 
               {/* Common Menu Items */}
               <div className="my-4 border-t border-gray-300"></div>
@@ -233,7 +238,7 @@ const Dashboard = () => {
                   }
                 >
                   <FaHome className="mr-2 text-lg" />
-                  <span className="md:inline">Home</span>
+                  <span className="md:inline">{t("home")}</span>
                 </NavLink>
               </li>
               <li>
@@ -242,7 +247,7 @@ const Dashboard = () => {
                   className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
                 >
                   <IoLogOutOutline className="mr-2 text-lg" />
-                  <span className="md:inline">Logout</span>
+                  <span className="md:inline">{t("logout")}</span>
                 </button>
               </li>
             </ul>

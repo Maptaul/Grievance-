@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FiCamera,
@@ -25,10 +25,63 @@ const SubmitComplaint = () => {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [location, setLocation] = useState(null);
-  const [ward, setWard] = useState(null); // New state for ward selection
+  const [ward, setWard] = useState(null); // Will now hold the name (en/bn) instead of Ward-X
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const { user, role } = useContext(AuthContext);
+
+  // Define the wards with their English and Bengali names
+  const wards = [
+    { en: "South Pahartali", bn: "দক্ষিণ পাহাড়তলী", value: "Ward-1" },
+    { en: "Jalalabad", bn: "জালালাবাদ", value: "Ward-2" },
+    { en: "Panchlaish", bn: "পাঁচলাইশ", value: "Ward-3" },
+    { en: "Chandgaon", bn: "চান্দগাঁও", value: "Ward-4" },
+    { en: "Mohra", bn: "মোহরা", value: "Ward-5" },
+    { en: "East Madarbari", bn: "পূর্ব মাদারবাড়ী", value: "Ward-6" },
+    { en: "West Madarbari", bn: "পশ্চিম মাদারবাড়ী", value: "Ward-7" },
+    { en: "Shulakbahar", bn: "শুলকবহর", value: "Ward-8" },
+    { en: "North Pahartali", bn: "উত্তর পাহাড়তলী", value: "Ward-9" },
+    { en: "North Kattali", bn: "উত্তর কাট্টলী", value: "Ward-10" },
+    { en: "South Kattali", bn: "দক্ষিণ কাট্টলী", value: "Ward-11" },
+    { en: "Saraipara", bn: "সরাইপাড়া", value: "Ward-12" },
+    { en: "Pahartali", bn: "পাহাড়তলী", value: "Ward-13" },
+    { en: "Lalkhan Bazar", bn: "লালখান বাজার", value: "Ward-14" },
+    { en: "Bagmoniram", bn: "বাগমনিরাম", value: "Ward-15" },
+    { en: "Chakbazar", bn: "চকবাজার", value: "Ward-16" },
+    { en: "West Bakalia", bn: "পশ্চিম বাকলিয়া", value: "Ward-17" },
+    { en: "East Bakalia", bn: "পূর্ব বাকলিয়া", value: "Ward-18" },
+    { en: "South Bakalia", bn: "দক্ষিণ বাকলিয়া", value: "Ward-19" },
+    { en: "Dewan Bazar", bn: "দেওয়ান বাজার", value: "Ward-20" },
+    { en: "Jamalkhan", bn: "জামালখান", value: "Ward-21" },
+    { en: "Enayet Bazar", bn: "এনায়েত বাজার", value: "Ward-22" },
+    { en: "North Pathantuli", bn: "উত্তর পাঠানটুলী", value: "Ward-23" },
+    { en: "North Agrabad", bn: "উত্তর আগ্রাবাদ", value: "Ward-24" },
+    { en: "Rampur", bn: "রামপুর", value: "Ward-25" },
+    { en: "North Halishahar", bn: "উত্তর হালিশহর", value: "Ward-26" },
+    { en: "South Agrabad", bn: "দক্ষিণ আগ্রাবাদ", value: "Ward-27" },
+    { en: "Pathantuli", bn: "পাঠানটুলী", value: "Ward-28" },
+    { en: "West Madarbari", bn: "পশ্চিম মাদারবাড়ী", value: "Ward-29" },
+    { en: "East Madarbari", bn: "পূর্ব মাদারবাড়ী", value: "Ward-30" },
+    { en: "Alkaran", bn: "আলকরণ", value: "Ward-31" },
+    { en: "Andarkilla", bn: "আন্দরকিল্লা", value: "Ward-32" },
+    { en: "Firingee Bazar", bn: "ফিরিঙ্গী বাজার", value: "Ward-33" },
+    { en: "Patharghata", bn: "পাথরঘাটা", value: "Ward-34" },
+    { en: "Boxirhat", bn: "বক্সিরহাট", value: "Ward-35" },
+    { en: "Gosaildanga", bn: "গোসাইলডাঙ্গা", value: "Ward-36" },
+    {
+      en: "North Middle Halishahar",
+      bn: "উত্তর মধ্য হালিশহর",
+      value: "Ward-37",
+    },
+    {
+      en: "South Middle Halishahar",
+      bn: "দক্ষিণ মধ্য হালিশহর",
+      value: "Ward-38",
+    },
+    { en: "South Halishahar", bn: "দক্ষিণ হালিশহর", value: "Ward-39" },
+    { en: "North Potenga", bn: "উত্তর পতেঙ্গা", value: "Ward-40" },
+    { en: "South Potenga", bn: "দক্ষিণ পতেঙ্গা", value: "Ward-41" },
+  ];
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -98,6 +151,16 @@ const SubmitComplaint = () => {
       return;
     }
 
+    if (!file) {
+      Swal.fire(t("missing_info"), t("upload_media"), "error");
+      return;
+    }
+
+    if (!ward) {
+      Swal.fire(t("missing_info"), t("select_ward"), "error");
+      return;
+    }
+
     if (!user?.email) {
       Swal.fire(t("error"), t("please_login_to_submit"), "error");
       return;
@@ -116,13 +179,19 @@ const SubmitComplaint = () => {
         fileUrl = imgResponse.data.data.display_url;
       }
 
+      // Find the corresponding Ward-X value based on the selected name
+      const selectedWard = wards.find(
+        (w) => (i18n.language === "bn" ? w.bn : w.en) === ward
+      );
+      const wardValue = selectedWard ? selectedWard.value : null;
+
       const complaintData = {
         category: selectedCategory,
         name: isAnonymous ? "Anonymous" : name,
         description,
         fileUrl,
         location,
-        ward, // Include ward in complaint data
+        ward: wardValue, // Store the Ward-X value in the complaint data
         status: "Pending",
         timestamp: new Date().toISOString(),
         email: user.email,
@@ -144,22 +213,18 @@ const SubmitComplaint = () => {
         title: t("complaint_submitted"),
         html: `
           <div class="text-left">
-            <p class="font-semibold">${t(
-              "category_label"
-            )}: ${selectedCategory}</p>
+            <p class="font-semibold">${t("category_label")}: ${selectedCategory}</p>
             <p class="mt-2">${t("complaint_received")}</p>
             ${
               location
-                ? `<p class="mt-2 text-sm">${t(
-                    "location_label"
-                  )}: ${location.latitude.toFixed(
+                ? `<p class="mt-2 text-sm">${t("location_label")}: ${location.latitude.toFixed(
                     4
                   )}, ${location.longitude.toFixed(4)}</p>`
                 : ""
             }
             ${
               ward
-                ? `<p class="mt-2 text-sm">${t("ward label")}: ${ward}</p>`
+                ? `<p class="mt-2 text-sm">${t("ward_label")}: ${ward}</p>`
                 : ""
             }
           </div>
@@ -171,7 +236,7 @@ const SubmitComplaint = () => {
       setDescription("");
       setFile(null);
       setLocation(null);
-      setWard(null); // Reset ward
+      setWard(null);
       setIsAnonymous(false);
     } catch (error) {
       console.error("Submission Error:", error);
@@ -231,7 +296,7 @@ const SubmitComplaint = () => {
 
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-700">
-            {t("description_label")}
+            {t("description_label")}*
           </label>
           <div className="relative">
             <FiMail className="absolute left-3 top-4 text-gray-400" />
@@ -247,7 +312,7 @@ const SubmitComplaint = () => {
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
-            {t("add_media")}
+            {t("add_media")}*
           </label>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -275,6 +340,7 @@ const SubmitComplaint = () => {
             capture="environment"
             onChange={handleFileChange}
             className="hidden"
+            required
           />
           <input
             type="file"
@@ -282,6 +348,7 @@ const SubmitComplaint = () => {
             accept="image/*, video/*, application/pdf"
             onChange={handleFileChange}
             className="hidden"
+            required
           />
 
           {file && (
@@ -303,7 +370,7 @@ const SubmitComplaint = () => {
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
-            {t("location_label")}
+            {t("ward_label")}*
           </label>
           <div className="grid grid-cols-2 gap-3">
             <div className="relative">
@@ -312,11 +379,15 @@ const SubmitComplaint = () => {
                 value={ward || ""}
                 onChange={(e) => setWard(e.target.value || null)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
               >
                 <option value="">{t("Select ward")}</option>
-                {Array.from({ length: 41 }, (_, i) => (
-                  <option key={i + 1} value={`Ward-${i + 1}`}>
-                    Ward-{i + 1}
+                {wards.map((ward) => (
+                  <option
+                    key={ward.value}
+                    value={i18n.language === "bn" ? ward.bn : ward.en}
+                  >
+                    {i18n.language === "bn" ? ward.bn : ward.en}
                   </option>
                 ))}
               </select>
