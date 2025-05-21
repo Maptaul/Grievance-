@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  FaAngleDown,
+  FaAngleUp,
   FaBars,
   FaHome,
   FaMapMarkedAlt,
@@ -15,10 +17,11 @@ import Loading from "../Components/Loading";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isComplaintsDropdownOpen, setIsComplaintsDropdownOpen] =
+    useState(false);
   const { user, role, logOut, loading } = useContext(AuthContext);
-  const email = user?.email || null;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -51,18 +54,138 @@ const Dashboard = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/dashboard/ManageMyComplaints"
-          onClick={() => setIsSidebarOpen(false)}
-          className={({ isActive }) =>
-            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
-              isActive ? "bg-blue-500 text-white" : "text-gray-800"
-            }`
-          }
-        >
-          <GrCompliance className="mr-2 text-lg" />
-          <span className="md:inline">{t("my_complaints")}</span>
-        </NavLink>
+        <div className="relative">
+          <button
+            onClick={() =>
+              setIsComplaintsDropdownOpen(!isComplaintsDropdownOpen)
+            }
+            className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
+          >
+            <GrCompliance className="mr-2 text-lg" />
+            <span className="md:inline">{t("my_complaints")}</span>
+            {isComplaintsDropdownOpen ? (
+              <FaAngleUp className="ml-auto" />
+            ) : (
+              <FaAngleDown className="ml-auto" />
+            )}
+          </button>
+          {isComplaintsDropdownOpen && (
+            <ul className="ml-6 mt-1 space-y-1">
+              <li>
+                <NavLink
+                  to="/dashboard/ManageMyComplaints/pending"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("pending_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageMyComplaints/viewed"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("viewed_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageMyComplaints/assigned"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("assigned_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageMyComplaints/ongoing"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("ongoing_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageMyComplaints/resolved"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("resolved_complaints")}</span>
+                </NavLink>
+              </li>
+              {/* <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/AllComplaints"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("pending_complaints")}</span>
+                </NavLink>
+              </li> */}
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/AllComplaints"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("all_complaints")}</span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </div>
       </li>
       <li>
         <NavLink
@@ -86,7 +209,11 @@ const Dashboard = () => {
     <>
       <li>
         <NavLink
-          to={role === "administrative" ? "/dashboard/AdminHome" : "/dashboard/EmployeeHome"}
+          to={
+            role === "administrative"
+              ? "/dashboard/AdminHome"
+              : "/dashboard/EmployeeHome"
+          }
           onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
@@ -95,36 +222,128 @@ const Dashboard = () => {
           }
         >
           <FaHome className="mr-2 text-lg" />
-          <span className="md:inline">{role === "administrative" ? t("admin_home") : t("employee_home")}</span>
+          <span className="md:inline">
+            {role === "administrative" ? t("admin_home") : t("employee_home")}
+          </span>
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/dashboard/ManageComplaints"
-          onClick={() => setIsSidebarOpen(false)}
-          className={({ isActive }) =>
-            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
-              isActive ? "bg-blue-500 text-white" : "text-gray-800"
-            }`
-          }
-        >
-          <TbReport className="mr-2 text-lg" />
-          <span className="md:inline">{t("complaints")}</span>
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/dashboard/AllComplaints"
-          onClick={() => setIsSidebarOpen(false)}
-          className={({ isActive }) =>
-            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
-              isActive ? "bg-blue-500 text-white" : "text-gray-800"
-            }`
-          }
-        >
-          <TbReport className="mr-2 text-lg" />
-          <span className="md:inline">{t("all_complaints")}</span>
-        </NavLink>
+        <div className="relative">
+          <button
+            onClick={() =>
+              setIsComplaintsDropdownOpen(!isComplaintsDropdownOpen)
+            }
+            className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
+          >
+            <TbReport className="mr-2 text-lg" />
+            <span className="md:inline">{t("complaints")}</span>
+            {isComplaintsDropdownOpen ? (
+              <FaAngleUp className="ml-auto" />
+            ) : (
+              <FaAngleDown className="ml-auto" />
+            )}
+          </button>
+          {isComplaintsDropdownOpen && (
+            <ul className="ml-6 mt-1 space-y-1">
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/pending"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("pending_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/viewed"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("viewed_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/assigned"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("assigned_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/ongoing"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("ongoing_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/resolved"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("resolved_complaints")}</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/dashboard/ManageComplaints/AllComplaints"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setIsComplaintsDropdownOpen(false);
+                  }}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                      isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                    }`
+                  }
+                >
+                  <span className="md:inline">{t("all_complaints")}</span>
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </div>
       </li>
       <li>
         <NavLink
@@ -138,6 +357,20 @@ const Dashboard = () => {
         >
           <FaMapMarkedAlt className="mr-2 text-lg" />
           <span className="md:inline">{t("ward_wise_view")}</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/Profile"
+          onClick={() => setIsSidebarOpen(false)}
+          className={({ isActive }) =>
+            `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+              isActive ? "bg-blue-500 text-white" : "text-gray-800"
+            }`
+          }
+        >
+          <FaUser className="mr-2 text-lg" />
+          <span className="md:inline">{t("profile")}</span>
         </NavLink>
       </li>
     </>

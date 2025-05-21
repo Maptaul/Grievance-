@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaCheckCircle,
   FaClock,
@@ -7,30 +8,33 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 
-const COLORS = ["#640D5F", "#0f766e", "#f59e0b", "#4b5563"]; // purple-900, teal-600, amber-500, gray-600
+const COLORS = ["#ff6f61", "#640D5F", "#0f766e", "#f59e0b", "#4b5563"]; // Adjusted colors for 5 statuses: red-500, purple-900, teal-600, amber-500, gray-600
 
 const AdminHome = () => {
+  const { t } = useTranslation();
   const { user, role } = useContext(AuthContext);
   const [stats, setStats] = useState({
     totalUsers: 0,
     pendingComplaints: 0,
+    viewedComplaints: 0,
+    assignedComplaints: 0,
     ongoingComplaints: 0,
     resolvedComplaints: 0,
   });
@@ -44,17 +48,15 @@ const AdminHome = () => {
     if (role === "administrative") {
       const fetchData = async () => {
         try {
-          const usersResponse = await fetch(
-            "https://grievance-server.vercel.app/users"
-          );
-          if (!usersResponse.ok) throw new Error("Failed to fetch users");
+          const usersResponse = await fetch("http://localhost:3000/users");
+          if (!usersResponse.ok) throw new Error(t("error_fetch_users"));
           const users = await usersResponse.json();
 
           const complaintsResponse = await fetch(
-            "https://grievance-server.vercel.app/complaints"
+            "http://localhost:3000/complaints"
           );
           if (!complaintsResponse.ok)
-            throw new Error("Failed to fetch complaints");
+            throw new Error(t("error_fetch_complaints"));
           const complaintsData = await complaintsResponse.json();
 
           setComplaints(complaintsData);
@@ -62,6 +64,12 @@ const AdminHome = () => {
             totalUsers: users.length,
             pendingComplaints: complaintsData.filter(
               (c) => c.status === "Pending"
+            ).length,
+            viewedComplaints: complaintsData.filter(
+              (c) => c.status === "Viewed"
+            ).length,
+            assignedComplaints: complaintsData.filter(
+              (c) => c.status === "Assigned"
             ).length,
             ongoingComplaints: complaintsData.filter(
               (c) => c.status === "Ongoing"
@@ -78,27 +86,39 @@ const AdminHome = () => {
       };
       fetchData();
     }
-  }, [role]);
+  }, [role, t]);
 
   // Process chart data
   const categoryData = complaints.reduce((acc, complaint) => {
-    const category = complaint.category || "Others";
+    const category = complaint.category || t("others");
     acc[category] = (acc[category] || 0) + 1;
     return acc;
   }, {});
-  const categoryChartData = Object.entries(categoryData).map(([name, complaints]) => ({
-    name,
-    complaints,
-  }));
+  const categoryChartData = Object.entries(categoryData).map(
+    ([name, complaints]) => ({
+      name,
+      complaints,
+    })
+  );
 
   const statusChartData = [
-    { name: "Pending", value: stats.pendingComplaints },
-    { name: "Ongoing", value: stats.ongoingComplaints },
-    { name: "Resolved", value: stats.resolvedComplaints },
+    { name: t("pending"), value: stats.pendingComplaints },
+    { name: t("viewed"), value: stats.viewedComplaints },
+    { name: t("assigned"), value: stats.assignedComplaints },
+    { name: t("ongoing"), value: stats.ongoingComplaints },
+    { name: t("resolved"), value: stats.resolvedComplaints },
   ].filter((entry) => entry.value > 0); // Remove zero values for cleaner pie chart
 
   const handlePendingClick = () => {
     setViewMode("pending");
+  };
+
+  const handleViewedClick = () => {
+    setViewMode("viewed");
+  };
+
+  const handleAssignedClick = () => {
+    setViewMode("assigned");
   };
 
   const handleOngoingClick = () => {
@@ -122,28 +142,28 @@ const AdminHome = () => {
   const handleEditClick = async (complaint) => {
     try {
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ status: "Ongoing" }),
+          body: JSON.stringify({ status: "Viewed" }),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to update complaint status");
+      if (!response.ok) throw new Error(t("error_update_complaint_status"));
 
       await Swal.fire({
         icon: "success",
-        title: "Status Updated",
-        text: `Complaint status changed to Ongoing!`,
+        title: t("status_updated"),
+        text: t("complaint_status_changed_to_viewed"),
         timer: 2000,
         showConfirmButton: false,
       });
 
       const updatedComplaints = complaints.map((c) =>
-        c._id === complaint._id ? { ...c, status: "Ongoing" } : c
+        c._id === complaint._id ? { ...c, status: "Viewed" } : c
       );
       setComplaints(updatedComplaints);
       navigate(`/dashboard/editComplaint/${complaint._id}`, {
@@ -153,8 +173,8 @@ const AdminHome = () => {
       console.error("Error updating complaint:", err);
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Failed to update complaint status. Please try again.",
+        title: t("error"),
+        text: t("failed_to_update_complaint_status"),
       });
     }
   };
@@ -166,7 +186,9 @@ const AdminHome = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p className="text-red-500 text-xl font-semibold">Error: {error}</p>
+        <p className="text-red-500 text-xl font-semibold">
+          {t("error")}: {error}
+        </p>
       </div>
     );
   }
@@ -197,57 +219,65 @@ const AdminHome = () => {
           <div className="bg-gradient-to-r from-amber-400 to-orange-500 p-6 rounded-xl shadow-lg flex items-center space-x-4 animate-fade-in">
             <img
               src={user?.photoURL || "https://via.placeholder.com/80"}
-              alt="Profile"
+              alt={t("profile_alt")}
               className="w-20 h-20 rounded-full border-4 border-white object-cover transform hover:scale-110 transition-transform duration-300"
             />
             <div>
               <h2 className="text-3xl font-bold text-white drop-shadow-md">
-                Welcome, {user?.displayName || "Admin"}
+                {t("welcome")}, {user?.displayName || t("admin")}
               </h2>
               <p className="mt-1 text-amber-100 text-lg">
-                Manage system activity with ease and efficiency.
+                {t("manage_system_activity")}
               </p>
             </div>
           </div>
 
           {/* Stats Cards */}
           {viewMode === "stats" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {[
+                // {
+                //   title: t("total_users"),
+                //   value: stats.totalUsers,
+                //   icon: <FaUsers className="text-4xl text-teal-600" />,
+                //   gradient: "from-teal-400 to-teal-600",
+                // },
                 {
-                  title: "Total Users",
-                  value: stats.totalUsers,
-                  icon: <FaUsers className="text-4xl text-teal-600" />,
-                  gradient: "from-teal-400 to-teal-600",
-                },
-                {
-                  title: "Pending Complaints",
+                  title: t("pending_complaints"),
                   value: stats.pendingComplaints,
                   icon: (
                     <FaExclamationTriangle className="text-4xl text-red-600" />
                   ),
                   gradient: "from-red-400 to-red-600",
-                  onClick: handlePendingClick,
                 },
                 {
-                  title: "Ongoing Complaints",
+                  title: t("viewed_complaints"),
+                  value: stats.viewedComplaints,
+                  icon: <FaEye className="text-4xl text-purple-600" />,
+                  gradient: "from-purple-400 to-purple-600",
+                },
+                {
+                  title: t("assigned_complaints"),
+                  value: stats.assignedComplaints,
+                  icon: <FaUsers className="text-4xl text-yellow-600" />,
+                  gradient: "from-yellow-400 to-yellow-600",
+                },
+                {
+                  title: t("ongoing_complaints"),
                   value: stats.ongoingComplaints,
                   icon: <FaClock className="text-4xl text-blue-600" />,
                   gradient: "from-blue-400 to-blue-600",
-                  onClick: handleOngoingClick,
                 },
                 {
-                  title: "Resolved Complaints",
+                  title: t("resolved_complaints"),
                   value: stats.resolvedComplaints,
                   icon: <FaCheckCircle className="text-4xl text-green-600" />,
                   gradient: "from-green-400 to-green-600",
-                  onClick: handleResolvedClick,
                 },
               ].map((card, index) => (
                 <div
                   key={index}
-                  className={`bg-white p-6 rounded-xl shadow-md hover-scale cursor-pointer bg-gradient-to-br ${card.gradient} text-white animate-fade-in`}
-                  onClick={card.onClick}
+                  className={`bg-white p-6 rounded-xl shadow-md bg-gradient-to-br ${card.gradient} text-white animate-fade-in`}
                 >
                   <div className="flex items-center space-x-4">
                     <div className="p-3 bg-white bg-opacity-30 rounded-full">
@@ -264,25 +294,27 @@ const AdminHome = () => {
           )}
 
           {/* Complaints Tables */}
-          {["pending", "ongoing", "resolved"].includes(viewMode) &&
+          {["pending", "viewed", "assigned", "ongoing", "resolved"].includes(
+            viewMode
+          ) &&
             complaints.length > 0 && (
               <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
                 <button
                   className="mb-4 px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-lg hover-pulse"
                   onClick={handleBackToStats}
                 >
-                  Back to Dashboard
+                  {t("back_to_dashboard")}
                 </button>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
                       <tr>
                         {[
-                          "Serial",
-                          "Category",
-                          "Title",
-                          "Status",
-                          "Actions",
+                          t("serial"),
+                          t("category"),
+                          t("title"),
+                          t("status"),
+                          t("actions"),
                         ].map((header) => (
                           <th
                             key={header}
@@ -321,12 +353,16 @@ const AdminHome = () => {
                                 className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
                                   complaint.status === "Pending"
                                     ? "bg-red-200 text-red-800"
+                                    : complaint.status === "Viewed"
+                                    ? "bg-purple-200 text-purple-800"
+                                    : complaint.status === "Assigned"
+                                    ? "bg-yellow-200 text-yellow-800"
                                     : complaint.status === "Ongoing"
                                     ? "bg-blue-200 text-blue-800"
                                     : "bg-green-200 text-green-800"
                                 }`}
                               >
-                                {complaint.status}
+                                {t(complaint.status.toLowerCase())}
                               </span>
                             </td>
                             <td className="py-4 px-4">
@@ -338,7 +374,7 @@ const AdminHome = () => {
                                 }
                                 className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
                               >
-                                <FaEye className="mr-1" /> View
+                                <FaEye className="mr-1" /> {t("view")}
                               </button>
                             </td>
                           </tr>
@@ -353,13 +389,13 @@ const AdminHome = () => {
           {viewMode === "stats" && (
             <div className="space-y-8 mt-8">
               <h2 className="text-2xl font-bold text-gray-800">
-                Complaint Analytics
+                {t("complaint_analytics")}
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Bar Chart: Complaints by Category */}
                 <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
                   <h3 className="text-xl font-semibold text-gray-700 mb-4">
-                    Complaints by Category
+                    {t("complaints_by_category")}
                   </h3>
                   {categoryChartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={300}>
@@ -375,14 +411,14 @@ const AdminHome = () => {
                       </BarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <p className="text-gray-500">No category data available.</p>
+                    <p className="text-gray-500">{t("no_category_data")}</p>
                   )}
                 </div>
 
                 {/* Pie Chart: Complaint Status */}
                 <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
                   <h3 className="text-xl font-semibold text-gray-700 mb-4">
-                    Complaint Status Distribution
+                    {t("complaint_status_distribution")}
                   </h3>
                   {statusChartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={300}>
@@ -410,7 +446,7 @@ const AdminHome = () => {
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
-                    <p className="text-gray-500">No status data available.</p>
+                    <p className="text-gray-500">{t("no_status_data")}</p>
                   )}
                 </div>
               </div>

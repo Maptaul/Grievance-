@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -116,37 +115,64 @@ export default function Contact() {
                   {t("contact_info_heading")}
                 </h2>
                 <div className="space-y-4">
-                  <div className="flex items-center">
-                    <FaPhone className="text-[#640D5F] text-xl mr-3" />
-                    <p className="text-gray-800 whitespace-normal">
-                      {t("contact_info.phone_label")}:{" "}
+                  <ul className="list-none">
+                    <li className="mb-1 font-medium">
+                      {t("chattogram_city_corporation")}
+                    </li>
+                    <li className="mb-1">{t("nagar_bhaban")}</li>
+                    <li className="mb-1">
+                      {t("batail_hill_tigerpass", {
+                        defaultValue: "Batail Hill, Tigerpass, Chattogram",
+                      })}
+                    </li>
+                    <li className="mb-1">
+                      {t("phone_label", { defaultValue: "Phone" })}:{" "}
                       <a
-                        href="tel:+971569258166"
-                        aria-label={t("contact_info.phone_link_label")}
+                        href="tel:02333388817"
+                        className="hover:text-[#640D5F]"
                       >
-                        +971569258166
+                        {t("phone_1", { defaultValue: "02333388817" })}
                       </a>
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <FaEnvelope className="text-[#640D5F] text-xl mr-3" />
-                    <p className="text-gray-800 whitespace-normal">
-                      {t("contact_info.email_label")}:{" "}
+                      ,{" "}
                       <a
-                        href="mailto:contact@jionex.com"
-                        aria-label={t("contact_info.email_link_label")}
+                        href="tel:02333388818"
+                        className="hover:text-[#640D5F]"
                       >
-                        contact@jionex.com
+                        {t("phone_2", { defaultValue: "02333388818" })}
                       </a>
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <FaMapMarkerAlt className="text-[#640D5F] text-xl mr-3" />
-                    <p className="text-gray-800 whitespace-normal">
-                      {t("contact_info.address_label")}: IPL City Centre, 4th
-                      Floor, 162 O.R. Nizam Rd, Chattogram-4317, Bangladesh.
-                    </p>
-                  </div>
+                      ,{" "}
+                      <a
+                        href="tel:02333388819"
+                        className="hover:text-[#640D5F]"
+                      >
+                        {t("phone_3", { defaultValue: "02333388819" })}
+                      </a>
+                    </li>
+                    <li className="mb-1">
+                      {t("email_label", { defaultValue: "Email" })}:{" "}
+                      <a
+                        href="mailto:info@ccc.gov.bd"
+                        className="hover:text-[#640D5F]"
+                      >
+                        {t("info_ccc_email", {
+                          defaultValue: "info@ccc.gov.bd",
+                        })}
+                      </a>
+                      ,{" "}
+                      <a
+                        href="mailto:programmer@ccc.gov.bd"
+                        className="hover:text-[#640D5F]"
+                      >
+                        {t("programmer_ccc_email", {
+                          defaultValue: "programmer@ccc.gov.bd",
+                        })}
+                      </a>
+                    </li>
+                    <li>
+                      {t("fax_label", { defaultValue: "Fax" })}:{" "}
+                      {t("fax_number", { defaultValue: "02333388803" })}
+                    </li>
+                  </ul>
                 </div>
                 <div className="mt-6">
                   <iframe

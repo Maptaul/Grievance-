@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import mayor from "/src/assets/mayor.jpg";
 
@@ -6,15 +5,17 @@ const MayorMessage = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="pt-[48px] sm:pt-[56px] bg-[#f4f4f4]">
+    <section className="pt-[48px] sm:pt-[56px] bg-[#f4f4f4] ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center pb-5">
-          <h2 className="text-3xl font-semibold">{t("mayor_message_header")}</h2>
+          <h2 className="text-3xl font-semibold">
+            {t("mayor_message_header")}
+          </h2>
         </div>
 
         {/* Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center ">
           {/* Image */}
           <div className="text-center">
             <img

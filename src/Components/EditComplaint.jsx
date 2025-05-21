@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiFile, FiImage, FiMapPin, FiX } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; // Ensure SweetAlert2 is installed and properly imported
@@ -105,7 +105,7 @@ const EditComplaint = () => {
         newLocation: updateLocation || undefined,
       };
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

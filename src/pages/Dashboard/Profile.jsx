@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider"; // Adjust the import path as needed
 
@@ -14,7 +14,7 @@ const Profile = () => {
       const fetchUserData = async () => {
         try {
           const response = await fetch(
-            `https://grievance-server.vercel.app/users/${user.email}`
+            `http://localhost:3000/users/${user.email}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch user data");

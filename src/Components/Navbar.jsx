@@ -49,7 +49,7 @@ const NavBar = () => {
     localStorage.setItem("i18nextLng", lng);
   };
 
-  // Framer Motion variants for the Complaints button
+  // Framer Motion variants for the Complaints/Dashboard button
   const buttonVariants = {
     idle: {
       scale: [1, 1.05, 1],
@@ -127,28 +127,16 @@ const NavBar = () => {
                 {user ? (
                   <li>
                     <Link
-                      to="/dashboard"
+                      to="/complaint-category"
                       className="text-gray-800 font-medium hover:bg-teal-100 hover:text-teal-600 px-4 py-2 rounded-lg text-sm sm:text-base"
                       onClick={() =>
                         dropdownRef.current.removeAttribute("open")
                       }
                     >
-                      {t("dashboard")}
+                      {t("complaints")}
                     </Link>
                   </li>
-                ) : (
-                  <li>
-                    <Link
-                      to="/login"
-                      className="text-gray-800 font-medium hover:bg-teal-100 hover:text-teal-600 px-4 py-2 rounded-lg text-sm sm:text-base"
-                      onClick={() =>
-                        dropdownRef.current.removeAttribute("open")
-                      }
-                    >
-                      {t("login")}
-                    </Link>
-                  </li>
-                )}
+                ) : null}
               </ul>
             </details>
             <Link to="/" className="flex items-center">
@@ -175,12 +163,21 @@ const NavBar = () => {
               whileHover="hover"
               whileTap="tap"
             >
-              <Link
-                to="/complaint-category"
-                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
-              >
-                {t("complaints")}
-              </Link>
+              {user ? (
+                <Link
+                  to="/dashboard"
+                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+                >
+                  {t("dashboard")}
+                </Link>
+              ) : (
+                <Link
+                  to="/complaint-category"
+                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+                >
+                  {t("complaints")}
+                </Link>
+              )}
             </motion.div>
             <div className="dropdown dropdown-end">
               <label
@@ -212,7 +209,7 @@ const NavBar = () => {
                 </li>
               </ul>
             </div>
-            {user && (
+            {user ? (
               <div className="dropdown dropdown-end">
                 <label
                   tabIndex={0}
@@ -243,6 +240,13 @@ const NavBar = () => {
                   </li>
                 </ul>
               </div>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+              >
+                {t("login")}
+              </Link>
             )}
           </div>
         </div>

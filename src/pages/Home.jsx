@@ -1,4 +1,3 @@
-import React from "react";
 import Banner from "../Components/Banner";
 import GetInvolved from "../Components/GetInvolved";
 import KeyPillarsSection from "../Components/KeyPillarsSection";
@@ -19,13 +18,13 @@ const Home = () => {
         <Notice />
       </section>
       <section>
+        <MayorMessage />
+      </section>
+      <section>
         <Welcome />
       </section>
       <section>
         <Vision />
-      </section>
-      <section>
-        <MayorMessage />
       </section>
       <section>
         <ProgressSection />

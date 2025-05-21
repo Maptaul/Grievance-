@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 
 const AllComplaints = () => {
@@ -12,9 +12,7 @@ const AllComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch(
-          "https://grievance-server.vercel.app/complaints"
-        );
+        const response = await fetch("http://localhost:3000/complaints");
         if (!response.ok) throw new Error("Failed to fetch complaints");
         const data = await response.json();
         setComplaints(data);
@@ -44,7 +42,8 @@ const AllComplaints = () => {
     try {
       dateA = a.timestamp ? new Date(a.timestamp) : new Date(0); // Fallback to epoch
       dateB = b.timestamp ? new Date(b.timestamp) : new Date(0);
-      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) throw new Error("Invalid date");
+      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime()))
+        throw new Error("Invalid date");
     } catch {
       // Fallback: Extract date and time from string
       const getDateTime = (timestamp) => {
@@ -61,9 +60,7 @@ const AllComplaints = () => {
         : valueB.localeCompare(valueA);
     }
 
-    return sortDirection === "asc"
-      ? dateA - dateB
-      : dateB - dateA;
+    return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
   });
 
   // Toggle sort direction
@@ -145,7 +142,9 @@ const AllComplaints = () => {
                 key={complaint._id}
                 className="border-b border-gray-300 hover:bg-gray-300"
               >
-                <td className="py-3 px-4 text-gray-800">{complaint._id || "N/A"}</td>
+                <td className="py-3 px-4 text-gray-800">
+                  {complaint._id || "N/A"}
+                </td>
                 <td className="py-3 px-4 text-gray-800">
                   {complaint.category || "N/A"}
                 </td>

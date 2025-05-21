@@ -1,10 +1,8 @@
-import { motion } from "framer-motion";
-import React from "react";
 import banner from "/src/assets/finalvideo.mp4";
 
 const BannerSection = () => {
   return (
-    <section className="relative pt-20 mt-3 max-w-7xl mx-auto w-full h-[500px] overflow-hidden">
+    <section className="relative pt-20 mt-3 max-w-7xl mx-auto w-full rounded-md h-[510px] overflow-hidden">
       <div>
         <video
           className="absolute top-0 left-0 w-full h-full object-cover"

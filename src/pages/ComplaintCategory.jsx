@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import Loading from "../Components/Loading";
@@ -28,14 +28,14 @@ const ComplaintCategory = () => {
   const [languageChanged, setLanguageChanged] = useState(false);
 
   useEffect(() => {
-    fetch("https://grievance-server.vercel.app/category")
+    fetch("http://localhost:3000/category")
       .then((response) => response.json())
       .then((data) => {
         setComplaints(data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error(t("error_fetching_data"), error);
         setLoading(false);
       });
   }, []);
@@ -90,7 +90,7 @@ const ComplaintCategory = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loading />
+        <Loading message={t("loading")} />
       </div>
     );
   }
@@ -98,7 +98,7 @@ const ComplaintCategory = () => {
   return (
     <>
       {/* Banner */}
-      <section className=" pt-15 pb-12 text-center">
+      <section className="pt-15 pb-12 text-center">
         <div className="">
           <motion.h1
             className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4"
@@ -108,14 +108,14 @@ const ComplaintCategory = () => {
           >
             {t("select_complaint_category")}
           </motion.h1>
-          <p className="text-gray-600 text-lg">{t("choose category below")}</p>
+          <p className="text-gray-600 text-lg">{t("choose_category_below")}</p>
         </div>
       </section>
 
       {/* Services Grid */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid  md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
             {complaints.map((item, index) => {
               const translatedCategory = t(`category.${item.category}`, {
                 defaultValue: item.category,

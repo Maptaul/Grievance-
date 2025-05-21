@@ -37,7 +37,7 @@ const AuthProvider = ({ children }) => {
         role: "citizen",
         createdAt: new Date().toISOString(),
       };
-      await axios.post("https://grievance-server.vercel.app/users", userData);
+      await axios.post("http://localhost:3000/users", userData);
       setRole("citizen");
       return userCredential;
     } catch (error) {
@@ -86,7 +86,7 @@ const AuthProvider = ({ children }) => {
           const email = currentUser.email.toLowerCase();
           console.log("Fetching role for email:", email);
           const response = await axios.get(
-            `https://grievance-server.vercel.app/users/${email}`
+            `http://localhost:3000/users/${email}`
           );
           if (response.data && response.data.role) {
             setRole(response.data.role);
@@ -94,7 +94,7 @@ const AuthProvider = ({ children }) => {
           } else {
             setRole("citizen");
             console.warn("No role found, defaulting to 'citizen'");
-            await axios.post("https://grievance-server.vercel.app/users", {
+            await axios.post("http://localhost:3000/users", {
               email,
               role: "citizen",
               createdAt: new Date().toISOString(),

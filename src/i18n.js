@@ -17,6 +17,12 @@ const resources = {
       language: "Language",
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
 
+      history: "History",
+      no_history_available: "No history available",
+      unauthorized_access: "You do not have permission to view this page.",
+      only_employees_can_resolve: "Only employees can resolve complaints.",
+      unauthorized: "Unauthorized",
+
       // Existing Login/Registration Translations
       complainant_login: "Login",
       admin_login: "Admin Login",
@@ -44,6 +50,7 @@ const resources = {
       copyright: "Copyright",
       all_rights_reserved: "All rights reserved by Chittagong City Corporation",
       innovated_by: "Innovated by",
+      no_resolved_complaints: "No resolved complaints found",
       // SubmitComplaint Translations
       report_issue: "Report an Issue",
       improve_community: "Help improve our community",
@@ -83,9 +90,58 @@ const resources = {
       select_ward: "Please select a ward.",
       ward_label: "Ward",
 
+      error_fetch_users: "Failed to fetch users",
+      error_fetch_complaints: "Failed to fetch complaints",
+      others: "Others",
+      viewed: "Viewed",
+      assigned: "Assigned",
+      ongoing: "Ongoing",
+      resolved: "Resolved",
+      error_update_complaint_status: "Failed to update complaint status",
+      status_updated: "Status Updated",
+      complaint_status_changed_to_assigned:
+        "Complaint status changed to Assigned!",
+      failed_to_update_complaint_status:
+        "Failed to update complaint status. Please try again.",
+      profile_alt: "Profile",
+      welcome: "Welcome",
+      admin: "Admin",
+      manage_system_activity:
+        "Manage system activity with ease and efficiency.",
+      total_users: "Total Users",
+      viewed_complaints: "Viewed",
+      assigned_complaints: "Assigned",
+      ongoing_complaints: "Ongoing",
+      resolved_complaints: "Resolved",
+      back_to_dashboard: "Back to Dashboard",
+      serial: "Serial",
+      title: "Title",
+      status: "Status",
+      actions: "Actions",
+      view: "View",
+      complaint_analytics: "Complaint Analytics",
+      complaints_by_category: "Complaints by Category",
+      no_category_data: "No category data available.",
+      complaint_status_distribution: "Complaint Status Distribution",
+      no_status_data: "No status data available.",
+      pending: "Pending",
+      complaint_status_changed_to_viewed: "Complaint status changed to Viewed!",
+
+      mobile_label: "Mobile Number",
+      mobile_placeholder: "Enter your mobile number (e.g., 1234567890)",
+      provide_valid_mobile:
+        "Please provide a valid mobile number (10-15 digits)",
+      anonymous: "Anonymous",
+      status_pending: "Pending",
+      failed_to_submit_complaint: "Failed to submit complaint.",
+      category_required: "Category is required",
+
+      category_tab: "Category",
+      view_map: "Map",
+
       // Dashboard Translations
-      user_home: "User Home",
-      my_complaints: "My Complaints",
+      user_home: "Citizen Home",
+      my_complaints: "Complaints",
       profile: "Profile",
       admin_home: "Admin Home",
       employee_home: "Employee Home",
@@ -95,7 +151,7 @@ const resources = {
       employees: "Employees",
       admin_dashboard: "Admin Dashboard",
       employee_dashboard: "Employee Dashboard",
-      user_dashboard: "User Dashboard",
+      user_dashboard: "Citizen Dashboard",
 
       // Login Component Translations
       complainant_login_override: "Please Login",
@@ -124,17 +180,85 @@ const resources = {
       login_form: "Login form",
       technical_partner: "Technical Partner",
 
+      manage_your_complaints: "Manage your complaints by status",
+
+      status_viewed: "Viewed",
+      status_assigned: "Assigned",
+      status_ongoing: "Ongoing",
+      status_resolved: "Resolved",
+      complaint_id: "Complaint ID",
+
+      description: "Description",
+      file: "File",
+      location: "Location",
+
+      date: "Date",
+      view_file: "View",
+      na: "N/A",
+      location_not_specified: "Not specified",
+      location_invalid: "Invalid location",
+      no_complaints: "No {status} complaints found",
+      loading: "Loading...",
+
+      manage_employees: "Manage Employees",
+      add_employee: "Add Employee",
+      add_new_employee: "Add New Employee",
+      name: "Name",
+      designation: "Designation",
+      department: "Department",
+      mobile: "Mobile",
+      suspended: "Suspended",
+      active: "Active",
+      suspend: "Suspend",
+      unsuspend: "Unsuspend",
+      save: "Save",
+      cancel: "Cancel",
+      confirm_action: "Are you sure you want to {{action}} this employee?",
+      suspend_text: "This will block the employee from accessing the system.",
+      unsuspend_text: "This will restore the employee's access.",
+      yes_suspend: "Yes, suspend!",
+      yes_unsuspend: "Yes, unsuspend!",
+      suspend_success: "Employee Suspended",
+      unsuspend_success: "Employee Unsuspended",
+      fail_suspend: "Failed to suspend employee. Please try again.",
+      fail_unsuspend: "Failed to unsuspend employee. Please try again.",
+      fetch_error: "Failed to fetch employees",
+      add_error: "Failed to add employee. Please try again.",
+      add_success: "The employee has been added successfully!",
+      upload_error: "Failed to upload photo. Please try again.",
+
+      name_required: "Name is required",
+      designation_required: "Designation is required",
+      mobile_required: "Mobile number is required",
+      email_required: "Email is required",
+      department_required: "Department is required",
+      password_required: "Password is required",
+      password_min_length: "Password must be at least 6 characters",
+      password_placeholder: "Enter your password",
+
+      please_login: "Please log in to view your complaints",
+      failed_to_fetch_complaints: "Failed to fetch complaints",
+      "category.Electricity": "Electricity",
+      "category.Gas": "Gas",
+      "category.Water & Sewerage": "Water & Sewerage",
+      "category.Road & Infrastructure": "Road & Infrastructure",
+      "category.Sanitation & Waste Management": "Sanitation & Waste Management",
+      "category.Public Transport": "Public Transport",
+      "category.Environment & Pollution": "Environment & Pollution",
+      "category.Law & Order": "Law & Order",
+      "category.Animal Control": "Animal Control",
+      "category.Health & Medical": "Health & Medical",
+      "category.The Sidewalk": "The Sidewalk",
+      "category.Others": "Others",
+
       // SignUp Component Translations
       register_account: "Register an Account",
       full_name: "Full Name",
       email_address: "Email Address",
       email_placeholder: "Enter your email address",
       password: "Password",
-      password_placeholder: "Enter your password",
-      password_required: "Please enter a password",
-      password_min_length: "Password must be at least 6 characters long",
+
       image_uploaded_successfully: "Profile photograph uploaded successfully",
-      submission_failed: "Registration submission failed. Please try again",
       already_registered: "Already registered?",
       sign_in_with_google: "Sign In with Google",
       upload_profile_image: "Upload Profile Photograph",
@@ -144,13 +268,23 @@ const resources = {
       citizen: "Citizen",
       administrative: "Administrative",
       employee: "Employee",
-      name_required: "Name is required",
-      email_required: "Email is required",
+
       role_required: "Role selection is required",
       registering: "Registering...",
       already_have_account: "Already have an account?",
       registration_successful: "Registration Successful!",
       profile_image: "Profile Image",
+
+      welcome_back: "Welcome Back",
+      dashboard_overview: "Here’s an overview of your dashboard",
+      total_complaints: "Total Complaints",
+      pending_reviews: "Pending Reviews",
+      profile_completion: "Profile Completion",
+      all_your_complaints: "All Your Complaints",
+      hide: "Hide",
+      show_all: "Show All",
+      category_unknown: "Unknown Category",
+      error_fetching_complaints: "Error fetching complaints",
 
       // Notice Translations
       notice_1: "We're Hiring: Data Analyst Needed!",
@@ -170,10 +304,52 @@ const resources = {
         "Chattogram, the bustling port city of Bangladesh, is on a transformative journey to become a smart and sustainable urban hub. With its rich history, strategic location, and economic significance, Chattogram is embracing innovation, technology, and eco-friendly practices to enhance the quality of life for its residents and create a model city for the future.",
       welcome_image_alt: "Chattogram",
 
+      welcome_employee: "Welcome",
+      manage_tasks_message: "Manage your assigned tasks efficiently",
+      profile_image_alt: "Profile Image",
+      pending_complaints: "Pending",
+      start: "Start",
+      category_others: "Others",
+      category_road: "Road",
+      category_water: "Water",
+      category_electricity: "Electricity",
+      status_changed_to: "Complaint status changed to {status}",
+      error_updating_complaint: "Error updating complaint",
+      failed_to_update_complaint:
+        "Failed to update complaint status. Please try again.",
+
       // Vision Translations
       vision_title: "Our Vision",
       vision_description:
         "To transform Chattogram into a globally recognized smart and sustainable city that leverages cutting-edge technology, promotes environmental stewardship, and ensures inclusive growth for all its citizens.",
+
+      edit_complaint: "Edit Complaint",
+      complaint_details: "Complaint Details",
+      id: "ID",
+
+      user_email: "User Email",
+      created_at: "Created At",
+
+      original_image: "Original Image",
+      view_image: "View Image",
+      update_history: "Update History",
+      update: "Update",
+      updated_at: "Updated At",
+      updated_image: "Updated Image",
+      no_updated_image_available: "No Updated Image Available",
+
+      photo: "Photo",
+      choose_photo: "Choose Photo",
+
+      add_update_description: "Add update description...",
+      comment: "Comment",
+      add_update_comment: "Add update comment...",
+      resolve: "Resolve",
+      view_on_map: "View on Map",
+
+      no_viewed_complaints: "No viewed complaints",
+      assigned_employee: "Assigned Employee",
+      not_applicable: "Not Applicable",
 
       // MayorMessage Translations
       mayor_message_header: "A Message from the City Mayor",
@@ -288,6 +464,76 @@ const resources = {
         },
       },
 
+      // Removed duplicate keys: welcome_back, dashboard_overview, total_complaints, pending_reviews, profile_completion, all_your_complaints, show_all, hide, error_fetching_complaints
+
+      no_pending_complaints: "No pending complaints available.",
+      sort_by: "Sort By",
+      none: "None",
+
+      timestamp: "Timestamp",
+      sort_asc: "Sort Ascending",
+      sort_desc: "Sort Descending",
+
+      basic_information: "Basic Information",
+      ward_no: "Ward No",
+      status_timeline: "Status & Timeline",
+      submitted: "Submitted",
+
+      no_description: "No description provided",
+      attachments_location: "Attachments & Location",
+      view_attached_file: "View Attached File",
+      no_attachments: "No attachments",
+      view_location_map: "View Location on Map",
+      assign_complaint: "Assign Complaint",
+      no_employees_available: "No employees available",
+      close: "Close",
+
+      failed_to_fetch_employees: "Failed to fetch employees",
+
+      only_admin_can_change_status:
+        "Only administrative users can change the status of complaints.",
+      failed_to_update_status_to_viewed:
+        "Failed to update complaint status to Viewed",
+
+      status_changed_to_viewed: "Complaint status changed to Viewed!",
+      only_admin_can_assign: "Only administrative users can assign complaints.",
+      failed_to_assign_complaint: "Failed to assign complaint",
+
+      complaint_assigned_success: "Complaint has been assigned successfully!",
+      failed_to_update_status:
+        "Failed to update complaint status. Please try again.",
+
+      mark_as_resolved: "Mark as Resolved",
+      back_to_ongoing_complaints: "Back to Ongoing Complaints",
+      no_ongoing_complaints: "No Ongoing Complaints",
+
+      error_fetch_employees: "Failed to fetch employees",
+
+      only_employees_can_update_status:
+        "Only employees can update complaint status",
+      error_update_status: "Failed to update status",
+      status_updated_to_resolved: "Status updated to Resolved",
+
+      s_no: "S.No",
+
+      no_assigned_complaints: "No assigned complaints",
+
+      file_view: "File",
+
+      back_to_assigned_complaints: "Back to Assigned Complaints",
+
+      error_resolve_status: "Failed to resolve status",
+
+      n_a: "N/A",
+
+      assign: "Assign",
+      select_employee: "Select Employee",
+
+      back_to_viewed_complaints: "Back to Viewed Complaints",
+      error_assign_status: "Failed to assign status",
+      choose_category_below: "Choose a category below",
+      error_fetching_data: "Error fetching data",
+
       // OngoingProjects Translations
       ongoing_projects_title: "Ongoing Projects",
       ongoing_projects: {
@@ -381,6 +627,19 @@ const resources = {
       fax_label: "Fax",
       info_ccc_email: "info@ccc.gov.bd",
       programmer_ccc_email: "programmer@ccc.gov.bd",
+      // EmployeeHome Translations
+
+      unknown_user: "Unknown User",
+
+      manage_tasks: "Manage Tasks",
+
+      navigate_to_all_complaints: "Navigate to All Complaints page",
+      navigate_to_manage_tasks: "Navigate to Manage Tasks page",
+
+      please_login_as_employee:
+        "Please log in as an employee to access this page.",
+      logout_successful: "Logout Successful",
+      logout_failed: "Logout Failed",
 
       // Chatbot Translations
       chatbot_title: "Smart AI Chatbot",
@@ -468,13 +727,12 @@ const resources = {
       },
 
       // Additional General Translations
-      loading: "Loading...",
+
       no_data: "No data available",
       try_again: "Please try again",
       back: "Back",
       next: "Next",
-      save: "Save",
-      cancel: "Cancel",
+
       edit: "Edit",
       delete: "Delete",
       confirm: "Confirm",
@@ -528,12 +786,30 @@ const resources = {
         "The Sidewalk": "পথচারী পথ",
         Others: "অন্যান্য",
       },
+
+      view_map: "মানচিত্র",
       about_us: "আমাদের সম্পর্কে",
       press_kit: "প্রেস কিট",
       copyright: "কপিরাইট",
       all_rights_reserved:
         "সকল অধিকার সংরক্ষিত চট্টগ্রাম সিটি কর্পোরেশনের দ্বারা",
-
+      user_home: "নাগরিক হোম",
+      my_complaints: "অভিযোগ",
+      all_complaints: "সমস্ত অভিযোগ",
+      viewed_complaints: "দেখা অভিযোগ",
+      assigned_complaints: "নির্ধারিত অভিযোগ",
+      ongoing_complaints: "চলমান অভিযোগ",
+      resolved_complaints: "সমাধান হওয়া অভিযোগ",
+      profile: "প্রোফাইল",
+      admin_home: "অ্যাডমিন হোম",
+      employee_home: "কর্মচারী হোম",
+      ward_wise_view: "ওয়ার্ড অনুযায়ী দৃশ্য",
+      manage_users: "ব্যবহারকারী ব্যবস্থাপনা",
+      employees: "কর্মচারী",
+      admin_dashboard: "অ্যাডমিন ড্যাশবোর্ড",
+      employee_dashboard: "কর্মচারী ড্যাশবোর্ড",
+      user_dashboard: "নাগরিক ড্যাশবোর্ড",
+      home: "হোম",
       // SubmitComplaint Translations
       report_issue: "সমস্যা রিপোর্ট করুন",
       improve_community: "আমাদের সম্প্রদায় উন্নত করতে সাহায্য করুন",
@@ -574,19 +850,39 @@ const resources = {
       select_ward: "দয়া করে একটি ওয়ার্ড নির্বাচন করুন।",
       ward_label: "ওয়ার্ড",
 
-      // Dashboard Translations
-      user_home: "ব্যবহারকারী হোম",
-      my_complaints: "আমার অভিযোগগুলো",
-      profile: "প্রোফাইল",
-      admin_home: "অ্যাডমিন হোম",
-      employee_home: "কর্মচারী হোম",
-      all_complaints: "সব অভিযোগ",
-      ward_wise_view: "ওয়ার্ড অনুযায়ী দৃশ্য",
-      manage_users: "ব্যবহারকারী পরিচালনা",
-      employees: "কর্মচারীগণ",
-      admin_dashboard: "অ্যাডমিন ড্যাশবোর্ড",
-      employee_dashboard: "কর্মচারী ড্যাশবোর্ড",
-      user_dashboard: "ব্যবহারকারী ড্যাশবোর্ড",
+      error_fetch_users: "ব্যবহারকারীদের তথ্য আনতে ব্যর্থ হয়েছে",
+      error_fetch_complaints: "অভিযোগগুলি আনতে ব্যর্থ হয়েছে",
+      others: "অন্যান্য",
+      viewed: "দেখা",
+      assigned: "নির্ধারিত",
+      ongoing: "চলমান",
+      resolved: "সমাধান হয়েছে",
+      error_update_complaint_status:
+        "অভিযোগের স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে",
+      status_updated: "স্ট্যাটাস আপডেট হয়েছে",
+      complaint_status_changed_to_assigned:
+        "অভিযোগের স্ট্যাটাস নির্ধারিত হয়েছে!",
+      failed_to_update_complaint_status:
+        "অভিযোগের স্ট্যাটাস আপডেট করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+      profile_alt: "প্রোফাইল",
+      welcome: "স্বাগতম",
+      admin: "অ্যাডমিন",
+      manage_system_activity:
+        "সিস্টেমের কার্যক্রম সহজে এবং দক্ষতার সাথে পরিচালনা করুন।",
+      total_users: "মোট ব্যবহারকারী",
+      back_to_dashboard: "ড্যাশবোর্ডে ফিরে যান",
+      serial: "ক্রমিক",
+      title: "শিরোনাম",
+      status: "স্ট্যাটাস",
+      actions: "ক্রিয়াকলাপ",
+      view: "দেখুন",
+      complaint_analytics: "অভিযোগ বিশ্লেষণ",
+      complaints_by_category: "বিভাগ অনুযায়ী অভিযোগ",
+      no_category_data: "কোনো বিভাগের তথ্য নেই।",
+      complaint_status_distribution: "অভিযোগের স্ট্যাটাস বিতরণ",
+      no_status_data: "কোনো স্ট্যাটাস তথ্য নেই।",
+      pending: "মুলতুবি",
+      complaint_status_changed_to_viewed: "অভিযোগের স্ট্যাটাস দেখা হয়েছে!",
 
       // Login Component Translations
       complainant_login_override: "লগইন করুন",
@@ -615,6 +911,57 @@ const resources = {
       login_form: "লগইন ফর্ম",
       technical_partner: "প্রযুক্তিগত পার্টনার",
 
+      sort_by: "ক্রমানুসারে",
+      none: "কিছু না",
+
+      timestamp: "সময় স্থান",
+      sort_asc: "আরোহী ক্রম",
+      sort_desc: "অবরোহী ক্রম",
+      s_no: "ক্রমিক নং",
+      ward_no: "ওয়ার্ড নম্বর",
+
+      file_view: "ফাইল দেখুন",
+
+      assign: "নিয়োগ",
+      select_employee: "কর্মচারী নির্বাচন",
+
+      error_fetch_employees: "কর্মচারী আনতে ব্যর্থ",
+      error_update_status: "স্ট্যাটাস আপডেট করতে ব্যর্থ",
+
+      complaint_details: "অভিযোগের বিস্তারিত",
+      name: "নাম",
+      description: "বিবরণ",
+      location: "অবস্থান",
+      view_file: "ফাইল দেখুন",
+      back_to_viewed_complaints: "দেখা অভিযোগে ফিরে যান",
+      error_assign_status: "স্ট্যাটাস নিয়োগ করতে ব্যর্থ",
+      status_assigned: "স্ট্যাটাস নিয়োগ করা হয়েছে",
+
+      welcome_back: "স্বাগতম ফিরে এসেছেন",
+      dashboard_overview: "আপনার ড্যাশবোর্ডের সারসংক্ষেপ এখানে",
+      total_complaints: "মোট অভিযোগ",
+      pending_reviews: "বিচারাধীন অভিযোগ",
+      profile_completion: "প্রোফাইল সম্পূর্ণতা",
+      all_your_complaints: "আপনার সমস্ত অভিযোগ",
+      hide: "লুকান",
+      show_all: "সব দেখান",
+      complaint_id: "অভিযোগ আইডি",
+      file: "ফাইল",
+      date: "তারিখ",
+      na: "প্রযোজ্য নয়",
+      location_not_specified: "অবস্থান নির্দিষ্ট করা হয়নি",
+      location_invalid: "অবৈধ অবস্থান",
+      category_unknown: "অজানা বিভাগ",
+      status_pending: "অপেক্ষমাণ",
+      status_ongoing: "চলমান",
+      status_resolved: "সমাধান হয়েছে",
+      failed_to_fetch_complaints: "অভিযোগ আনতে ব্যর্থ হয়েছে",
+      error_fetching_complaints: "অভিযোগ আনার সময় ত্রুটি",
+      loading: "লোড হচ্ছে...",
+      "category.road": "রাস্তা",
+      "category.water": "পানি",
+      "category.electricity": "বিদ্যুৎ",
+
       // SignUp Component Translations
       register_account: "একটি অ্যাকাউন্ট নিবন্ধন করুন",
       full_name: "পূর্ণ নাম",
@@ -625,8 +972,6 @@ const resources = {
       password_required: "অনুগ্রহ করে একটি পাসওয়ার্ড লিখুন",
       password_min_length: "পাসওয়ার্ড কমপক্ষে ৬ অক্ষর লম্বা হতে হবে",
       image_uploaded_successfully: "প্রোফাইল ছবি সফলভাবে আপলোড করা হয়েছে",
-      submission_failed:
-        "নিবন্ধন জমা দেওয়া ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন",
       already_registered: "ইতিমধ্যে নিবন্ধিত?",
       sign_in_with_google: "গুগল দিয়ে সাইন ইন করুন",
       upload_profile_image: "প্রোফাইল ছবি আপলোড করুন",
@@ -643,6 +988,9 @@ const resources = {
       already_have_account: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
       registration_successful: "নিবন্ধন সফল!",
       profile_image: "প্রোফাইল ছবি",
+
+      history: "ইতিহাস",
+      no_history_available: "কোনো ইতিহাস উপলব্ধ নেই",
 
       // Notice Translations
       notice_1: "আমরা নিয়োগ করছি: ডেটা বিশ্লেষক প্রয়োজন!",
@@ -675,12 +1023,108 @@ const resources = {
         '"চট্টগ্রাম শুধু একটি শহর নয়; এটি বাংলাদেশের অর্থনীতির হৃদস্পন্দন এবং স্থিতিস্থাপকতা ও অগ্রগতির প্রতীক। আমরা আমাদের শহরকে একটি স্মার্ট এবং টেকসই নগর কেন্দ্রে রূপান্তরিত করার এই উচ্চাভিলাষী যাত্রায় যাত্রা শুরু করেছি, আমি প্রতিশ্রুতিবদ্ধ যে প্রতিটি নাগরিক এই রূপান্তর থেকে উপকৃত হবে। একসাথে, আমরা এমন একটি শহর গড়ে তুলব যা কেবল প্রযুক্তিগতভাবে উন্নত নয়, পরিবেশগতভাবে দায়িত্বশীল এবং সামাজিকভাবে অন্তর্ভুক্তিমূলক। আসুন আমরা হাতে হাত রেখে চট্টগ্রামের জন্য একটি উজ্জ্বল, সবুজ এবং স্মার্ট ভবিষ্যত গড়ে তুলি।"',
       mayor_image_alt: "মেয়র",
 
+      unauthorized_access: "আপনার এই পৃষ্ঠা দেখার অনুমতি নেই।",
+      only_employees_can_resolve:
+        "শুধুমাত্র কর্মচারীরা অভিযোগ সমাধান করতে পারে।",
+      unauthorized: "অননুমোদিত",
+
+      basic_information: "মৌলিক তথ্য",
+
+      status_timeline: "অবস্থা ও সময়রেখা",
+      submitted: "জমা দেওয়া হয়েছে",
+
+      no_description: "কোনো বর্ণনা দেওয়া হয়নি",
+      attachments_location: "সংযুক্তি ও অবস্থান",
+      view_attached_file: "সংযুক্ত ফাইল দেখুন",
+      no_attachments: "কোনো সংযুক্তি নেই",
+      view_location_map: "মানচিত্রে অবস্থান দেখুন",
+      assign_complaint: "অভিযোগ নিয়োগ করুন",
+      no_employees_available: "কোনো কর্মী উপলব্ধ নেই",
+      close: "বন্ধ করুন",
+
+      failed_to_fetch_employees: "কর্মীদের তথ্য আনতে ব্যর্থ",
+
+      only_admin_can_change_status:
+        "শুধুমাত্র প্রশাসনিক ব্যবহারকারীরা অভিযোগের অবস্থা পরিবর্তন করতে পারেন।",
+      failed_to_update_status_to_viewed:
+        "অভিযোগের অবস্থা দেখা হয়েছে তে আপডেট করতে ব্যর্থ",
+
+      status_changed_to_viewed:
+        "অভিযোগের অবস্থা দেখা হয়েছে তে পরিবর্তিত হয়েছে!",
+      only_admin_can_assign:
+        "শুধুমাত্র প্রশাসনিক ব্যবহারকারীরা অভিযোগ নিয়োগ করতে পারেন।",
+      failed_to_assign_complaint: "অভিযোগ নিয়োগ করতে ব্যর্থ",
+
+      complaint_assigned_success: "অভিযোগ সফলভাবে নিয়োগ করা হয়েছে!",
+      failed_to_update_status:
+        "অভিযোগের অবস্থা আপডেট করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।",
+
+      status_viewed: "দেখা হয়েছে",
+
+      edit_complaint: "অভিযোগ সম্পাদনা করুন",
+
+      id: "আইডি",
+
+      user_email: "ব্যবহারকারীর ইমেইল",
+      created_at: "তৈরি হয়েছে",
+
+      original_image: "মূল ছবি",
+      view_image: "ছবি দেখুন",
+      update_history: "আপডেট ইতিহাস",
+      update: "আপডেট করুন",
+      updated_at: "আপডেট হয়েছে",
+      updated_image: "আপডেট ছবি",
+      no_updated_image_available: "কোনো আপডেট ছবি নেই",
+
+      photo: "ছবি",
+      choose_photo: "ছবি নির্বাচন করুন",
+
+      add_update_description: "আপডেট বিবরণ যোগ করুন...",
+      comment: "মন্তব্য",
+      add_update_comment: "আপডেট মন্তব্য যোগ করুন...",
+      resolve: "সমাধান করুন",
+
+      no_viewed_complaints: "কোনো দেখা অভিযোগ নেই",
+      assigned_employee: "নিযুক্ত কর্মচারী",
+      not_applicable: "প্রযোজ্য নয়",
+
       // ProgressSection Translations
       progress_title: "নেতৃত্বে চট্টগ্রামের অগ্রগতি",
       progress_video1_title:
         "এমন কোন স্প্রে আমি চাইনা যা দিলে মশা লাফ দিয়ে উঠে যাবে: ডাঃ শাহাদাত হোসেন",
       progress_video2_title:
         "সিটি করপোরেশনে রাজনীতির আলাপ নিয়ে আসবেন না : ডাঃ শাহাদাত হোসেন",
+
+      manage_employees: "কর্মচারী ব্যবস্থাপনা",
+      add_employee: "কর্মচারী যোগ করুন",
+      add_new_employee: "নতুন কর্মচারী যোগ করুন",
+      designation: "পদবী",
+      department: "বিভাগ",
+      mobile: "মোবাইল",
+      suspended: "বহিষ্কৃত",
+      active: "সক্রিয়",
+      suspend: "বহিষ্কার করুন",
+      unsuspend: "পুনরায় সক্রিয় করুন",
+      save: "সংরক্ষণ করুন",
+      cancel: "বাতিল করুন",
+      confirm_action:
+        "আপনি কি নিশ্চিত যে আপনি এই কর্মচারীকে {{action}} করতে চান?",
+      suspend_text: "এটি কর্মচারীকে সিস্টেমে প্রবেশ করতে বাধা দেবে।",
+      unsuspend_text: "এটি কর্মচারীর অ্যাক্সেস পুনরায় চালু করবে।",
+      yes_suspend: "হ্যাঁ, বহিষ্কার করুন!",
+      yes_unsuspend: "হ্যাঁ, পুনরায় সক্রিয় করুন!",
+      suspend_success: "কর্মচারীকে বহিষ্কার করা হয়েছে",
+      unsuspend_success: "কর্মচারীকে পুনরায় সক্রিয় করা হয়েছে",
+      fail_suspend:
+        "কর্মচারীকে বহিষ্কার করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      fail_unsuspend:
+        "কর্মচারীকে পুনরায় সক্রিয় করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      fetch_error: "কর্মচারীদের তথ্য আনতে ব্যর্থ হয়েছে",
+      add_error:
+        "কর্মচারী যোগ করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      add_success: "কর্মচারী সফলভাবে যোগ করা হয়েছে!",
+      upload_error:
+        "ছবি আপলোড করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
 
       // KeyPillarsSection Translations
       key_pillars_title: "রূপান্তরের মূল স্তম্ভ",
@@ -777,6 +1221,87 @@ const resources = {
           },
         },
       },
+
+      no_assigned_complaints: "কোনো নির্ধারিত অভিযোগ নেই",
+
+      back_to_assigned_complaints: "নির্ধারিত অভিযোগে ফিরে যান",
+
+      error_resolve_status: "স্ট্যাটাস সমাধান করতে ব্যর্থ",
+
+      n_a: "N/A",
+
+      pending_complaints: "মুলতুবি",
+
+      mobile_label: "মোবাইল নম্বর",
+      mobile_placeholder: "আপনার মোবাইল নম্বর লিখুন (যেমন, ১২৩৪৫৬৭৮৯০)",
+      provide_valid_mobile:
+        "অনুগ্রহ করে একটি বৈধ মোবাইল নম্বর প্রদান করুন (১০-১৫ সংখ্যা)",
+      anonymous: "বেনামী",
+
+      failed_to_submit_complaint: "অভিযোগ জমা দিতে ব্যর্থ।",
+      category_required: "বিভাগ প্রয়োজন",
+
+      sort_none: "কোনোটি নয়",
+
+      no_resolved_complaints: "কোনো সমাধানকৃত অভিযোগ পাওয়া যায়নি",
+
+      mark_as_resolved: "সমাধান হিসেবে চিহ্নিত করুন",
+      back_to_ongoing_complaints: "চলমান অভিযোগে ফিরে যান",
+      no_ongoing_complaints: "কোনো চলমান অভিযোগ নেই",
+
+      only_employees_can_update_status:
+        "শুধুমাত্র কর্মচারীরা অভিযোগের অবস্থা আপডেট করতে পারেন",
+
+      status_updated_to_resolved: "অবস্থা সমাধান হিসেবে আপডেট হয়েছে",
+
+      // EmployeeHome Translations
+
+      category_tab: "বিভাগ",
+
+      user_default: "ব্যবহারকারী",
+
+      mobile_required: "মোবাইল নম্বর আবশ্যক",
+      department_required: "বিভাগ আবশ্যক",
+
+      "category.Electricity": "বিদ্যুত",
+      "category.Gas": "গ্যাস",
+      "category.Water & Sewerage": "পানি ও স্যুয়ারেজ",
+      "category.Road & Infrastructure": "রাস্তা ও অবকাঠামো",
+      "category.Sanitation & Waste Management":
+        "স্বাস্থ্যকরতা ও কচরা ব্যবস্থাপনা",
+      "category.Public Transport": "পাবলিক পরিবহন",
+      "category.Environment & Pollution": "পরিবেশ ও দূষণ",
+      "category.Law & Order": "আইন ও কানুন",
+      "category.Animal Control": "প্রাণী নিয়ন্ত্রণ",
+      "category.Health & Medical": "স্বাস্থ্য ও চিকিৎসা",
+      "category.The Sidewalk": "পায়ে হাঁটা পথ",
+      "category.Others": "অন্যান্য",
+
+      welcome_employee: "স্বাগত",
+      unknown_user: "অজানা ব্যবহারকারী",
+      manage_tasks_message: "আপনার অভিযোগগুলি পরিচালনা করুন",
+
+      manage_tasks: "কার্য পরিচালনা",
+
+      navigate_to_all_complaints: "সব অভিযোগ পৃষ্ঠায় যান",
+      navigate_to_manage_tasks: "কার্য পরিচালনা পৃষ্ঠায় যান",
+
+      please_login_as_employee:
+        "এই পৃষ্ঠায় প্রবেশ করতে দয়া করে একজন কর্মচারী হিসেবে লগ ইন করুন।",
+      logout_successful: "লগ আউট সফল",
+      logout_failed: "লগ আউট ব্যর্থ",
+
+      choose_category_below: "নিচে একটি বিভাগ নির্বাচন করুন",
+
+      error_fetching_data: "তথ্য সংগ্রহে ত্রুটি",
+
+      manage_your_complaints: "অবস্থা অনুযায়ী আপনার অভিযোগগুলি পরিচালনা করুন",
+
+      no_complaints: "কোনো {status} অভিযোগ পাওয়া যায়নি",
+
+      please_login: "আপনার অভিযোগ দেখতে অনুগ্রহ করে লগইন করুন",
+
+      view_on_map: "মানচিত্রে দেখুন",
 
       // OngoingProjects Translations
       ongoing_projects_title: "চলমান প্রকল্প",
@@ -912,6 +1437,7 @@ const resources = {
         email_link_label: "আমাদের একটি ইমেইল পাঠান",
       },
       contact_map_title: "চট্টগ্রাম সিটি কর্পোরেশনের মানচিত্র",
+      view_on_map: "মানচিত্রে দেখুন",
 
       // Ward Translations
       "Select ward": "ওয়ার্ড নির্বাচন করুন",
@@ -960,7 +1486,7 @@ const resources = {
       },
 
       // Additional General Translations
-      loading: "লোড হচ্ছে...",
+
       no_data: "কোনো ডেটা উপলব্ধ নেই",
       try_again: "অনুগ্রহ করে আবার চেষ্টা করুন",
       back: "পেছনে",

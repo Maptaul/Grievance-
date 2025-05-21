@@ -7,6 +7,7 @@ import {
   FiImage,
   FiMail,
   FiMapPin,
+  FiPhone,
   FiUser,
   FiX,
 } from "react-icons/fi";
@@ -25,12 +26,12 @@ const SubmitComplaint = () => {
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
   const [location, setLocation] = useState(null);
-  const [ward, setWard] = useState(null); // Will now hold the name (en/bn) instead of Ward-X
+  const [ward, setWard] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState("");
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const { user, role } = useContext(AuthContext);
 
-  // Define the wards with their English and Bengali names
   const wards = [
     { en: "South Pahartali", bn: "দক্ষিণ পাহাড়তলী", value: "Ward-1" },
     { en: "Jalalabad", bn: "জালালাবাদ", value: "Ward-2" },
@@ -161,6 +162,12 @@ const SubmitComplaint = () => {
       return;
     }
 
+    const phoneRegex = /^\d{10,15}$/;
+    if (!mobileNumber || !phoneRegex.test(mobileNumber)) {
+      Swal.fire(t("missing_info"), t("provide_valid_mobile"), "error");
+      return;
+    }
+
     if (!user?.email) {
       Swal.fire(t("error"), t("please_login_to_submit"), "error");
       return;
@@ -179,45 +186,63 @@ const SubmitComplaint = () => {
         fileUrl = imgResponse.data.data.display_url;
       }
 
-      // Find the corresponding Ward-X value based on the selected name
       const selectedWard = wards.find(
         (w) => (i18n.language === "bn" ? w.bn : w.en) === ward
       );
       const wardValue = selectedWard ? selectedWard.value : null;
 
+      if (!selectedCategory) {
+        throw new Error(t("category_required"));
+      }
+
       const complaintData = {
         category: selectedCategory,
-        name: isAnonymous ? "Anonymous" : name,
+        name: isAnonymous ? t("anonymous") : name,
         description,
         fileUrl,
         location,
-        ward: wardValue, // Store the Ward-X value in the complaint data
-        status: "Pending",
+        ward: wardValue,
+        status: t("status_pending"),
+        employeeId: null,
         timestamp: new Date().toISOString(),
         email: user.email,
+        mobileNumber,
       };
 
-      const response = await fetch(
-        "https://grievance-server.vercel.app/complaints",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(complaintData),
-        }
-      );
+      console.log("Submitting complaint data:", complaintData);
 
-      if (!response.ok) throw new Error("Failed to submit complaint");
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `${t(
+            "failed_to_submit_complaint"
+          )} Server responded with: ${errorText}`
+        );
+      }
+
+      const responseData = await response.json();
+      console.log("Server response:", responseData);
 
       Swal.fire({
         icon: "success",
         title: t("complaint_submitted"),
         html: `
           <div class="text-left">
-            <p class="font-semibold">${t("category_label")}: ${selectedCategory}</p>
+            <p class="font-semibold">${t("category_label")}: ${t(
+          `category.${selectedCategory}`
+        )}</p>
             <p class="mt-2">${t("complaint_received")}</p>
             ${
               location
-                ? `<p class="mt-2 text-sm">${t("location_label")}: ${location.latitude.toFixed(
+                ? `<p class="mt-2 text-sm">${t(
+                    "location_label"
+                  )}: ${location.latitude.toFixed(
                     4
                   )}, ${location.longitude.toFixed(4)}</p>`
                 : ""
@@ -227,6 +252,7 @@ const SubmitComplaint = () => {
                 ? `<p class="mt-2 text-sm">${t("ward_label")}: ${ward}</p>`
                 : ""
             }
+            <p class="mt-2 text-sm">${t("mobile_label")}: ${mobileNumber}</p>
           </div>
         `,
         confirmButtonColor: "#3B82F6",
@@ -238,9 +264,14 @@ const SubmitComplaint = () => {
       setLocation(null);
       setWard(null);
       setIsAnonymous(false);
+      setMobileNumber("");
     } catch (error) {
       console.error("Submission Error:", error);
-      Swal.fire(t("error"), t("submission_failed"), "error");
+      Swal.fire(
+        t("error"),
+        t("submission_failed") + (error.message ? `: ${error.message}` : ""),
+        "error"
+      );
     }
   };
 
@@ -310,6 +341,23 @@ const SubmitComplaint = () => {
           </div>
         </div>
 
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">
+            {t("mobile_label")}*
+          </label>
+          <div className="relative">
+            <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="tel"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              placeholder={t("mobile_placeholder")}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+        </div>
+
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
             {t("add_media")}*
@@ -340,7 +388,7 @@ const SubmitComplaint = () => {
             capture="environment"
             onChange={handleFileChange}
             className="hidden"
-            required
+            // Removed required attribute
           />
           <input
             type="file"
@@ -348,7 +396,7 @@ const SubmitComplaint = () => {
             accept="image/*, video/*, application/pdf"
             onChange={handleFileChange}
             className="hidden"
-            required
+            // Removed required attribute
           />
 
           {file && (
@@ -381,7 +429,7 @@ const SubmitComplaint = () => {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 required
               >
-                <option value="">{t("Select ward")}</option>
+                <option value="">{t("select_ward")}</option>
                 {wards.map((ward) => (
                   <option
                     key={ward.value}

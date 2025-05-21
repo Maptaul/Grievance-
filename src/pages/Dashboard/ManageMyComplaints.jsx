@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
@@ -12,7 +12,7 @@ const ManageMyComplaints = () => {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`https://grievance-server.vercel.app/complaints/user/${user.email}`)
+      fetch(`http://localhost:3000/complaints/user/${user.email}`)
         .then((response) => {
           if (!response.ok) throw new Error("Failed to fetch your complaints");
           return response.json();

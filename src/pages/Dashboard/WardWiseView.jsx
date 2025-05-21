@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../Components/Loading";
 
 const WardWiseView = () => {
@@ -13,9 +13,7 @@ const WardWiseView = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch(
-          "https://grievance-server.vercel.app/complaints"
-        );
+        const response = await fetch("http://localhost:3000/complaints");
         if (!response.ok) throw new Error("Failed to fetch complaints");
         const data = await response.json();
         setComplaints(data);
@@ -54,7 +52,8 @@ const WardWiseView = () => {
       try {
         dateA = a.timestamp ? new Date(a.timestamp) : new Date(0); // Fallback to epoch
         dateB = b.timestamp ? new Date(b.timestamp) : new Date(0);
-        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) throw new Error("Invalid date");
+        if (isNaN(dateA.getTime()) || isNaN(dateB.getTime()))
+          throw new Error("Invalid date");
       } catch {
         // Fallback: Extract date and time from string
         const getDateTime = (timestamp) => {
@@ -71,9 +70,7 @@ const WardWiseView = () => {
           : valueB.localeCompare(valueA);
       }
 
-      return sortDirection === "asc"
-        ? dateA - dateB
-        : dateB - dateA;
+      return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
     });
   };
 
@@ -108,13 +105,17 @@ const WardWiseView = () => {
 
   return (
     <div className="p-6 md:p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Ward-Wise Complaints</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Ward-Wise Complaints
+      </h1>
       {Object.keys(groupedComplaints).length === 0 ? (
         <p className="text-gray-800">No complaints available.</p>
       ) : selectedWard ? (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">{selectedWard}</h2>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              {selectedWard}
+            </h2>
             <button
               onClick={handleBack}
               className="p-2 bg-gray-200 border border-gray-300 rounded-md text-gray-800 hover:bg-gray-300 transition-colors"
@@ -124,7 +125,10 @@ const WardWiseView = () => {
           </div>
           <div className="mb-4 bg-gray-200 p-4 rounded-lg border border-gray-300 flex gap-4 items-center">
             <div>
-              <label htmlFor="sortBy" className="text-gray-800 font-semibold mr-2">
+              <label
+                htmlFor="sortBy"
+                className="text-gray-800 font-semibold mr-2"
+              >
                 Sort By:
               </label>
               <select
@@ -176,50 +180,54 @@ const WardWiseView = () => {
                 </tr>
               </thead>
               <tbody>
-                {sortComplaints(groupedComplaints[selectedWard]).map((complaint) => (
-                  <tr
-                    key={complaint._id}
-                    className="border-b border-gray-300 hover:bg-gray-300"
-                  >
-                    <td className="py-3 px-4 text-gray-800">{complaint._id || "N/A"}</td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.category || "N/A"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.name || "N/A"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.description || "N/A"}
-                    </td>
-                    <td className="py-3 px-4">
-                      {complaint.fileUrl ? (
-                        <a
-                          href={complaint.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                        >
-                          View File
-                        </a>
-                      ) : (
-                        "N/A"
-                      )}
-                    </td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.location
-                        ? `${complaint.location.latitude}, ${complaint.location.longitude}`
-                        : "N/A"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.status || "N/A"}
-                    </td>
-                    <td className="py-3 px-4 text-gray-800">
-                      {complaint.timestamp
-                        ? new Date(complaint.timestamp).toLocaleString()
-                        : "N/A"}
-                    </td>
-                  </tr>
-                ))}
+                {sortComplaints(groupedComplaints[selectedWard]).map(
+                  (complaint) => (
+                    <tr
+                      key={complaint._id}
+                      className="border-b border-gray-300 hover:bg-gray-300"
+                    >
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint._id || "N/A"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.category || "N/A"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.name || "N/A"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.description || "N/A"}
+                      </td>
+                      <td className="py-3 px-4">
+                        {complaint.fileUrl ? (
+                          <a
+                            href={complaint.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline"
+                          >
+                            View File
+                          </a>
+                        ) : (
+                          "N/A"
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.location
+                          ? `${complaint.location.latitude}, ${complaint.location.longitude}`
+                          : "N/A"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.status || "N/A"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-800">
+                        {complaint.timestamp
+                          ? new Date(complaint.timestamp).toLocaleString()
+                          : "N/A"}
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
@@ -234,7 +242,8 @@ const WardWiseView = () => {
             >
               <h2 className="text-xl font-semibold text-gray-800">{ward}</h2>
               <p className="text-gray-700">
-                {wardComplaints.length} {wardComplaints.length === 1 ? "Complaint" : "Complaints"}
+                {wardComplaints.length}{" "}
+                {wardComplaints.length === 1 ? "Complaint" : "Complaints"}
               </p>
             </div>
           ))}
