@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Login = () => {
-  const { signIn, googleSignIn, resetPassword } = useContext(AuthContext) || {};
+  const { signIn, googleSignIn, resetPassword, user, displayName, photoURL } =
+    useContext(AuthContext) || {};
   const [error, setError] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -310,6 +311,18 @@ const Login = () => {
               </Link>
             </p>
             <div className="text-center text-xs mt-6 opacity-70">
+              {user && (
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <img
+                    src={photoURL || "https://via.placeholder.com/40"}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full border"
+                  />
+                  <span className="font-medium text-gray-800">
+                    {displayName}
+                  </span>
+                </div>
+              )}
               {t("innovated_by")}{" "}
               <a
                 href="https://www.jionex.com/"

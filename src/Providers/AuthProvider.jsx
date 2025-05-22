@@ -1,4 +1,5 @@
 import axios from "axios";
+import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -15,6 +16,7 @@ import { app } from "./../firebase/firebase.config";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
+const secondaryApp = initializeApp(app.options, "Secondary");
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -31,7 +33,6 @@ const AuthProvider = ({ children }) => {
         email,
         password
       );
-      const newUser = userCredential.user;
       const userData = {
         email: email.toLowerCase(),
         role: "citizen",
@@ -46,6 +47,23 @@ const AuthProvider = ({ children }) => {
       throw error;
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Create employee user without affecting current session
+  const createEmployeeUser = async (email, password) => {
+    const secondaryAuth = getAuth(secondaryApp);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        secondaryAuth,
+        email,
+        password
+      );
+      // Optionally, sign out the secondary auth instance
+      await secondaryAuth.signOut();
+      return userCredential;
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -115,17 +133,26 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  const displayName = user?.displayName || user?.email || "";
+  const photoURL =
+    user?.photoURL ||
+    (user?.providerData && user.providerData[0]?.photoURL) ||
+    null;
+
   const authInfo = {
     user,
     role,
     loading,
     error,
     createUser,
+    createEmployeeUser,
     signIn,
     logOut,
     updateUserProfile,
     googleSignIn,
     resetPassword,
+    displayName, // add to context
+    photoURL, // add to context
   };
 
   return (

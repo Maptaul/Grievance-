@@ -151,103 +151,181 @@ const ResolvedComplaints = () => {
             {sortDirection === "asc" ? t("sort_desc") : t("sort_asc")}
           </button>
         </div>
-        {sortedComplaints.length > 0 ? (
-          <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
-            <div className="table-responsive overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
-                  <tr>
-                    {[
-                      "s_no",
-                      "category",
-                      "ward_no",
-                      "status",
-                      "assigned_employee",
-                      "file",
-                      "timestamp",
-                      "actions",
-                    ].map((header) => (
-                      <th
-                        key={header}
-                        className="py-3 px-4 text-left text-white font-semibold text-sm uppercase tracking-wider"
-                      >
-                        {t(header)}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {sortedComplaints.map((complaint, index) => {
-                    const assignedEmployee =
-                      employees.find((emp) => emp._id === complaint.employeeId)
-                        ?.name || t("not_applicable");
-                    return (
-                      <tr
-                        key={complaint._id}
-                        className={`hover:bg-amber-50 transition-colors ${
-                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }`}
-                      >
-                        <td className="py-4 px-4 text-gray-800">{index + 1}</td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.category || t("not_applicable")}
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.ward || t("not_applicable")}
-                        </td>
-                        <td className="py-4 px-4">
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-200 text-green-800`}
-                          >
-                            {t(`status_${complaint.status.toLowerCase()}`, {
-                              defaultValue: complaint.status,
-                            })}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {assignedEmployee}
-                        </td>
-                        <td className="py-4 px-4">
-                          {complaint.fileUrl ? (
-                            <a
-                              href={complaint.fileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
+
+        {/* Mobile: Card View */}
+        <div className="block md:hidden space-y-4">
+          {sortedComplaints.length > 0 ? (
+            sortedComplaints.map((complaint, index) => (
+              <div
+                key={complaint._id}
+                className="bg-white p-4 rounded-lg shadow-lg slide-in"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-800 font-medium">
+                    {t("serial")}: {index + 1}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        complaint.status === "Resolved"
+                          ? "bg-green-400"
+                          : "bg-gray-400"
+                      }`}
+                    ></span>
+                    {t(`status_${complaint.status.toLowerCase()}`, {
+                      defaultValue: complaint.status,
+                    })}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("category_tab")}:</span>{" "}
+                  {complaint.category || t("na")}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("title")}:</span>{" "}
+                  {complaint.title || t("na")}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("file")}:</span>{" "}
+                  {complaint.fileUrl ? (
+                    <a
+                      href={complaint.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {t("view_file")}
+                    </a>
+                  ) : (
+                    t("na")
+                  )}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("timestamp")}:</span>{" "}
+                  {complaint.timestamp
+                    ? new Date(complaint.timestamp).toLocaleString()
+                    : t("na")}
+                </p>
+                <div className="mt-2">
+                  <button
+                    onClick={() => handleViewClick(complaint)}
+                    className="bg-blue-600 text-white py-1.5 px-3 rounded-md hover-glow flex items-center w-full justify-center"
+                  >
+                    <FaEye className="mr-1" /> {t("view")}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600 text-center">
+              {t("no_pending_complaints")}
+            </p>
+          )}
+        </div>
+
+        {/* Desktop: Table View */}
+        <div className="hidden md:block">
+          {sortedComplaints.length > 0 ? (
+            <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+              <div className="table-responsive overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
+                    <tr>
+                      {[
+                        "s_no",
+                        "category_tab",
+                        "ward_no",
+                        "status",
+                        "assigned_employee",
+                        "file",
+                        "timestamp",
+                        "actions",
+                      ].map((header) => (
+                        <th
+                          key={header}
+                          className="py-3 px-4 text-left text-white font-semibold text-sm uppercase tracking-wider"
+                        >
+                          {t(header)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {sortedComplaints.map((complaint, index) => {
+                      const assignedEmployee =
+                        employees.find(
+                          (emp) => emp._id === complaint.employeeId
+                        )?.name || t("not_applicable");
+                      return (
+                        <tr
+                          key={complaint._id}
+                          className={`hover:bg-amber-50 transition-colors ${
+                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                          }`}
+                        >
+                          <td className="py-4 px-4 text-gray-800">
+                            {index + 1}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.category || t("not_applicable")}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.ward || t("not_applicable")}
+                          </td>
+                          <td className="py-4 px-4">
+                            <span
+                              className={`inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-200 text-green-800`}
                             >
-                              {t("view_file")}
-                            </a>
-                          ) : (
-                            t("not_applicable")
-                          )}
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.timestamp
-                            ? new Date(complaint.timestamp).toLocaleString()
-                            : t("not_applicable")}
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleViewClick(complaint)}
-                              className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
-                            >
-                              <FaEye className="mr-1" /> {t("view")}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                              {t(`status_${complaint.status.toLowerCase()}`, {
+                                defaultValue: complaint.status,
+                              })}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {assignedEmployee}
+                          </td>
+                          <td className="py-4 px-4">
+                            {complaint.fileUrl ? (
+                              <a
+                                href={complaint.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                              >
+                                {t("view_file")}
+                              </a>
+                            ) : (
+                              t("not_applicable")
+                            )}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.timestamp
+                              ? new Date(complaint.timestamp).toLocaleString()
+                              : t("not_applicable")}
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleViewClick(complaint)}
+                                className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
+                              >
+                                <FaEye className="mr-1" /> {t("view")}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center">
-            {t("no_resolved_complaints")}
-          </p>
-        )}
+          ) : (
+            <p className="text-gray-500 text-center">
+              {t("no_resolved_complaints")}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -179,6 +179,7 @@ const resources = {
       login_failed: "Login Failed",
       login_form: "Login form",
       technical_partner: "Technical Partner",
+      send_reset_link: "Send Reset Link",
 
       manage_your_complaints: "Manage your complaints by status",
 
@@ -257,6 +258,7 @@ const resources = {
       email_address: "Email Address",
       email_placeholder: "Enter your email address",
       password: "Password",
+      profile_information: "Profile Information",
 
       image_uploaded_successfully: "Profile photograph uploaded successfully",
       already_registered: "Already registered?",
@@ -268,6 +270,43 @@ const resources = {
       citizen: "Citizen",
       administrative: "Administrative",
       employee: "Employee",
+
+      ward_wise_complaints: "Ward-Wise Complaints",
+      complaint: "Complaint",
+      complaint_details: "Complaint Details",
+      update_history: "Update History",
+      sort_by: "Sort By",
+      sort_none: "None",
+      sort_category: "Category",
+      sort_timestamp: "Timestamp",
+      sort_descending: "Sort Descending",
+      sort_ascending: "Sort Ascending",
+      id: "ID",
+
+      user_email: "User Email",
+      created_at: "Created At",
+      view_on_map: "View on Map",
+      original_image: "Original Image",
+      original_alt: "Original Image",
+      update: "Update",
+      updated_at: "Updated At",
+      updated_image: "Updated Image",
+      updated_image_alt: "Updated Image {{index}}",
+      resolve: "Resolve",
+      back: "Back",
+
+      unknown_ward: "Unknown Ward",
+      default_date: "1970-01-01",
+      default_time: "00:00:00",
+      fetch_complaints_error: "Failed to fetch complaints",
+      invalid_date_error: "Invalid date",
+
+      no_complaints_available: "No complaints available",
+      back_to_wards: "Back to Wards",
+      error_title: "Error",
+      invalid_status_transition: "Invalid status transition",
+      failed_update_status: "Failed to update status",
+      status_updated_to_resolved: "Status updated to Resolved",
 
       role_required: "Role selection is required",
       registering: "Registering...",
@@ -324,18 +363,7 @@ const resources = {
         "To transform Chattogram into a globally recognized smart and sustainable city that leverages cutting-edge technology, promotes environmental stewardship, and ensures inclusive growth for all its citizens.",
 
       edit_complaint: "Edit Complaint",
-      complaint_details: "Complaint Details",
-      id: "ID",
 
-      user_email: "User Email",
-      created_at: "Created At",
-
-      original_image: "Original Image",
-      view_image: "View Image",
-      update_history: "Update History",
-      update: "Update",
-      updated_at: "Updated At",
-      updated_image: "Updated Image",
       no_updated_image_available: "No Updated Image Available",
 
       photo: "Photo",
@@ -344,8 +372,6 @@ const resources = {
       add_update_description: "Add update description...",
       comment: "Comment",
       add_update_comment: "Add update comment...",
-      resolve: "Resolve",
-      view_on_map: "View on Map",
 
       no_viewed_complaints: "No viewed complaints",
       assigned_employee: "Assigned Employee",
@@ -467,7 +493,7 @@ const resources = {
       // Removed duplicate keys: welcome_back, dashboard_overview, total_complaints, pending_reviews, profile_completion, all_your_complaints, show_all, hide, error_fetching_complaints
 
       no_pending_complaints: "No pending complaints available.",
-      sort_by: "Sort By",
+
       none: "None",
 
       timestamp: "Timestamp",
@@ -487,6 +513,7 @@ const resources = {
       assign_complaint: "Assign Complaint",
       no_employees_available: "No employees available",
       close: "Close",
+      enter_email: "Enter your email",
 
       failed_to_fetch_employees: "Failed to fetch employees",
 
@@ -512,7 +539,6 @@ const resources = {
       only_employees_can_update_status:
         "Only employees can update complaint status",
       error_update_status: "Failed to update status",
-      status_updated_to_resolved: "Status updated to Resolved",
 
       s_no: "S.No",
 
@@ -533,6 +559,18 @@ const resources = {
       error_assign_status: "Failed to assign status",
       choose_category_below: "Choose a category below",
       error_fetching_data: "Error fetching data",
+
+      fetch_user_data_error: "Failed to fetch user data",
+      no_user_logged_in: "No user is logged in",
+
+      unknown_user: "Unknown User",
+      unknown_date: "Unknown Date",
+      edit_profile: "Edit Profile",
+      citizen_role: "Citizen",
+      employee_role: "Employee",
+
+      joined: "Joined",
+      email: "Email",
 
       // OngoingProjects Translations
       ongoing_projects_title: "Ongoing Projects",
@@ -628,8 +666,6 @@ const resources = {
       info_ccc_email: "info@ccc.gov.bd",
       programmer_ccc_email: "programmer@ccc.gov.bd",
       // EmployeeHome Translations
-
-      unknown_user: "Unknown User",
 
       manage_tasks: "Manage Tasks",
 
@@ -730,7 +766,7 @@ const resources = {
 
       no_data: "No data available",
       try_again: "Please try again",
-      back: "Back",
+
       next: "Next",
 
       edit: "Edit",
@@ -1033,6 +1069,56 @@ const resources = {
       status_timeline: "অবস্থা ও সময়রেখা",
       submitted: "জমা দেওয়া হয়েছে",
 
+      fetch_user_data_error: "ইউজারের ডেটা আনতে ব্যর্থ হয়েছে",
+      no_user_logged_in: "কোনো ইউজার লগইন করেনি",
+
+      unknown_user: "অজানা ব্যবহারকারী",
+      unknown_date: "অজানা তারিখ",
+
+      edit_profile: "প্রোফাইল সম্পাদনা করুন",
+      citizen_role: "নাগরিক",
+      employee_role: "কর্মচারী",
+
+      joined: "যোগদান করেছেন",
+      email: "ইমেইল",
+
+      ward_wise_complaints: "ওয়ার্ডভিত্তিক অভিযোগ",
+      complaint: "অভিযোগ",
+
+      update_history: "আপডেট ইতিহাস",
+
+      sort_none: "কোনটি না",
+      sort_category: "শ্রেণী",
+      sort_timestamp: "সময়",
+      sort_descending: "নিম্নক্রমে সাজান",
+      sort_ascending: "উর্ধ্বক্রমে সাজান",
+      id: "আইডি",
+
+      user_email: "ব্যবহারকারীর ইমেইল",
+      created_at: "তৈরির সময়",
+      view_on_map: "মানচিত্রে দেখুন",
+      original_image: "মূল ছবি",
+      original_alt: "মূল ছবি",
+      update: "আপডেট",
+      updated_at: "আপডেট সময়",
+      updated_image: "আপডেট ছবি",
+      updated_image_alt: "আপডেট ছবি {{index}}",
+      resolve: "সমাধান করুন",
+      back: "ফিরে যান",
+
+      unknown_ward: "অজানা ওয়ার্ড",
+      default_date: "১৯৭০-০১-০১",
+      default_time: "০০:০০:০০",
+      fetch_complaints_error: "অভিযোগ আনতে ব্যর্থ হয়েছে",
+      invalid_date_error: "অবৈধ তারিখ",
+
+      no_complaints_available: "কোনো অভিযোগ পাওয়া যায়নি",
+      back_to_wards: "ওয়ার্ড তালিকায় ফিরে যান",
+      error_title: "ত্রুটি",
+      invalid_status_transition: "অবৈধ অবস্থা পরিবর্তন",
+      failed_update_status: "অবস্থা আপডেট করতে ব্যর্থ হয়েছে",
+      status_updated_to_resolved: "অবস্থা 'সমাধান হয়েছে' এ আপডেট হয়েছে",
+
       no_description: "কোনো বর্ণনা দেওয়া হয়নি",
       attachments_location: "সংযুক্তি ও অবস্থান",
       view_attached_file: "সংযুক্ত ফাইল দেখুন",
@@ -1063,17 +1149,6 @@ const resources = {
 
       edit_complaint: "অভিযোগ সম্পাদনা করুন",
 
-      id: "আইডি",
-
-      user_email: "ব্যবহারকারীর ইমেইল",
-      created_at: "তৈরি হয়েছে",
-
-      original_image: "মূল ছবি",
-      view_image: "ছবি দেখুন",
-      update_history: "আপডেট ইতিহাস",
-      update: "আপডেট করুন",
-      updated_at: "আপডেট হয়েছে",
-      updated_image: "আপডেট ছবি",
       no_updated_image_available: "কোনো আপডেট ছবি নেই",
 
       photo: "ছবি",
@@ -1082,7 +1157,6 @@ const resources = {
       add_update_description: "আপডেট বিবরণ যোগ করুন...",
       comment: "মন্তব্য",
       add_update_comment: "আপডেট মন্তব্য যোগ করুন...",
-      resolve: "সমাধান করুন",
 
       no_viewed_complaints: "কোনো দেখা অভিযোগ নেই",
       assigned_employee: "নিযুক্ত কর্মচারী",
@@ -1125,6 +1199,9 @@ const resources = {
       add_success: "কর্মচারী সফলভাবে যোগ করা হয়েছে!",
       upload_error:
         "ছবি আপলোড করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+
+      send_reset_link: "পাসওয়ার্ড রিসেট লিংক পাঠান",
+      enter_email: "আপনার ইমেইল দিন",
 
       // KeyPillarsSection Translations
       key_pillars_title: "রূপান্তরের মূল স্তম্ভ",
@@ -1278,7 +1355,7 @@ const resources = {
       "category.Others": "অন্যান্য",
 
       welcome_employee: "স্বাগত",
-      unknown_user: "অজানা ব্যবহারকারী",
+
       manage_tasks_message: "আপনার অভিযোগগুলি পরিচালনা করুন",
 
       manage_tasks: "কার্য পরিচালনা",
@@ -1437,7 +1514,6 @@ const resources = {
         email_link_label: "আমাদের একটি ইমেইল পাঠান",
       },
       contact_map_title: "চট্টগ্রাম সিটি কর্পোরেশনের মানচিত্র",
-      view_on_map: "মানচিত্রে দেখুন",
 
       // Ward Translations
       "Select ward": "ওয়ার্ড নির্বাচন করুন",
@@ -1486,13 +1562,13 @@ const resources = {
       },
 
       // Additional General Translations
+      profile_information: "প্রোফাইল তথ্য",
 
       no_data: "কোনো ডেটা উপলব্ধ নেই",
       try_again: "অনুগ্রহ করে আবার চেষ্টা করুন",
       back: "পেছনে",
       next: "পরবর্তী",
-      save: "সংরক্ষণ করুন",
-      cancel: "বাতিল করুন",
+
       edit: "সম্পাদনা করুন",
       delete: "মুছুন",
       confirm: "নিশ্চিত করুন",

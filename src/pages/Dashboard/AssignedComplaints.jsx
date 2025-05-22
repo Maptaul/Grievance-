@@ -1,9 +1,13 @@
+import axios from "axios"; // Added axios import
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye, FaMapMarkerAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const AssignedComplaints = () => {
   const { t } = useTranslation();
@@ -15,7 +19,9 @@ const AssignedComplaints = () => {
   const [sortDirection, setSortDirection] = useState("desc");
   const [employees, setEmployees] = useState([]);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(null); // Will store the ImgBB URL
+  const [description, setDescription] = useState("");
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,6 +53,30 @@ const AssignedComplaints = () => {
     fetchData();
   }, [t, role, user]);
 
+  // Handle image upload to ImgBB
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
+        formData
+      );
+      if (res.data.success) {
+        setPhoto(res.data.data.display_url);
+        toast.success(t("image_uploaded_successfully"));
+      } else {
+        throw new Error(t("submission_failed"));
+      }
+    } catch (error) {
+      toast.error(t("submission_failed"));
+    }
+  };
+
   const sortedComplaints = [...complaints].sort((a, b) => {
     if (sortBy === "none") return 0;
     if (sortBy === "category") {
@@ -76,7 +106,10 @@ const AssignedComplaints = () => {
         const response = await fetch(`http://localhost:3000/complaints/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "Ongoing", history: updatedHistory }),
+          body: JSON.stringify({
+            status: "Ongoing",
+            history: JSON.stringify(updatedHistory),
+          }),
         });
         if (!response.ok) {
           const errorText = await response.text();
@@ -97,6 +130,8 @@ const AssignedComplaints = () => {
     ];
     setSelectedComplaint({ ...complaint, history });
     setPhoto(null);
+    setDescription("");
+    setComment("");
   };
 
   const handleResolve = async (id) => {
@@ -109,6 +144,7 @@ const AssignedComplaints = () => {
       return;
     }
     const complaint = complaints.find((c) => c._id === id);
+    console.log("Current status before resolve:", complaint.status); // Debug
     if (complaint.status !== "Ongoing") {
       Swal.fire({
         icon: "error",
@@ -126,13 +162,24 @@ const AssignedComplaints = () => {
       return;
     }
     try {
-      const formData = new FormData();
-      formData.append("status", "Resolved");
-      formData.append("photo", photo);
+      const updatedHistory = [
+        ...(complaint.history || []),
+        {
+          status: "Resolved",
+          timestamp: new Date().toISOString(),
+          fileUrl: photo,
+          description,
+          comment,
+        },
+      ];
 
       const response = await fetch(`http://localhost:3000/complaints/${id}`, {
         method: "PUT",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "Resolved",
+          history: JSON.stringify(updatedHistory),
+        }),
       });
       if (!response.ok) {
         const errorText = await response.text();
@@ -142,6 +189,9 @@ const AssignedComplaints = () => {
       setComplaints(updatedComplaints);
       setSelectedComplaint(null);
       setPhoto(null);
+      setDescription("");
+      setComment("");
+      toast.success(t("complaint_resolved_successfully"));
     } catch (err) {
       Swal.fire({ icon: "error", title: t("error"), text: err.message });
     }
@@ -150,6 +200,8 @@ const AssignedComplaints = () => {
   const closeModal = () => {
     setSelectedComplaint(null);
     setPhoto(null);
+    setDescription("");
+    setComment("");
   };
 
   if (loading) return <Loading />;
@@ -230,104 +282,186 @@ const AssignedComplaints = () => {
             {sortDirection === "asc" ? t("sort_desc") : t("sort_asc")}
           </button>
         </div>
-        {sortedComplaints.length > 0 ? (
-          <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
-            <div className="table-responsive overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
-                  <tr>
-                    {[
-                      "s_no",
-                      "category",
-                      "ward_no",
-                      "status",
-                      "assigned_employee",
-                      "file",
-                      "timestamp",
-                      "actions",
-                    ].map((header) => (
-                      <th
-                        key={header}
-                        className="py-3 px-4 text-left text-white font-semibold text-sm uppercase tracking-wider"
-                      >
-                        {t(header)}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {sortedComplaints.map((complaint, index) => {
-                    const assignedEmployee =
-                      employees.find((emp) => emp._id === complaint.employeeId)
-                        ?.name || t("n_a");
-                    return (
-                      <tr
-                        key={complaint._id}
-                        className={`hover:bg-amber-50 transition-colors ${
-                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }`}
-                      >
-                        <td className="py-4 px-4 text-gray-800">{index + 1}</td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.category || t("n_a")}
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.ward || t("n_a")}
-                        </td>
-                        <td className="py-4 px-4">
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800`}
-                          >
-                            {complaint.status || t("n_a")}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {assignedEmployee}
-                        </td>
-                        <td className="py-4 px-4">
-                          {complaint.fileUrl ? (
-                            <a
-                              href={complaint.fileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
+
+        {/* Mobile: Card View */}
+        <div className="block md:hidden space-y-4">
+          {sortedComplaints.length > 0 ? (
+            sortedComplaints.map((complaint, index) => (
+              <div
+                key={complaint._id}
+                className="bg-white p-4 rounded-lg shadow-lg slide-in"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-800 font-medium">
+                    {t("serial")}: {index + 1}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span
+                      className={`w-2 h-2 rounded-full ${
+                        complaint.status === "Assigned"
+                          ? "bg-yellow-400"
+                          : complaint.status === "Ongoing"
+                          ? "bg-blue-400"
+                          : complaint.status === "Resolved"
+                          ? "bg-green-400"
+                          : "bg-gray-400"
+                      }`}
+                    ></span>
+                    {t(`status_${complaint.status.toLowerCase()}`, {
+                      defaultValue: complaint.status,
+                    })}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("category_tab")}:</span>{" "}
+                  {complaint.category || t("na")}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("title")}:</span>{" "}
+                  {complaint.title || t("na")}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("file")}:</span>{" "}
+                  {complaint.fileUrl ? (
+                    <a
+                      href={complaint.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {t("view_file")}
+                    </a>
+                  ) : (
+                    t("na")
+                  )}
+                </p>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium">{t("timestamp")}:</span>{" "}
+                  {complaint.timestamp
+                    ? new Date(complaint.timestamp).toLocaleString()
+                    : t("na")}
+                </p>
+                <div className="mt-2">
+                  <button
+                    onClick={() => handleView(complaint._id)}
+                    className="bg-blue-600 text-white py-1.5 px-3 rounded-md hover-glow flex items-center w-full justify-center"
+                  >
+                    <FaEye className="mr-1" /> {t("view")}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-600 text-center">
+              {t("no_pending_complaints")}
+            </p>
+          )}
+        </div>
+
+        {/* Desktop: Table View */}
+        <div className="hidden md:block">
+          {sortedComplaints.length > 0 ? (
+            <div className="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+              <div className="table-responsive overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-amber-400 to-orange-500 sticky top-0">
+                    <tr>
+                      {[
+                        "s_no",
+                        "category_tab",
+                        "ward_no",
+                        "status",
+                        "assigned_employee",
+                        "file",
+                        "timestamp",
+                        "actions",
+                      ].map((header) => (
+                        <th
+                          key={header}
+                          className="py-3 px-4 text-left text-white font-semibold text-sm uppercase tracking-wider"
+                        >
+                          {t(header)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {sortedComplaints.map((complaint, index) => {
+                      const assignedEmployee =
+                        employees.find(
+                          (emp) => emp._id === complaint.employeeId
+                        )?.name || t("n_a");
+                      return (
+                        <tr
+                          key={complaint._id}
+                          className={`hover:bg-amber-50 transition-colors ${
+                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                          }`}
+                        >
+                          <td className="py-4 px-4 text-gray-800">
+                            {index + 1}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.category || t("n_a")}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.ward || t("n_a")}
+                          </td>
+                          <td className="py-4 px-4">
+                            <span
+                              className={`inline-block px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800`}
                             >
-                              {t("view_file")}
-                            </a>
-                          ) : (
-                            t("n_a")
-                          )}
-                        </td>
-                        <td className="py-4 px-4 text-gray-800">
-                          {complaint.timestamp
-                            ? new Date(complaint.timestamp).toLocaleString()
-                            : t("n_a")}
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleView(complaint._id)}
-                              className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
-                            >
-                              <FaEye className="mr-1" /> {t("view")}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                              {complaint.status || t("n_a")}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {assignedEmployee}
+                          </td>
+                          <td className="py-4 px-4">
+                            {complaint.fileUrl ? (
+                              <a
+                                href={complaint.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                              >
+                                {t("view_file")}
+                              </a>
+                            ) : (
+                              t("n_a")
+                            )}
+                          </td>
+                          <td className="py-4 px-4 text-gray-800">
+                            {complaint.timestamp
+                              ? new Date(complaint.timestamp).toLocaleString()
+                              : t("n_a")}
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleView(complaint._id)}
+                                className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white py-1 px-3 rounded-md hover-pulse flex items-center"
+                              >
+                                <FaEye className="mr-1" /> {t("view")}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center">
-            {t("no_assigned_complaints")}
-          </p>
-        )}
+          ) : (
+            <p className="text-gray-500 text-center">
+              {t("no_assigned_complaints")}
+            </p>
+          )}
+        </div>
 
         {selectedComplaint && (
-          <div className=" inset-0  bg-opacity-75 flex items-center justify-center z-50">
+          <div className="inset-0 bg-opacity-75 flex items-center justify-center z-50">
             <div className="modal-content bg-white p-4 md:p-6 rounded-xl shadow-xl animate-fade-in">
               <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
                 <svg
@@ -354,19 +488,19 @@ const AssignedComplaints = () => {
                 <div className="bg-gray-100 p-4 rounded-b-md space-y-2">
                   <p>
                     <span className="font-medium">{t("id")}:</span>{" "}
-                    {selectedComplaint._id || t("n_a")}
+                    {selectedComplaint._id || t("not_applicable")}
                   </p>
                   <p>
                     <span className="font-medium">{t("title")}:</span>{" "}
-                    {selectedComplaint.title || t("n_a")}
+                    {selectedComplaint.title || t("not_applicable")}
                   </p>
                   <p>
-                    <span className="font-medium">{t("category")}:</span>{" "}
-                    {selectedComplaint.category || t("n_a")}
+                    <span className="font-medium">{t("category_tab")}:</span>{" "}
+                    {selectedComplaint.category || t("not_applicable")}
                   </p>
                   <p>
                     <span className="font-medium">{t("status")}:</span>{" "}
-                    {selectedComplaint.status || t("n_a")}
+                    {selectedComplaint.status || t("not_applicable")}
                   </p>
                   <p>
                     <span className="font-medium">{t("user_email")}:</span>{" "}
@@ -378,13 +512,13 @@ const AssignedComplaints = () => {
                     </span>{" "}
                     {employees.find(
                       (emp) => emp._id === selectedComplaint.employeeId
-                    )?.name || t("n_a")}
+                    )?.name || t("not_applicable")}
                   </p>
                   <p>
                     <span className="font-medium">{t("created_at")}:</span>{" "}
                     {selectedComplaint.timestamp
                       ? new Date(selectedComplaint.timestamp).toLocaleString()
-                      : t("n_a")}
+                      : t("not_applicable")}
                   </p>
                   <div>
                     <span className="font-medium">{t("location")}:</span>{" "}
@@ -401,7 +535,7 @@ const AssignedComplaints = () => {
                         </a>
                       </div>
                     ) : (
-                      t("n_a")
+                      t("not_applicable")
                     )}
                   </div>
                   {selectedComplaint.fileUrl && (
@@ -434,11 +568,29 @@ const AssignedComplaints = () => {
                           {t("update")} #{index + 1}
                         </h4>
                         <p>
+                          <span className="font-medium">{t("status")}:</span>{" "}
+                          {update.status || t("n_a")}
+                        </p>
+                        <p>
                           <span className="font-medium">
                             {t("updated_at")}:
                           </span>{" "}
                           {new Date(update.timestamp).toLocaleString()}
                         </p>
+                        {update.description && (
+                          <p>
+                            <span className="font-medium">
+                              {t("description")}:
+                            </span>{" "}
+                            {update.description}
+                          </p>
+                        )}
+                        {update.comment && (
+                          <p>
+                            <span className="font-medium">{t("comment")}:</span>{" "}
+                            {update.comment}
+                          </p>
+                        )}
                         {update.fileUrl && (
                           <div className="image-container mt-2">
                             <span className="font-medium">
@@ -464,12 +616,22 @@ const AssignedComplaints = () => {
                   {t("photo")}
                 </h3>
                 <div className="bg-gray-100 p-4 rounded-b-md">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setPhoto(e.target.files[0])}
-                    className="mb-2 w-full"
-                  />
+                  <div>
+                    <label
+                      htmlFor="image"
+                      className="block mb-2 text-base font-medium text-gray-900"
+                    >
+                      {t("profile_image")}
+                    </label>
+                    <input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-700 file:px-4 file:py-2 hover:file:bg-gray-200 shadow-md"
+                      aria-label={t("upload_profile_image")}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -481,6 +643,8 @@ const AssignedComplaints = () => {
                   <textarea
                     className="w-full p-2 border rounded-md"
                     placeholder={t("add_update_description")}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </div>
               </div>
@@ -493,6 +657,8 @@ const AssignedComplaints = () => {
                   <textarea
                     className="w-full p-2 border rounded-md"
                     placeholder={t("add_update_comment")}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                   />
                 </div>
               </div>
@@ -549,7 +715,7 @@ const AssignedComplaints = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      d="M15 11a3 3 0 11-6 0 3 0 0 016 0z"
                     />
                   </svg>
                   {t("add_location")}

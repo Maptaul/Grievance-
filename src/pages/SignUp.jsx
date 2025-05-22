@@ -11,8 +11,14 @@ import { AuthContext } from "../Providers/AuthProvider";
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 
 const SignUp = () => {
-  const { createUser, googleSignIn, updateUserProfile } =
-    useContext(AuthContext);
+  const {
+    createUser,
+    googleSignIn,
+    updateUserProfile,
+    user,
+    displayName,
+    photoURL,
+  } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [image, setImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -336,6 +342,18 @@ const SignUp = () => {
                 )}
               </button>
             </form>
+
+            {/* User Info Display */}
+            {user && (
+              <div className="flex items-center gap-2 mt-2">
+                <img
+                  src={photoURL || "https://via.placeholder.com/50"}
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="font-medium text-gray-800">{displayName}</span>
+              </div>
+            )}
 
             <p className="text-center text-sm mt-2 text-gray-600">
               {t("already_registered")}{" "}

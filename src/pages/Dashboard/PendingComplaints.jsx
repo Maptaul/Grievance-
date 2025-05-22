@@ -411,7 +411,9 @@ const PendingComplaints = () => {
                     </h3>
                     <div className="space-y-2">
                       <p>
-                        <span className="font-medium">{t("category")}:</span>{" "}
+                        <span className="font-medium">
+                          {t("category_tab")}:
+                        </span>{" "}
                         {selectedComplaint.category || t("na")}
                       </p>
                       <p>

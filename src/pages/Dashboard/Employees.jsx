@@ -16,7 +16,7 @@ const Employees = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [photoFile, setPhotoFile] = useState(null);
   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-  const { createUser, role } = useContext(AuthContext);
+  const { createEmployeeUser, displayName, photoURL } = useContext(AuthContext);
 
   const {
     register,
@@ -34,8 +34,8 @@ const Employees = () => {
         if (!response.ok) throw new Error(t("fetch_error"));
         const data = await response.json();
         setEmployees(data);
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -54,7 +54,7 @@ const Employees = () => {
       const data = await response.json();
       if (data.success) return data.data.url;
       throw new Error(t("upload_error"));
-    } catch (err) {
+    } catch (error) {
       toast.error(t("upload_error"));
       return null;
     }
@@ -68,6 +68,10 @@ const Employees = () => {
     }
 
     try {
+      // Create user in Firebase Auth using secondary instance (does not log out admin)
+      await createEmployeeUser(data.email, data.password);
+
+      // Save user in backend
       const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,7 +98,7 @@ const Employees = () => {
       document.getElementById("add_employee_modal").close();
 
       toast.success(t("add_success"));
-    } catch (err) {
+    } catch {
       toast.error(t("add_error"));
     }
   };
@@ -131,7 +135,7 @@ const Employees = () => {
         );
 
         toast.success(t(`${action}_success`));
-      } catch (err) {
+      } catch {
         toast.error(t(`fail_${action}`));
       }
     }
@@ -212,13 +216,17 @@ const Employees = () => {
               >
                 <td className="py-2 px-3 sm:py-3 sm:px-4">
                   <img
-                    src={employee.photo || "https://via.placeholder.com/50"}
+                    src={
+                      employee.photo ||
+                      photoURL ||
+                      "https://via.placeholder.com/50"
+                    }
                     alt={t("employee_photo_alt", { name: employee.name })}
                     className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-gray-300"
                   />
                 </td>
                 <td className="py-2 px-3 sm:py-3 sm:px-4 text-gray-800 text-sm sm:text-base">
-                  {employee.name || "N/A"}
+                  {employee.name || displayName || "N/A"}
                 </td>
                 <td className="py-2 px-3 sm:py-3 sm:px-4 text-gray-800 text-sm sm:text-base">
                   {employee.designation || "N/A"}
@@ -267,7 +275,7 @@ const Employees = () => {
           >
             <div className="flex justify-between items-center mb-1 sm:mb-2">
               <span className="text-gray-800 font-medium text-sm sm:text-base">
-                {employee.name || "N/A"}
+                {employee.name || displayName || "N/A"}
               </span>
               <span
                 className={`inline-block px-1 sm:px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
@@ -282,7 +290,9 @@ const Employees = () => {
             <p className="text-sm sm:text-base text-gray-700">
               <span className="font-medium">{t("photo")}:</span>{" "}
               <img
-                src={employee.photo || "https://via.placeholder.com/50"}
+                src={
+                  employee.photo || photoURL || "https://via.placeholder.com/50"
+                }
                 alt={t("employee_photo_alt", { name: employee.name })}
                 className="inline-block w-8 h-8 rounded-full object-cover border border-gray-300"
               />
