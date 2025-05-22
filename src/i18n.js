@@ -295,6 +295,41 @@ const resources = {
       resolve: "Resolve",
       back: "Back",
 
+      manage_citizens: "Manage Citizens",
+      photo: "Photo",
+      name_user: "Name",
+      email: "Email",
+      role: "Role",
+      status_user: "Status",
+      actions_user: "Actions",
+      citizen_role: "Citizen",
+      suspended_user: "Suspended",
+      active_user: "Active",
+      suspend_user: "Suspend",
+      unsuspend_user: "Unsuspend",
+      n_a: "N/A",
+      fetch_users_error: "Failed to fetch users",
+      error_user: "Error",
+      are_you_sure_suspend_user: "Are you sure you want to suspend this user?",
+      are_you_sure_unsuspend_user:
+        "Are you sure you want to unsuspend this user?",
+      restore_user_action_message:
+        "This will restore the user's ability to perform actions.",
+      prevent_user_action_message:
+        "This will prevent the user from performing any actions.",
+      yes_suspend_user: "Yes, suspend!",
+      yes_unsuspend_user: "Yes, unsuspend!",
+      failed_suspend_user: "Failed to suspend user",
+      failed_unsuspend_user: "Failed to unsuspend user",
+      user_suspended: "User Suspended",
+      user_unsuspended: "User Unsuspended",
+      user_action_success: "The user has been {{action}}ed successfully!",
+      error_title: "Error",
+      failed_suspend_user_message: "Failed to suspend user. Please try again.",
+      failed_unsuspend_user_message:
+        "Failed to unsuspend user. Please try again.",
+      user_photo_alt: "Photo of {{name}}",
+
       unknown_ward: "Unknown Ward",
       default_date: "1970-01-01",
       default_time: "00:00:00",
@@ -303,7 +338,7 @@ const resources = {
 
       no_complaints_available: "No complaints available",
       back_to_wards: "Back to Wards",
-      error_title: "Error",
+
       invalid_status_transition: "Invalid status transition",
       failed_update_status: "Failed to update status",
       status_updated_to_resolved: "Status updated to Resolved",
@@ -1045,6 +1080,42 @@ const resources = {
       welcome_description:
         "চট্টগ্রাম, বাংলাদেশের ব্যস্ত বন্দর শহর, একটি স্মার্ট এবং টেকসই নগর কেন্দ্র হওয়ার জন্য একটি রূপান্তরকারী যাত্রায় রয়েছে। এর সমৃদ্ধ ইতিহাস, কৌশলগত অবস্থান এবং অর্থনৈতিক গুরুত্ব সহ, চট্টগ্রাম উদ্ভাবন, প্রযুক্তি এবং পরিবেশ-বান্ধব অনুশীলন গ্রহণ করছে যাতে বাসিন্দাদের জীবনমান উন্নত হয় এবং ভবিষ্যতের জন্য একটি মডেল শহর তৈরি হয়।",
       welcome_image_alt: "চট্টগ্রাম",
+
+      manage_citizens: "নাগরিকদের পরিচালনা করুন",
+      photo: "ছবি",
+
+      email: "ইমেইল",
+      role: "ভূমিকা",
+
+      citizen_role: "নাগরিক",
+      suspended: "স্থগিত",
+      active: "সক্রিয়",
+      suspend: "স্থগিত করুন",
+      unsuspend: "পুনরায় সক্রিয় করুন",
+      n_a: "প্রযোজ্য নয়",
+      fetch_users_error: "ব্যবহারকারীদের আনতে ব্যর্থ হয়েছে",
+
+      are_you_sure_suspend_user:
+        "আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীকে স্থগিত করতে চান?",
+      are_you_sure_unsuspend_user:
+        "আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীকে পুনরায় সক্রিয় করতে চান?",
+      restore_user_action_message:
+        "এটি ব্যবহারকারীকে কার্যক্রম সম্পাদনের সক্ষমতা ফিরিয়ে দেবে।",
+      prevent_user_action_message:
+        "এটি ব্যবহারকারীকে কোনো কার্যক্রম সম্পাদন থেকে বিরত রাখবে।",
+      yes_suspend: "হ্যাঁ, স্থগিত করুন!",
+      yes_unsuspend: "হ্যাঁ, পুনরায় সক্রিয় করুন!",
+      failed_suspend_user: "ব্যবহারকারীকে স্থগিত করতে ব্যর্থ হয়েছে",
+      failed_unsuspend_user: "ব্যবহারকারীকে পুনরায় সক্রিয় করতে ব্যর্থ হয়েছে",
+      user_suspended: "ব্যবহারকারী স্থগিত হয়েছে",
+      user_unsuspended: "ব্যবহারকারী পুনরায় সক্রিয় হয়েছে",
+      user_action_success: "ব্যবহারকারী সফলভাবে {{action}} করা হয়েছে!",
+      error_title: "ত্রুটি",
+      failed_suspend_user_message:
+        "ব্যবহারকারীকে স্থগিত করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      failed_unsuspend_user_message:
+        "ব্যবহারকারীকে পুনরায় সক্রিয় করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      user_photo_alt: "{{name}} এর ছবি",
 
       // Vision Translations
       vision_title: "আমাদের দৃষ্টিভঙ্গি",
