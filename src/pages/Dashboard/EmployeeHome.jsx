@@ -48,7 +48,7 @@ const EmployeeHome = () => {
       const fetchData = async () => {
         try {
           const complaintsResponse = await fetch(
-            `http://localhost:3000/complaints/employee/${user._id}`
+            `https://grievance-server.vercel.app/complaints/employee/${user._id}`
           );
           if (!complaintsResponse.ok)
             throw new Error(t("failed_to_fetch_complaints"));
@@ -132,7 +132,7 @@ const EmployeeHome = () => {
           ? t("status_resolved")
           : complaint.status;
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaint._id}`,
+        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

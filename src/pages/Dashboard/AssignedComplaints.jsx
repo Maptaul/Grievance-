@@ -27,8 +27,8 @@ const AssignedComplaints = () => {
     const fetchData = async () => {
       try {
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("http://localhost:3000/complaints"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://grievance-server.vercel.app/complaints"),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
@@ -103,14 +103,17 @@ const AssignedComplaints = () => {
           ...(complaint.history || []),
           { status: "Ongoing", timestamp: new Date().toISOString() },
         ];
-        const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            status: "Ongoing",
-            history: JSON.stringify(updatedHistory),
-          }),
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/complaints/${id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              status: "Ongoing",
+              history: JSON.stringify(updatedHistory),
+            }),
+          }
+        );
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`${t("error_update_status")}: ${errorText}`);
@@ -173,14 +176,17 @@ const AssignedComplaints = () => {
         },
       ];
 
-      const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: "Resolved",
-          history: JSON.stringify(updatedHistory),
-        }),
-      });
+      const response = await fetch(
+        `https://grievance-server.vercel.app/complaints/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: "Resolved",
+            history: JSON.stringify(updatedHistory),
+          }),
+        }
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`${t("error_update_status")}: ${errorText}`);

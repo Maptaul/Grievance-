@@ -211,11 +211,14 @@ const SubmitComplaint = () => {
 
       console.log("Submitting complaint data:", complaintData);
 
-      const response = await fetch("http://localhost:3000/complaints", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(complaintData),
-      });
+      const response = await fetch(
+        "https://grievance-server.vercel.app/complaints",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(complaintData),
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();

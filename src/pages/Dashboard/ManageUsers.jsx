@@ -12,7 +12,7 @@ const ManageUsers = () => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/users?role=citizen"
+          "https://grievance-server.vercel.app/users?role=citizen"
         );
         if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
@@ -45,11 +45,14 @@ const ManageUsers = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/users/${email}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ suspended: !currentSuspendedStatus }),
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/users/${email}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ suspended: !currentSuspendedStatus }),
+          }
+        );
         if (!response.ok) throw new Error(`Failed to ${action} user`);
 
         setUsers(
