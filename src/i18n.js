@@ -17,6 +17,8 @@ const resources = {
       language: "Language",
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
 
+      no_updated_image_available: "No updated image available",
+
       history: "History",
       no_history_available: "No history available",
       unauthorized_access: "You do not have permission to view this page.",
@@ -126,15 +128,21 @@ const resources = {
       no_status_data: "No status data available.",
       pending: "Pending",
       complaint_status_changed_to_viewed: "Complaint status changed to Viewed!",
+      select_department: "Select Department",
+      search_department: "Search Department",
+      no_departments_found: "No departments found",
 
       mobile_label: "Mobile Number",
-      mobile_placeholder: "Enter your mobile number (e.g., 1234567890)",
+      mobile_placeholder: "01XXXXXXXXX",
       provide_valid_mobile:
         "Please provide a valid mobile number (10-15 digits)",
       anonymous: "Anonymous",
       status_pending: "Pending",
       failed_to_submit_complaint: "Failed to submit complaint.",
       category_required: "Category is required",
+
+      uploaded_image: "Uploaded Image",
+      view_uploaded_image: "View Uploaded Image",
 
       category_tab: "Category",
       view_map: "Map",
@@ -236,6 +244,9 @@ const resources = {
       password_required: "Password is required",
       password_min_length: "Password must be at least 6 characters",
       password_placeholder: "Enter your password",
+      view_assigned_complaint: "View Assigned Complaints",
+
+      view_resolved_complaint: "View Resolved Complaints",
 
       please_login: "Please log in to view your complaints",
       failed_to_fetch_complaints: "Failed to fetch complaints",
@@ -259,6 +270,9 @@ const resources = {
       email_placeholder: "Enter your email address",
       password: "Password",
       profile_information: "Profile Information",
+      select_designation: "Select Designation",
+      search_designation: "Search Designation",
+      no_designations_found: "No designations found",
 
       image_uploaded_successfully: "Profile photograph uploaded successfully",
       already_registered: "Already registered?",
@@ -294,7 +308,7 @@ const resources = {
       updated_image_alt: "Updated Image {{index}}",
       resolve: "Resolve",
       back: "Back",
-
+      no_pending_complaints: "No pending complaints available.",
       manage_citizens: "Manage Citizens",
       photo: "Photo",
       name_user: "Name",
@@ -392,6 +406,10 @@ const resources = {
       failed_to_update_complaint:
         "Failed to update complaint status. Please try again.",
 
+      complaint_resolved_successfully: "Complaint resolved successfully",
+      error_update_status: "Error updating status",
+      only_employees_can_update_status: "Only employees can update status",
+
       // Vision Translations
       vision_title: "Our Vision",
       vision_description:
@@ -401,7 +419,6 @@ const resources = {
 
       no_updated_image_available: "No Updated Image Available",
 
-      photo: "Photo",
       choose_photo: "Choose Photo",
 
       add_update_description: "Add update description...",
@@ -571,10 +588,6 @@ const resources = {
 
       error_fetch_employees: "Failed to fetch employees",
 
-      only_employees_can_update_status:
-        "Only employees can update complaint status",
-      error_update_status: "Failed to update status",
-
       s_no: "S.No",
 
       no_assigned_complaints: "No assigned complaints",
@@ -584,8 +597,6 @@ const resources = {
       back_to_assigned_complaints: "Back to Assigned Complaints",
 
       error_resolve_status: "Failed to resolve status",
-
-      n_a: "N/A",
 
       assign: "Assign",
       select_employee: "Select Employee",
@@ -601,11 +612,10 @@ const resources = {
       unknown_user: "Unknown User",
       unknown_date: "Unknown Date",
       edit_profile: "Edit Profile",
-      citizen_role: "Citizen",
+
       employee_role: "Employee",
 
       joined: "Joined",
-      email: "Email",
 
       // OngoingProjects Translations
       ongoing_projects_title: "Ongoing Projects",
@@ -674,6 +684,7 @@ const resources = {
         },
       },
       get_involved_image_alt: "Get Involved",
+      employee_home_welcome: "Welcome to the Employee Dashboard, {{name}}!",
 
       // Footer Translations
       footer_contact_title: "Contact Us",
@@ -955,6 +966,9 @@ const resources = {
       pending: "মুলতুবি",
       complaint_status_changed_to_viewed: "অভিযোগের স্ট্যাটাস দেখা হয়েছে!",
 
+      uploaded_image: "আপলোড করা ছবি",
+      view_uploaded_image: "আপলোড করা ছবি দেখুন",
+
       // Login Component Translations
       complainant_login_override: "লগইন করুন",
       your_name_override: "ইমেইল",
@@ -1147,11 +1161,10 @@ const resources = {
       unknown_date: "অজানা তারিখ",
 
       edit_profile: "প্রোফাইল সম্পাদনা করুন",
-      citizen_role: "নাগরিক",
+
       employee_role: "কর্মচারী",
 
       joined: "যোগদান করেছেন",
-      email: "ইমেইল",
 
       ward_wise_complaints: "ওয়ার্ডভিত্তিক অভিযোগ",
       complaint: "অভিযোগ",
@@ -1164,6 +1177,10 @@ const resources = {
       sort_descending: "নিম্নক্রমে সাজান",
       sort_ascending: "উর্ধ্বক্রমে সাজান",
       id: "আইডি",
+
+      select_designation: "পদবী নির্বাচন করুন",
+      search_designation: "পদবী অনুসন্ধান করুন",
+      no_designations_found: "কোনো পদবী পাওয়া যায়নি",
 
       user_email: "ব্যবহারকারীর ইমেইল",
       created_at: "তৈরির সময়",
@@ -1185,7 +1202,7 @@ const resources = {
 
       no_complaints_available: "কোনো অভিযোগ পাওয়া যায়নি",
       back_to_wards: "ওয়ার্ড তালিকায় ফিরে যান",
-      error_title: "ত্রুটি",
+
       invalid_status_transition: "অবৈধ অবস্থা পরিবর্তন",
       failed_update_status: "অবস্থা আপডেট করতে ব্যর্থ হয়েছে",
       status_updated_to_resolved: "অবস্থা 'সমাধান হয়েছে' এ আপডেট হয়েছে",
@@ -1198,6 +1215,9 @@ const resources = {
       assign_complaint: "অভিযোগ নিয়োগ করুন",
       no_employees_available: "কোনো কর্মী উপলব্ধ নেই",
       close: "বন্ধ করুন",
+      select_department: "বিভাগ নির্বাচন করুন",
+      search_department: "বিভাগ অনুসন্ধান করুন",
+      no_departments_found: "কোনো বিভাগ পাওয়া যায়নি",
 
       failed_to_fetch_employees: "কর্মীদের তথ্য আনতে ব্যর্থ",
 
@@ -1222,7 +1242,6 @@ const resources = {
 
       no_updated_image_available: "কোনো আপডেট ছবি নেই",
 
-      photo: "ছবি",
       choose_photo: "ছবি নির্বাচন করুন",
 
       add_update_description: "আপডেট বিবরণ যোগ করুন...",
@@ -1240,24 +1259,22 @@ const resources = {
       progress_video2_title:
         "সিটি করপোরেশনে রাজনীতির আলাপ নিয়ে আসবেন না : ডাঃ শাহাদাত হোসেন",
 
+      employee_home_welcome: "কর্মচারী হোম",
+
       manage_employees: "কর্মচারী ব্যবস্থাপনা",
       add_employee: "কর্মচারী যোগ করুন",
       add_new_employee: "নতুন কর্মচারী যোগ করুন",
       designation: "পদবী",
       department: "বিভাগ",
       mobile: "মোবাইল",
-      suspended: "বহিষ্কৃত",
-      active: "সক্রিয়",
-      suspend: "বহিষ্কার করুন",
-      unsuspend: "পুনরায় সক্রিয় করুন",
+
       save: "সংরক্ষণ করুন",
       cancel: "বাতিল করুন",
       confirm_action:
         "আপনি কি নিশ্চিত যে আপনি এই কর্মচারীকে {{action}} করতে চান?",
       suspend_text: "এটি কর্মচারীকে সিস্টেমে প্রবেশ করতে বাধা দেবে।",
       unsuspend_text: "এটি কর্মচারীর অ্যাক্সেস পুনরায় চালু করবে।",
-      yes_suspend: "হ্যাঁ, বহিষ্কার করুন!",
-      yes_unsuspend: "হ্যাঁ, পুনরায় সক্রিয় করুন!",
+
       suspend_success: "কর্মচারীকে বহিষ্কার করা হয়েছে",
       unsuspend_success: "কর্মচারীকে পুনরায় সক্রিয় করা হয়েছে",
       fail_suspend:
@@ -1303,6 +1320,8 @@ const resources = {
               "সকল বাসিন্দার জন্য ডিজিটাল সাক্ষরতা এবং প্রযুক্তি অ্যাক্সেস প্রচার।",
           },
         },
+
+        no_pending_complaints: "কোনো মুলতুবি অভিযোগ নেই",
         sustainable_environment: {
           title: "টেকসই পরিবেশ",
           description: "একটি সবুজ এবং পরিষ্কার নগর ইকোসিস্টেম তৈরি।",
@@ -1370,26 +1389,24 @@ const resources = {
         },
       },
 
+      view_assigned_complaint: "নির্ধারিত অভিযোগ দেখুন",
+
       no_assigned_complaints: "কোনো নির্ধারিত অভিযোগ নেই",
 
       back_to_assigned_complaints: "নির্ধারিত অভিযোগে ফিরে যান",
 
       error_resolve_status: "স্ট্যাটাস সমাধান করতে ব্যর্থ",
 
-      n_a: "N/A",
-
       pending_complaints: "মুলতুবি",
 
       mobile_label: "মোবাইল নম্বর",
-      mobile_placeholder: "আপনার মোবাইল নম্বর লিখুন (যেমন, ১২৩৪৫৬৭৮৯০)",
+      mobile_placeholder: "০১XXXXXXXXX",
       provide_valid_mobile:
         "অনুগ্রহ করে একটি বৈধ মোবাইল নম্বর প্রদান করুন (১০-১৫ সংখ্যা)",
       anonymous: "বেনামী",
 
       failed_to_submit_complaint: "অভিযোগ জমা দিতে ব্যর্থ।",
       category_required: "বিভাগ প্রয়োজন",
-
-      sort_none: "কোনোটি নয়",
 
       no_resolved_complaints: "কোনো সমাধানকৃত অভিযোগ পাওয়া যায়নি",
 
@@ -1399,8 +1416,6 @@ const resources = {
 
       only_employees_can_update_status:
         "শুধুমাত্র কর্মচারীরা অভিযোগের অবস্থা আপডেট করতে পারেন",
-
-      status_updated_to_resolved: "অবস্থা সমাধান হিসেবে আপডেট হয়েছে",
 
       // EmployeeHome Translations
 
@@ -1424,6 +1439,7 @@ const resources = {
       "category.Health & Medical": "স্বাস্থ্য ও চিকিৎসা",
       "category.The Sidewalk": "পায়ে হাঁটা পথ",
       "category.Others": "অন্যান্য",
+      complaint_resolved_successfully: "অভিযোগ সফলভাবে সমাধান হয়েছে",
 
       welcome_employee: "স্বাগত",
 
@@ -1448,8 +1464,6 @@ const resources = {
       no_complaints: "কোনো {status} অভিযোগ পাওয়া যায়নি",
 
       please_login: "আপনার অভিযোগ দেখতে অনুগ্রহ করে লগইন করুন",
-
-      view_on_map: "মানচিত্রে দেখুন",
 
       // OngoingProjects Translations
       ongoing_projects_title: "চলমান প্রকল্প",
@@ -1494,6 +1508,8 @@ const resources = {
             "নিরাপত্তা এবং দীর্ঘায়ুর জন্য রাস্তা, সেতু এবং পাবলিক ভবন পর্যবেক্ষণ এবং রক্ষণাবেক্ষণের জন্য আইওটি এবং এআই ব্যবহার।",
         },
       },
+
+      view_resolved_complaint: "সমাধানকৃত অভিযোগ দেখুন",
 
       // GetInvolved Translations
       get_involved_title: "অংশগ্রহণ করুন",
@@ -1637,7 +1653,7 @@ const resources = {
 
       no_data: "কোনো ডেটা উপলব্ধ নেই",
       try_again: "অনুগ্রহ করে আবার চেষ্টা করুন",
-      back: "পেছনে",
+
       next: "পরবর্তী",
 
       edit: "সম্পাদনা করুন",

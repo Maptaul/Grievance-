@@ -24,7 +24,7 @@ const SubmitComplaint = () => {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]); // Changed from single file to multiple files
   const [location, setLocation] = useState(null);
   const [ward, setWard] = useState(null);
   const [mobileNumber, setMobileNumber] = useState("");
@@ -85,9 +85,7 @@ const SubmitComplaint = () => {
   ];
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (!selectedFile) return;
-
+    const selectedFiles = Array.from(e.target.files);
     const validTypes = [
       "image/jpeg",
       "image/png",
@@ -95,22 +93,23 @@ const SubmitComplaint = () => {
       "application/pdf",
     ];
     const maxSize = 10 * 1024 * 1024;
-
-    if (!validTypes.includes(selectedFile.type)) {
-      Swal.fire(
-        t("invalid_file_type"),
-        t("please_upload_valid_files"),
-        "error"
-      );
-      return;
+    let validFiles = [];
+    for (const file of selectedFiles) {
+      if (!validTypes.includes(file.type)) {
+        Swal.fire(
+          t("invalid_file_type"),
+          t("please_upload_valid_files"),
+          "error"
+        );
+        continue;
+      }
+      if (file.size > maxSize) {
+        Swal.fire(t("file_too_large"), t("max_file_size"), "error");
+        continue;
+      }
+      validFiles.push(file);
     }
-
-    if (selectedFile.size > maxSize) {
-      Swal.fire(t("file_too_large"), t("max_file_size"), "error");
-      return;
-    }
-
-    setFile(selectedFile);
+    setFiles((prev) => [...prev, ...validFiles]);
   };
 
   const getLocation = () => {
@@ -144,6 +143,10 @@ const SubmitComplaint = () => {
     }
   };
 
+  const handleRemoveFile = (index) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -152,7 +155,7 @@ const SubmitComplaint = () => {
       return;
     }
 
-    if (!file) {
+    if (!files.length) {
       Swal.fire(t("missing_info"), t("upload_media"), "error");
       return;
     }
@@ -162,9 +165,14 @@ const SubmitComplaint = () => {
       return;
     }
 
-    const phoneRegex = /^\d{10,15}$/;
-    if (!mobileNumber || !phoneRegex.test(mobileNumber)) {
-      Swal.fire(t("missing_info"), t("provide_valid_mobile"), "error");
+    // Bangladeshi mobile number: starts with 01 and 11 digits
+    const bdPhoneRegex = /^01[0-9]{9}$/;
+    if (!mobileNumber || !bdPhoneRegex.test(mobileNumber)) {
+      Swal.fire(
+        t("missing_info"),
+        t("provide_valid_bangladeshi_mobile"),
+        "error"
+      );
       return;
     }
 
@@ -174,16 +182,18 @@ const SubmitComplaint = () => {
     }
 
     try {
-      let fileUrl = "";
-      if (file) {
-        const formData = new FormData();
-        formData.append("image", file);
+      let fileUrls = [];
+      if (files.length) {
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append("image", file);
 
-        const imgResponse = await axios.post(
-          `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
-          formData
-        );
-        fileUrl = imgResponse.data.data.display_url;
+          const imgResponse = await axios.post(
+            `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
+            formData
+          );
+          fileUrls.push(imgResponse.data.data.display_url);
+        }
       }
 
       const selectedWard = wards.find(
@@ -199,7 +209,7 @@ const SubmitComplaint = () => {
         category: selectedCategory,
         name: isAnonymous ? t("anonymous") : name,
         description,
-        fileUrl,
+        fileUrl: fileUrls, // Now an array
         location,
         ward: wardValue,
         status: t("status_pending"),
@@ -211,14 +221,11 @@ const SubmitComplaint = () => {
 
       console.log("Submitting complaint data:", complaintData);
 
-      const response = await fetch(
-        "https://grievance-server.vercel.app/complaints",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(complaintData),
-        }
-      );
+      const response = await fetch("http://localhost:3000/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(complaintData),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -263,7 +270,7 @@ const SubmitComplaint = () => {
 
       setName("");
       setDescription("");
-      setFile(null);
+      setFiles([]);
       setLocation(null);
       setWard(null);
       setIsAnonymous(false);
@@ -391,7 +398,7 @@ const SubmitComplaint = () => {
             capture="environment"
             onChange={handleFileChange}
             className="hidden"
-            // Removed required attribute
+            multiple
           />
           <input
             type="file"
@@ -399,22 +406,26 @@ const SubmitComplaint = () => {
             accept="image/*, video/*, application/pdf"
             onChange={handleFileChange}
             className="hidden"
-            // Removed required attribute
+            multiple
           />
 
-          {file && (
-            <div className="p-3 bg-gray-50 rounded-lg flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FiFile className="text-gray-500" />
-                <span className="text-sm font-medium">{file.name}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setFile(null)}
-                className="text-red-500 hover:text-red-600"
-              >
-                <FiX className="w-5 h-5" />
-              </button>
+          {files.length > 0 && (
+            <div className="p-3 bg-gray-50 rounded-lg flex flex-col gap-2">
+              {files.map((file, idx) => (
+                <div key={idx} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <FiFile className="text-gray-500" />
+                    <span className="text-sm font-medium">{file.name}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(idx)}
+                    className="text-red-500 hover:text-red-600"
+                  >
+                    <FiX className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>

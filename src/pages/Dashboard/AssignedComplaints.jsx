@@ -1,9 +1,7 @@
-import axios from "axios"; // Added axios import
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaEye, FaMapMarkerAlt } from "react-icons/fa";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
 
@@ -12,34 +10,58 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const AssignedComplaints = () => {
   const { t } = useTranslation();
   const { user, role } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("timestamp");
   const [sortDirection, setSortDirection] = useState("desc");
   const [employees, setEmployees] = useState([]);
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const [photo, setPhoto] = useState(null); // Will store the ImgBB URL
-  const [description, setDescription] = useState("");
-  const [comment, setComment] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0); // Force re-fetch
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("https://grievance-server.vercel.app/complaints"),
-          fetch("https://grievance-server.vercel.app/users"),
+          fetch("http://localhost:3000/complaints"),
+          fetch("http://localhost:3000/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
         const data = await complaintsRes.json();
+        console.log("Fetched complaints data:", data); // Debug: Log all fetched complaints
         let assignedComplaints = data.filter((c) => c.status === "Assigned");
 
+        // Role-based filtering with enhanced debugging
         if (role === "citizen") {
           assignedComplaints = assignedComplaints.filter(
             (complaint) => complaint.email === user.email
           );
-        }
+        } else if (role === "employee") {
+          assignedComplaints = assignedComplaints.filter((complaint) => {
+            const complaintEmployeeId = complaint.employeeId?.toString() || "";
+            const userId = user._id?.toString() || "";
+            console.log("Employee Filter:", {
+              complaintId: complaint._id,
+              complaintEmployeeId,
+              userId,
+              userRole: role,
+              userEmail: user.email,
+              fullUser: user, // Log full user object for debugging
+            }); // Enhanced debug log
+            return complaintEmployeeId === userId;
+          });
+          if (assignedComplaints.length === 0) {
+            console.warn(
+              "No complaints assigned to employee:",
+              user._id,
+              "Role:",
+              role,
+              "User:",
+              user
+            );
+          }
+        } // Administrative role sees all assigned complaints by default
 
         setComplaints(assignedComplaints);
         const users = await employeesRes.json();
@@ -51,31 +73,7 @@ const AssignedComplaints = () => {
       }
     };
     fetchData();
-  }, [t, role, user]);
-
-  // Handle image upload to ImgBB
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${image_hosting_key}`,
-        formData
-      );
-      if (res.data.success) {
-        setPhoto(res.data.data.display_url);
-        toast.success(t("image_uploaded_successfully"));
-      } else {
-        throw new Error(t("submission_failed"));
-      }
-    } catch (error) {
-      toast.error(t("submission_failed"));
-    }
-  };
+  }, [t, role, user, refreshKey]); // Added refreshKey to force re-fetch
 
   const sortedComplaints = [...complaints].sort((a, b) => {
     if (sortBy === "none") return 0;
@@ -96,118 +94,41 @@ const AssignedComplaints = () => {
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
 
   const handleView = async (id) => {
-    const complaint = complaints.find((c) => c._id === id);
-    if (role === "employee" && complaint.status === "Assigned") {
+    let complaint = complaints.find((c) => c._id === id);
+    if (role === "employee") {
       try {
-        const updatedHistory = [
-          ...(complaint.history || []),
-          { status: "Ongoing", timestamp: new Date().toISOString() },
-        ];
         const response = await fetch(
-          `https://grievance-server.vercel.app/complaints/${id}`,
+          `http://localhost:3000/complaints/${complaint._id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              status: "Ongoing",
-              history: JSON.stringify(updatedHistory),
-            }),
+            body: JSON.stringify({ status: "Ongoing" }),
           }
         );
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`${t("error_update_status")}: ${errorText}`);
+          throw new Error(`${t("failed_to_update_status")}: ${errorText}`);
         }
+        // Update the local state with the new status
         const updatedComplaints = complaints.map((c) =>
-          c._id === id
-            ? { ...c, status: "Ongoing", history: updatedHistory }
-            : c
+          c._id === complaint._id ? { ...c, status: "Ongoing" } : c
         );
         setComplaints(updatedComplaints);
+        // Update the complaint object to reflect the new status
+        complaint = { ...complaint, status: "Ongoing" };
       } catch (err) {
-        Swal.fire({ icon: "error", title: t("error"), text: err.message });
+        console.error(t("error_updating_complaint"), err);
+        setError(err.message);
+        return; // Stop navigation if there's an error
       }
     }
-    const history = complaint.history || [
-      { status: complaint.status, timestamp: new Date().toISOString() },
-    ];
-    setSelectedComplaint({ ...complaint, history });
-    setPhoto(null);
-    setDescription("");
-    setComment("");
+    navigate(`/dashboard/viewAssignedComplaint/${complaint._id}`, {
+      state: { complaint },
+    });
   };
 
-  const handleResolve = async (id) => {
-    if (role !== "employee") {
-      Swal.fire({
-        icon: "error",
-        title: t("unauthorized"),
-        text: t("only_employees_can_update_status"),
-      });
-      return;
-    }
-    const complaint = complaints.find((c) => c._id === id);
-    console.log("Current status before resolve:", complaint.status); // Debug
-    if (complaint.status !== "Ongoing") {
-      Swal.fire({
-        icon: "error",
-        title: t("error"),
-        text: t("invalid_status_transition"),
-      });
-      return;
-    }
-    if (!photo) {
-      Swal.fire({
-        icon: "error",
-        title: t("error"),
-        text: t("photo_required"),
-      });
-      return;
-    }
-    try {
-      const updatedHistory = [
-        ...(complaint.history || []),
-        {
-          status: "Resolved",
-          timestamp: new Date().toISOString(),
-          fileUrl: photo,
-          description,
-          comment,
-        },
-      ];
-
-      const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            status: "Resolved",
-            history: JSON.stringify(updatedHistory),
-          }),
-        }
-      );
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`${t("error_update_status")}: ${errorText}`);
-      }
-      const updatedComplaints = complaints.filter((c) => c._id !== id);
-      setComplaints(updatedComplaints);
-      setSelectedComplaint(null);
-      setPhoto(null);
-      setDescription("");
-      setComment("");
-      toast.success(t("complaint_resolved_successfully"));
-    } catch (err) {
-      Swal.fire({ icon: "error", title: t("error"), text: err.message });
-    }
-  };
-
-  const closeModal = () => {
-    setSelectedComplaint(null);
-    setPhoto(null);
-    setDescription("");
-    setComment("");
+  const handleRefresh = () => {
+    setRefreshKey((prev) => prev + 1); // Trigger re-fetch
   };
 
   if (loading) return <Loading />;
@@ -287,6 +208,12 @@ const AssignedComplaints = () => {
           >
             {sortDirection === "asc" ? t("sort_desc") : t("sort_asc")}
           </button>
+          <button
+            onClick={handleRefresh}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200 w-full sm:w-auto"
+          >
+            {t("refresh")}
+          </button>
         </div>
 
         {/* Mobile: Card View */}
@@ -328,9 +255,9 @@ const AssignedComplaints = () => {
                 </p>
                 <p className="text-sm text-gray-700">
                   <span className="font-medium">{t("file")}:</span>{" "}
-                  {complaint.fileUrl ? (
+                  {complaint.fileUrl && complaint.fileUrl[0] ? (
                     <a
-                      href={complaint.fileUrl}
+                      href={complaint.fileUrl[0]}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
@@ -347,7 +274,7 @@ const AssignedComplaints = () => {
                     ? new Date(complaint.timestamp).toLocaleString()
                     : t("na")}
                 </p>
-                <div className="mt-2">
+                <div className="mt-2 flex flex-col gap-2">
                   <button
                     onClick={() => handleView(complaint._id)}
                     className="bg-blue-600 text-white py-1.5 px-3 rounded-md hover-glow flex items-center w-full justify-center"
@@ -359,7 +286,7 @@ const AssignedComplaints = () => {
             ))
           ) : (
             <p className="text-gray-600 text-center">
-              {t("no_pending_complaints")}
+              {t("no_assigned_complaints")}
             </p>
           )}
         </div>
@@ -424,9 +351,9 @@ const AssignedComplaints = () => {
                             {assignedEmployee}
                           </td>
                           <td className="py-4 px-4">
-                            {complaint.fileUrl ? (
+                            {complaint.fileUrl && complaint.fileUrl[0] ? (
                               <a
-                                href={complaint.fileUrl}
+                                href={complaint.fileUrl[0]}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline"
@@ -465,271 +392,6 @@ const AssignedComplaints = () => {
             </p>
           )}
         </div>
-
-        {selectedComplaint && (
-          <div className="inset-0 bg-opacity-75 flex items-center justify-center z-50">
-            <div className="modal-content bg-white p-4 md:p-6 rounded-xl shadow-xl animate-fade-in">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mr-2 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
-                {t("edit_complaint")}
-              </h2>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white bg-red-500 p-2 rounded-t-md">
-                  {t("complaint_details")}
-                </h3>
-                <div className="bg-gray-100 p-4 rounded-b-md space-y-2">
-                  <p>
-                    <span className="font-medium">{t("id")}:</span>{" "}
-                    {selectedComplaint._id || t("not_applicable")}
-                  </p>
-                  <p>
-                    <span className="font-medium">{t("title")}:</span>{" "}
-                    {selectedComplaint.title || t("not_applicable")}
-                  </p>
-                  <p>
-                    <span className="font-medium">{t("category_tab")}:</span>{" "}
-                    {selectedComplaint.category || t("not_applicable")}
-                  </p>
-                  <p>
-                    <span className="font-medium">{t("status")}:</span>{" "}
-                    {selectedComplaint.status || t("not_applicable")}
-                  </p>
-                  <p>
-                    <span className="font-medium">{t("user_email")}:</span>{" "}
-                    {selectedComplaint.email || t("anonymous")}
-                  </p>
-                  <p>
-                    <span className="font-medium">
-                      {t("assigned_employee")}:
-                    </span>{" "}
-                    {employees.find(
-                      (emp) => emp._id === selectedComplaint.employeeId
-                    )?.name || t("not_applicable")}
-                  </p>
-                  <p>
-                    <span className="font-medium">{t("created_at")}:</span>{" "}
-                    {selectedComplaint.timestamp
-                      ? new Date(selectedComplaint.timestamp).toLocaleString()
-                      : t("not_applicable")}
-                  </p>
-                  <div>
-                    <span className="font-medium">{t("location")}:</span>{" "}
-                    {selectedComplaint.location ? (
-                      <div className="mt-2">
-                        <a
-                          href={`https://www.google.com/maps?q=${selectedComplaint.location.latitude},${selectedComplaint.location.longitude}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex items-center mt-2"
-                        >
-                          <FaMapMarkerAlt className="mr-1" />
-                          {t("view_on_map")}
-                        </a>
-                      </div>
-                    ) : (
-                      t("not_applicable")
-                    )}
-                  </div>
-                  {selectedComplaint.fileUrl && (
-                    <div className="image-container">
-                      <span className="font-medium">
-                        {t("original_image")}:
-                      </span>{" "}
-                      <img
-                        src={selectedComplaint.fileUrl}
-                        alt={t("original_image")}
-                        className="mt-2 max-w-full h-auto border rounded-md"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white bg-red-500 p-2 rounded-t-md">
-                  {t("update_history")}
-                </h3>
-                <div className="bg-gray-100 p-4 rounded-b-md space-y-4">
-                  {selectedComplaint.history?.length > 0 ? (
-                    selectedComplaint.history.map((update, index) => (
-                      <div
-                        key={index}
-                        className="border-l-4 border-teal-500 pl-4"
-                      >
-                        <h4 className="font-medium">
-                          {t("update")} #{index + 1}
-                        </h4>
-                        <p>
-                          <span className="font-medium">{t("status")}:</span>{" "}
-                          {update.status || t("n_a")}
-                        </p>
-                        <p>
-                          <span className="font-medium">
-                            {t("updated_at")}:
-                          </span>{" "}
-                          {new Date(update.timestamp).toLocaleString()}
-                        </p>
-                        {update.description && (
-                          <p>
-                            <span className="font-medium">
-                              {t("description")}:
-                            </span>{" "}
-                            {update.description}
-                          </p>
-                        )}
-                        {update.comment && (
-                          <p>
-                            <span className="font-medium">{t("comment")}:</span>{" "}
-                            {update.comment}
-                          </p>
-                        )}
-                        {update.fileUrl && (
-                          <div className="image-container mt-2">
-                            <span className="font-medium">
-                              {t("updated_image")} #{index + 1}:
-                            </span>{" "}
-                            <img
-                              src={update.fileUrl}
-                              alt={t("updated_image")}
-                              className="mt-1 max-w-full h-auto border rounded-md"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500">{t("no_history_available")}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white bg-teal-500 p-2 rounded-t-md">
-                  {t("photo")}
-                </h3>
-                <div className="bg-gray-100 p-4 rounded-b-md">
-                  <div>
-                    <label
-                      htmlFor="image"
-                      className="block mb-2 text-base font-medium text-gray-900"
-                    >
-                      {t("profile_image")}
-                    </label>
-                    <input
-                      id="image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A2C5A] focus:border-[#4A2C5A] transition-all bg-white file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-700 file:px-4 file:py-2 hover:file:bg-gray-200 shadow-md"
-                      aria-label={t("upload_profile_image")}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white bg-teal-500 p-2 rounded-t-md">
-                  {t("description")}
-                </h3>
-                <div className="bg-gray-100 p-4 rounded-b-md">
-                  <textarea
-                    className="w-full p-2 border rounded-md"
-                    placeholder={t("add_update_description")}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white bg-teal-500 p-2 rounded-t-md">
-                  {t("comment")}
-                </h3>
-                <div className="bg-gray-100 p-4 rounded-b-md">
-                  <textarea
-                    className="w-full p-2 border rounded-md"
-                    placeholder={t("add_update_comment")}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                {role === "employee" && (
-                  <button
-                    onClick={() => handleResolve(selectedComplaint._id)}
-                    className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors button-full"
-                  >
-                    {t("resolve")}
-                  </button>
-                )}
-                <button
-                  onClick={closeModal}
-                  className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors button-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 inline"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                    />
-                  </svg>
-                  {t("back")}
-                </button>
-                <button
-                  onClick={() => {
-                    /* Add location logic */
-                  }}
-                  className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors button-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 inline"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 0 0 016 0z"
-                    />
-                  </svg>
-                  {t("add_location")}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -48,14 +48,12 @@ const AdminHome = () => {
     if (role === "administrative") {
       const fetchData = async () => {
         try {
-          const usersResponse = await fetch(
-            "https://grievance-server.vercel.app/users"
-          );
+          const usersResponse = await fetch("http://localhost:3000/users");
           if (!usersResponse.ok) throw new Error(t("error_fetch_users"));
           const users = await usersResponse.json();
 
           const complaintsResponse = await fetch(
-            "https://grievance-server.vercel.app/complaints"
+            "http://localhost:3000/complaints"
           );
           if (!complaintsResponse.ok)
             throw new Error(t("error_fetch_complaints"));
@@ -144,7 +142,7 @@ const AdminHome = () => {
   const handleEditClick = async (complaint) => {
     try {
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: {

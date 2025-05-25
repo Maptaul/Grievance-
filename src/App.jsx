@@ -3,6 +3,9 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 import EditComplaint from "./Components/EditComplaint";
+import ViewAssignedComplaint from "./Components/ViewAssignedComplaint";
+import ViewComplaint from "./Components/ViewComplaint";
+import ViewOngoingComplaint from "./Components/ViewOngoingComplaint";
 import Dashboard from "./Layouts/Dashboard";
 import Root from "./Layouts/Root";
 import ComplaintCategory from "./pages/ComplaintCategory";
@@ -11,13 +14,13 @@ import AdminHome from "./pages/Dashboard/AdminHome";
 import AllComplaints from "./pages/Dashboard/AllComplaints";
 import AssignedComplaints from "./pages/Dashboard/AssignedComplaints";
 import DashboardHome from "./pages/Dashboard/DashboardHome";
-import EmployeeHome from "./pages/Dashboard/EmployeeHome";
+import EmployeeHome from "./pages/Dashboard/EmployeeHome.jsx";
 import Employees from "./pages/Dashboard/Employees";
 import ManageUsers from "./pages/Dashboard/ManageUsers";
 import OngoingComplaints from "./pages/Dashboard/OngoingComplaints";
 import PendingComplaints from "./pages/Dashboard/PendingComplaints";
 import Profile from "./pages/Dashboard/Profile";
-import ResolvedComplaints from "./pages/Dashboard/ResolvedComplaints";
+import ResolvedComplaints from "./pages/Dashboard/ResolvedComplaints.jsx";
 import UserHome from "./pages/Dashboard/UserHome";
 import ViewedComplaints from "./pages/Dashboard/ViewedComplaints";
 import WardWiseView from "./pages/Dashboard/WardWiseView";
@@ -29,6 +32,7 @@ import SignUp from "./pages/SignUp";
 import SubmitComplaint from "./pages/SubmitComplaint";
 import { AuthContext } from "./Providers/AuthProvider";
 import PrivateRoute from "./Routes/PrivateRoute";
+import ViewResolvedComplaint from "./Components/ViewResolvedComplaint.jsx";
 
 function App() {
   const { role } = useContext(AuthContext);
@@ -176,6 +180,38 @@ function App() {
             }
           />
           <Route path="WardWiseView" element={<WardWiseView />} />
+          <Route
+            path="ViewComplaint/:id"
+            element={
+              <PrivateRoute>
+                <ViewComplaint />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="ViewAssignedComplaint/:id"
+            element={
+              <PrivateRoute>
+                <ViewAssignedComplaint />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="viewOngoingComplaint/:id"
+            element={
+              <PrivateRoute>
+                <ViewOngoingComplaint />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="viewResolvedComplaint/:id"
+            element={
+              <PrivateRoute>
+                <ViewResolvedComplaint />
+              </PrivateRoute>
+            }
+          />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

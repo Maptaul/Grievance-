@@ -40,6 +40,7 @@ const EmployeeHome = () => {
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState("stats");
   const [complaints, setComplaints] = useState([]);
+  const [userData, setUserData] = useState(null); // State for fetched user data
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,8 +48,9 @@ const EmployeeHome = () => {
       setLoading(true);
       const fetchData = async () => {
         try {
+          // Fetch complaints
           const complaintsResponse = await fetch(
-            `https://grievance-server.vercel.app/complaints/employee/${user._id}`
+            `http://localhost:3000/complaints/employee/${user._id}`
           );
           if (!complaintsResponse.ok)
             throw new Error(t("failed_to_fetch_complaints"));
@@ -72,6 +74,14 @@ const EmployeeHome = () => {
               (c) => c.status === t("status_resolved")
             ).length,
           });
+
+          // Fetch user data for name and photo
+          const userResponse = await fetch(
+            `http://localhost:3000/users/${user.email}`
+          );
+          if (!userResponse.ok) throw new Error(t("failed_to_fetch_user_data"));
+          const userData = await userResponse.json();
+          setUserData(userData);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -82,7 +92,7 @@ const EmployeeHome = () => {
     } else {
       setLoading(false);
     }
-  }, [role, user?._id, t]);
+  }, [role, user?._id, user?.email, t]);
 
   // Process chart data
   const categoryData = complaints.reduce((acc, complaint) => {
@@ -132,7 +142,7 @@ const EmployeeHome = () => {
           ? t("status_resolved")
           : complaint.status;
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -181,6 +191,13 @@ const EmployeeHome = () => {
     );
   }
 
+  // Fallback user data
+  const defaultUser = {
+    name: user?.displayName || t("employee"),
+    photo: user?.photoURL || "https://via.placeholder.com/80",
+  };
+  const profileData = { ...defaultUser, ...userData };
+
   return (
     <div className="p-2 sm:p-4 md:p-6 lg:p-8 min-h-screen bg-gray-50 font-poppins">
       <style>
@@ -206,13 +223,13 @@ const EmployeeHome = () => {
           {/* Welcome Section */}
           <div className="bg-gray-200 p-4 rounded-lg shadow-sm flex items-center space-x-3 animate-fade-in">
             <img
-              src={user?.photoURL || "https://via.placeholder.com/80"}
+              src={profileData.photo}
               alt={t("profile_image_alt")}
               className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover transform hover:scale-105 transition-transform duration-300"
             />
             <div>
               <h2 className="text-2xl font-semibold text-gray-800">
-                {t("welcome_employee")}, {user?.displayName || t("employee")}!
+                {t("welcome_employee")}, {profileData.name}!
               </h2>
               <p className="mt-1 text-gray-600 text-base">
                 {t("manage_tasks_message")}

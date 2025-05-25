@@ -20,8 +20,8 @@ const ResolvedComplaints = () => {
     const fetchData = async () => {
       try {
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("https://grievance-server.vercel.app/complaints"),
-          fetch("https://grievance-server.vercel.app/users"),
+          fetch("http://localhost:3000/complaints"),
+          fetch("http://localhost:3000/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
@@ -31,11 +31,16 @@ const ResolvedComplaints = () => {
         );
 
         // Role-based filtering
-        if (role === "citizen" || role === "employee") {
+        if (role === "citizen") {
           filteredComplaints = filteredComplaints.filter(
             (complaint) => complaint.email === user.email
           );
-        }
+        } else if (role === "employee") {
+          filteredComplaints = filteredComplaints.filter(
+            (complaint) =>
+              complaint.employeeId?.toString() === user._id?.toString()
+          );
+        } // Administrative role shows all resolved complaints (no additional filtering)
 
         setComplaints(filteredComplaints);
         const users = await employeesRes.json();
@@ -68,7 +73,7 @@ const ResolvedComplaints = () => {
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
 
   const handleViewClick = (complaint) => {
-    navigate(`/dashboard/editComplaint/${complaint._id}`, {
+    navigate(`/dashboard/viewResolvedComplaint/${complaint._id}`, {
       state: { complaint },
     });
   };
@@ -218,7 +223,7 @@ const ResolvedComplaints = () => {
             ))
           ) : (
             <p className="text-gray-600 text-center">
-              {t("no_pending_complaints")}
+              {t("no_resolved_complaints")}
             </p>
           )}
         </div>

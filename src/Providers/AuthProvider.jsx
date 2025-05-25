@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
         role: "citizen",
         createdAt: new Date().toISOString(),
       };
-      await axios.post("https://grievance-server.vercel.app/users", userData);
+      await axios.post("http://localhost:3000/users", userData);
       setRole("citizen");
       return userCredential;
     } catch (error) {
@@ -50,7 +50,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Create employee user without affecting current session
   const createEmployeeUser = async (email, password) => {
     const secondaryAuth = getAuth(secondaryApp);
     try {
@@ -59,7 +58,6 @@ const AuthProvider = ({ children }) => {
         email,
         password
       );
-      // Optionally, sign out the secondary auth instance
       await secondaryAuth.signOut();
       return userCredential;
     } catch (error) {
@@ -98,32 +96,56 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
       if (currentUser) {
         try {
           const email = currentUser.email.toLowerCase();
           console.log("Fetching role for email:", email);
           const response = await axios.get(
-            `https://grievance-server.vercel.app/users/${email}`
+            `http://localhost:3000/users/${email}`
           );
-          if (response.data && response.data.role) {
-            setRole(response.data.role);
-            console.log("User role fetched:", response.data.role);
+          const mongoUser = response.data;
+          console.log("MongoDB user data:", mongoUser);
+
+          if (mongoUser && mongoUser.email) {
+            // Merge Firebase user with MongoDB user data, including _id
+            setUser({
+              ...currentUser,
+              _id: mongoUser._id, // Set MongoDB _id
+              email: mongoUser.email,
+              name: mongoUser.name,
+              role: mongoUser.role,
+            });
+            setRole(mongoUser.role);
+            console.log("User role fetched:", mongoUser.role);
           } else {
-            setRole("citizen");
-            console.warn("No role found, defaulting to 'citizen'");
-            await axios.post("https://grievance-server.vercel.app/users", {
+            // If no MongoDB user exists, create one with default role 'citizen'
+            const userData = {
               email,
               role: "citizen",
               createdAt: new Date().toISOString(),
+            };
+            const createResponse = await axios.post(
+              "http://localhost:3000/users",
+              userData
+            );
+            const newMongoUser = createResponse.data;
+            setUser({
+              ...currentUser,
+              _id: newMongoUser._id, // Set new MongoDB _id if available
+              email,
+              role: "citizen",
             });
+            setRole("citizen");
+            console.warn("No role found, defaulted to 'citizen'");
           }
         } catch (error) {
           console.error("Error fetching user role:", error);
           setError(error.message || "Failed to fetch user role");
+          setUser(currentUser); // Fallback to Firebase user
           setRole("citizen");
         }
       } else {
+        setUser(null);
         setRole(null);
         setError(null);
       }
@@ -151,8 +173,8 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
     googleSignIn,
     resetPassword,
-    displayName, // add to context
-    photoURL, // add to context
+    displayName,
+    photoURL,
   };
 
   return (

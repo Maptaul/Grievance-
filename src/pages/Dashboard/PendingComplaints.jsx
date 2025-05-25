@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
 import { AuthContext } from "../../Providers/AuthProvider";
@@ -8,6 +9,7 @@ import { AuthContext } from "../../Providers/AuthProvider";
 const PendingComplaints = () => {
   const { t } = useTranslation();
   const { user, role } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [complaints, setComplaints] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,12 +19,19 @@ const PendingComplaints = () => {
   const [sortBy, setSortBy] = useState("timestamp");
   const [sortDirection, setSortDirection] = useState("desc");
 
+  // Multi-step dropdown states
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedDesignation, setSelectedDesignation] = useState(null);
+  const [departmentSearch, setDepartmentSearch] = useState("");
+  const [designationSearch, setDesignationSearch] = useState("");
+  const [employeeSearch, setEmployeeSearch] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [complaintsResponse, employeesResponse] = await Promise.all([
-          fetch("https://grievance-server.vercel.app/complaints"),
-          fetch("https://grievance-server.vercel.app/users"),
+          fetch("http://localhost:3000/complaints"),
+          fetch("http://localhost:3000/users"),
         ]);
         if (!complaintsResponse.ok)
           throw new Error(t("failed_to_fetch_complaints"));
@@ -30,7 +39,8 @@ const PendingComplaints = () => {
           throw new Error(t("failed_to_fetch_employees"));
         const complaintsData = await complaintsResponse.json();
         const users = await employeesResponse.json();
-        setEmployees(users.filter((emp) => emp.role === "employee"));
+        const employeeList = users.filter((emp) => emp.role === "employee");
+        setEmployees(employeeList);
 
         // Role-based filtering for Pending status
         let filteredComplaints = complaintsData.filter(
@@ -56,17 +66,23 @@ const PendingComplaints = () => {
   }, [role, user, t]);
 
   const handleViewClick = (complaint) => {
-    // Open modal for all roles; update status only for admin
-    setSelectedComplaint(complaint);
     if (role === "administrative") {
+      // Redirect to a new page for admins
+      navigate(`/dashboard/viewComplaint/${complaint._id}`, {
+        state: { complaint },
+      });
+      // Update status to "Viewed" for admin
       handleUpdateStatus(complaint);
+    } else {
+      // Open modal for citizens and employees
+      setSelectedComplaint(complaint);
     }
   };
 
   const handleUpdateStatus = async (complaint) => {
     try {
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
+        `http://localhost:3000/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -115,7 +131,7 @@ const PendingComplaints = () => {
 
     try {
       const response = await fetch(
-        `https://grievance-server.vercel.app/complaints/${complaintId}`,
+        `http://localhost:3000/complaints/${complaintId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -127,13 +143,16 @@ const PendingComplaints = () => {
         throw new Error(`${t("failed_to_assign_complaint")}: ${errorText}`);
       }
 
-      const updatedComplaints = complaints.filter(
-        (c) => c._id !== complaintId // Remove the assigned complaint from Pending list
-      );
+      // Remove the assigned complaint from the local state
+      const updatedComplaints = complaints.filter((c) => c._id !== complaintId);
       setComplaints(updatedComplaints);
+
+      // Close the modal and dropdown
       setSelectedComplaint(null);
       setShowAssignDropdown(false);
+      resetAssignDropdown();
 
+      // Show success message and navigate back after a short delay
       await Swal.fire({
         icon: "success",
         title: t("assigned"),
@@ -141,6 +160,13 @@ const PendingComplaints = () => {
         timer: 1500,
         showConfirmButton: false,
       });
+
+      // Try to go back in history, fallback to pending complaints page
+      if (window.history.length > 2) {
+        navigate(-1);
+      } else {
+        navigate("/dashboard/ManageComplaints/pending");
+      }
     } catch (err) {
       console.error("Error assigning complaint:", err.message);
       Swal.fire({
@@ -151,9 +177,18 @@ const PendingComplaints = () => {
     }
   };
 
+  const resetAssignDropdown = () => {
+    setSelectedDepartment(null);
+    setSelectedDesignation(null);
+    setDepartmentSearch("");
+    setDesignationSearch("");
+    setEmployeeSearch("");
+  };
+
   const closeModal = () => {
     setSelectedComplaint(null);
     setShowAssignDropdown(false);
+    resetAssignDropdown();
   };
 
   const sortedComplaints = [...complaints].sort((a, b) => {
@@ -173,6 +208,38 @@ const PendingComplaints = () => {
 
   const toggleSort = () =>
     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+
+  // Extract unique departments and designations
+  const departments = [
+    ...new Set(employees.map((emp) => emp.department)),
+  ].filter(Boolean);
+  const designations = selectedDepartment
+    ? [
+        ...new Set(
+          employees
+            .filter((emp) => emp.department === selectedDepartment)
+            .map((emp) => emp.designation)
+        ),
+      ].filter(Boolean)
+    : [];
+  const filteredEmployees = selectedDesignation
+    ? employees.filter(
+        (emp) =>
+          emp.department === selectedDepartment &&
+          emp.designation === selectedDesignation
+      )
+    : [];
+
+  // Search filtering
+  const filteredDepartments = departments.filter((dept) =>
+    dept.toLowerCase().includes(departmentSearch.toLowerCase())
+  );
+  const filteredDesignations = designations.filter((desg) =>
+    desg.toLowerCase().includes(designationSearch.toLowerCase())
+  );
+  const filteredEmployeeNames = filteredEmployees.filter((emp) =>
+    emp.name.toLowerCase().includes(employeeSearch.toLowerCase())
+  );
 
   if (loading) {
     return <Loading />;
@@ -201,6 +268,11 @@ const PendingComplaints = () => {
           }
           .hover-glow:hover { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
           .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+          .dropdown-slide { animation: dropdownSlide 0.3s ease-out; }
+          @keyframes dropdownSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
         `}
       </style>
       <div className="space-y-8 max-w-7xl mx-auto">
@@ -380,9 +452,9 @@ const PendingComplaints = () => {
           </p>
         )}
 
-        {/* Modal for Complaint Details */}
-        {selectedComplaint && (
-          <div className=" inset-0 bg-opacity-75 flex items-center justify-center z-50">
+        {/* Modal for Complaint Details (for non-admin roles) */}
+        {selectedComplaint && role !== "administrative" && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
             <div className="bg-white p-4 md:p-6 rounded-xl shadow-xl max-w-lg w-full mx-4 slide-in">
               <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2 flex items-center">
                 <svg
@@ -561,23 +633,150 @@ const PendingComplaints = () => {
                         {t("assign_complaint")}
                       </button>
                       {showAssignDropdown && (
-                        <div className="absolute top-full left-0 mt-2 w-full sm:w-64 border rounded-md shadow-lg bg-white z-10 max-h-48 overflow-y-auto">
-                          {employees.length > 0 ? (
-                            employees.map((emp) => (
-                              <button
-                                key={emp._id}
-                                onClick={() =>
-                                  handleAssign(selectedComplaint._id, emp._id)
+                        <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 p-4 overflow-y-auto dropdown-slide">
+                          <button
+                            onClick={() => {
+                              setShowAssignDropdown(false);
+                              resetAssignDropdown();
+                            }}
+                            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+
+                          {/* Step 1: Select Department */}
+                          {!selectedDepartment && (
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                {t("select_department")}
+                              </h3>
+                              <input
+                                type="text"
+                                placeholder={t("search_department")}
+                                value={departmentSearch}
+                                onChange={(e) =>
+                                  setDepartmentSearch(e.target.value)
                                 }
-                                className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-b last:border-b-0"
+                                className="w-full p-2 border border-gray-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                              />
+                              {filteredDepartments.length > 0 ? (
+                                filteredDepartments.map((dept) => (
+                                  <button
+                                    key={dept}
+                                    onClick={() => setSelectedDepartment(dept)}
+                                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-b last:border-b-0"
+                                  >
+                                    {dept}
+                                  </button>
+                                ))
+                              ) : (
+                                <p className="px-4 py-2 text-gray-500">
+                                  {t("no_departments_found")}
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Step 2: Select Designation */}
+                          {selectedDepartment && !selectedDesignation && (
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setSelectedDepartment(null);
+                                  setDepartmentSearch("");
+                                }}
+                                className="text-gray-600 hover:text-gray-800 mb-2"
                               >
-                                {emp.name} ({emp.role})
+                                ← {t("back")}
                               </button>
-                            ))
-                          ) : (
-                            <p className="px-4 py-2 text-gray-500">
-                              {t("no_employees_available")}
-                            </p>
+                              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                {t("select_designation")}
+                              </h3>
+                              <input
+                                type="text"
+                                placeholder={t("search_designation")}
+                                value={designationSearch}
+                                onChange={(e) =>
+                                  setDesignationSearch(e.target.value)
+                                }
+                                className="w-full p-2 border border-gray-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                              />
+                              {filteredDesignations.length > 0 ? (
+                                filteredDesignations.map((desg) => (
+                                  <button
+                                    key={desg}
+                                    onClick={() => setSelectedDesignation(desg)}
+                                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-b last:border-b-0"
+                                  >
+                                    {desg}
+                                  </button>
+                                ))
+                              ) : (
+                                <p className="px-4 py-2 text-gray-500">
+                                  {t("no_designations_found")}
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Step 3: Select Employee */}
+                          {selectedDepartment && selectedDesignation && (
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setSelectedDesignation(null);
+                                  setDesignationSearch("");
+                                }}
+                                className="text-gray-600 hover:text-gray-800 mb-2"
+                              >
+                                ← {t("back")}
+                              </button>
+                              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                {t("select_employee")}
+                              </h3>
+                              <input
+                                type="text"
+                                placeholder={t("search_employee")}
+                                value={employeeSearch}
+                                onChange={(e) =>
+                                  setEmployeeSearch(e.target.value)
+                                }
+                                className="w-full p-2 border border-gray-300 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                              />
+                              {filteredEmployeeNames.length > 0 ? (
+                                filteredEmployeeNames.map((emp) => (
+                                  <button
+                                    key={emp._id}
+                                    onClick={() =>
+                                      handleAssign(
+                                        selectedComplaint._id,
+                                        emp._id
+                                      )
+                                    }
+                                    className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-b last:border-b-0"
+                                  >
+                                    {emp.name}
+                                  </button>
+                                ))
+                              ) : (
+                                <p className="px-4 py-2 text-gray-500">
+                                  {t("no_employees_found")}
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
                       )}
