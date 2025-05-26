@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -47,35 +46,6 @@ const NavBar = () => {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
-  };
-
-  // Framer Motion variants for the Complaints/Dashboard button
-  const buttonVariants = {
-    idle: {
-      scale: [1, 1.05, 1],
-      opacity: [1, 0.7, 1],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-    hover: {
-      scale: 1.1,
-      opacity: 1,
-      backgroundColor: "#0f766e",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-    tap: {
-      scale: 0.95,
-      opacity: 1,
-      transition: {
-        duration: 0.1,
-      },
-    },
   };
 
   return (

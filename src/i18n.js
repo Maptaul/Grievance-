@@ -236,6 +236,8 @@ const resources = {
       add_success: "The employee has been added successfully!",
       upload_error: "Failed to upload photo. Please try again.",
 
+      view_more_videos: "View More Videos",
+
       name_required: "Name is required",
       designation_required: "Designation is required",
       mobile_required: "Mobile number is required",
@@ -382,6 +384,7 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       show_all: "Show All",
       category_unknown: "Unknown Category",
       error_fetching_complaints: "Error fetching complaints",
+      all_videos: "All Videos",
 
       // Notice Translations
       notice_1: "We're Hiring: Data Analyst Needed!",
@@ -1091,6 +1094,7 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       already_have_account: "ইতিমধ্যে অ্যাকাউন্ট আছে?",
       registration_successful: "নিবন্ধন সফল!",
       profile_image: "প্রোফাইল ছবি",
+      all_videos: "সমস্ত ভিডিও",
 
       history: "ইতিহাস",
       no_history_available: "কোনো ইতিহাস উপলব্ধ নেই",
@@ -1278,6 +1282,7 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       oss_description: `শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস) একটি বিপ্লবী ডিজিটাল নাগরিক সেবা প্ল্যাটফর্ম। এটি জিওনেক্স আইটি সার্ভিসেস কো. এলএলসি এবং চট্টগ্রাম সিটি কর্পোরেশনের সহযোগিতায় উন্নয়ন করা হয়েছে। এই স্মার্ট, একক প্ল্যাটফর্মটি সমস্ত মূল পৌর ও জনসেবা একত্রিত করার জন্য ডিজাইন করা হয়েছে—যা দ্রুত, কাগজবিহীন এবং আরও স্বচ্ছ সেবা প্রদান সক্ষম করে।
       এই উদ্যোগটি নাগরিকদের স্থানীয় সরকারের সাথে যোগাযোগের পদ্ধতি পরিবর্তন করার লক্ষ্যে গুরুত্বপূর্ণ সেবাগুলির কেন্দ্রীভূত অ্যাক্সেস প্রদান করে, বিলম্ব কমায় এবং প্রশাসনিক অকার্যকারিতা দূর করে। শাপলা ওএসএস কাগজের ব্যবহার কমিয়ে এবং পরিবেশগতভাবে দায়িত্বশীল অনুশীলনকে সমর্থন করে টেকসই শাসনকে প্রচার করে। এটি ডিজিটাল বাংলাদেশের জাতীয় দৃষ্টিভঙ্গি বাস্তবায়নের এবং ভবিষ্যত-প্রস্তুত স্মার্ট শহরগুলি গড়ে তোলার দিকে একটি গুরুত্বপূর্ণ পদক্ষেপ।
       সর্বোপরি, শাপলা ওএসএস নাগরিকদের অভিজ্ঞতা উন্নত করতে কার্যকর, নিরাপদ এবং বিশ্বাসযোগ্য জনসেবা প্রদান করতে প্রতিশ্রুতিবদ্ধ—এভাবে শাসনে বৃহত্তর স্বচ্ছতা, জবাবদিহিতা এবং জনসাধারণের বিশ্বাস Foster করে।`,
+      view_more_videos: "আরও ভিডিও দেখুন",
 
       // ProgressSection Translations
       progress_title: "নেতৃত্বে চট্টগ্রামের অগ্রগতি",
