@@ -12,7 +12,9 @@ const Welcome = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* Text Content */}
           <div>
-            <h2 className="text-3xl font-bold mb-4">{t("welcome_title")}</h2>
+            <h2 className="text-3xl text-center md:text-left font-bold mb-4">
+              {t("welcome_title")}
+            </h2>
             <p className="text-gray-700 text-justify leading-relaxed whitespace-normal">
               {t("welcome_description")}
             </p>

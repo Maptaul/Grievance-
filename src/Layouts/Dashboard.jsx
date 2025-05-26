@@ -36,7 +36,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchComplaintCounts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/complaints");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/complaints"
+        );
         if (!response.ok) throw new Error(t("error_fetch_complaints"));
         const data = await response.json();
         let counts = {
@@ -578,12 +580,12 @@ const Dashboard = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="md:hidden p-2 bg-blue-500 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
+        className="md:hidden p-3 bg-blue-500 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
       >
         {isSidebarOpen ? (
-          <FaTimes className="text-lg text-white" />
+          <FaTimes className="text-2xl text-white" />
         ) : (
-          <FaBars className="text-lg text-white" />
+          <FaBars className="text-2xl text-white" />
         )}
       </button>
 

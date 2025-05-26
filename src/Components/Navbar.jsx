@@ -151,34 +151,27 @@ const NavBar = () => {
           {/* Centered Welcome Text */}
           <div className="flex-1 flex justify-center items-center px-2">
             <span className="text-gray-800 font-semibold text-xs sm:text-sm md:text-base lg:text-lg text-center">
-              {t("welcome_to_ccc")}
+              {/* Show "ccc" on small screens, full text on md+ */}
+              <span className="block sm:hidden">{t("ccc")}</span>
+              <span className="hidden sm:block">{t("welcome_to_ccc")}</span>
             </span>
           </div>
-
-          {/* Buttons and Dropdowns */}
           <div className="flex items-center justify-end gap-2 sm:gap-3">
-            <motion.div
-              variants={buttonVariants}
-              initial="idle"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              {user ? (
-                <Link
-                  to="/dashboard"
-                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
-                >
-                  {t("dashboard")}
-                </Link>
-              ) : (
-                <Link
-                  to="/complaint-category"
-                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
-                >
-                  {t("complaints")}
-                </Link>
-              )}
-            </motion.div>
+            {user ? (
+              <Link
+                to="/dashboard"
+                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+              >
+                {t("dashboard")}
+              </Link>
+            ) : (
+              <Link
+                to="/complaint-category"
+                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+              >
+                {t("complaints")}
+              </Link>
+            )}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}

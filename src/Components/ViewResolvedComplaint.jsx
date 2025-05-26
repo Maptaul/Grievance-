@@ -18,8 +18,8 @@ const ViewResolvedComplaint = () => {
       try {
         setLoading(true);
         const [complaintRes, employeesRes] = await Promise.all([
-          fetch(`http://localhost:3000/complaints/${id}`),
-          fetch("http://localhost:3000/users"),
+          fetch(`https://grievance-server.vercel.app/complaints/${id}`),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintRes.ok) {
           const errorText = await complaintRes.text();

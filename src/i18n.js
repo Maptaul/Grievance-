@@ -263,6 +263,15 @@ const resources = {
       "category.The Sidewalk": "The Sidewalk",
       "category.Others": "Others",
 
+      oss_header: "One Stop Service (OSS)",
+      oss_image_alt: "One Stop Service Illustration",
+      oss_title: "One Stop Service",
+      oss_description: `A Revolutionary Digital Citizen Service Platform
+Shapla OSS is a visionary, citizen-focused digital service platform developed by JIONEX IT Services Co. LLC in collaboration with the Chattogram City Corporation. This smart, unified platform is designed to integrate all key municipal and public services into a single digital system—enabling faster, paperless, and more transparent service delivery.
+The initiative aims to transform how citizens interact with local government by centralizing access to vital services, reducing delays, and eliminating bureaucratic inefficiencies. Shapla OSS promotes sustainable governance by minimizing paper usage and supporting environmentally responsible practices. It is a significant step toward realizing the national vision of Digital Bangladesh and building future-ready Smart Cities.
+
+Above all, Shapla OSS is committed to enhancing the citizen experience by delivering efficient, secure, and trustworthy public services—thereby fostering greater transparency, accountability, and public trust in governance.`,
+
       // SignUp Component Translations
       register_account: "Register an Account",
       full_name: "Full Name",
@@ -385,6 +394,8 @@ const resources = {
       notice_8: "Workshop Alert: Learn About Smart City Technologies!",
       notice_9: "Emergency Services App Now Available – Download Today!",
       notice_10: "Follow Us on Social Media for Latest Updates!",
+      notice_11:
+        "Visit Shapla One Stop Service (Shapla OSS) by Chattogram City Corporation",
 
       // Welcome Translations
       welcome_title: "A Smart and Sustainable City",
@@ -617,6 +628,11 @@ const resources = {
 
       joined: "Joined",
 
+      oss_link_text: "Visit Shapla One Stop Service (Shapla OSS)",
+      oss_link_aria: "Visit Shapla OSS by Chattogram City Corporation",
+      oss_link: "https://oss.ccc.gov.bd",
+      oss_link_title: "Shapla OSS - One Stop Service Platform",
+
       // OngoingProjects Translations
       ongoing_projects_title: "Ongoing Projects",
       ongoing_projects: {
@@ -705,12 +721,14 @@ const resources = {
       logo_alt_ccc: "Chattogram City Corporation Logo",
       navigation_title: "Quick Link",
 
-      batail_hill_tigerpass: "Batail Hill, Tigerpass, Chattogram",
+      batali_hill_tigerpass: "Batali Hill, Tigerpass, Chattogram",
       phone_label: "Phone",
       email_label: "Email",
       fax_label: "Fax",
-      info_ccc_email: "info@ccc.gov.bd",
-      programmer_ccc_email: "programmer@ccc.gov.bd",
+      info_ccc_email: "smart@ccc.gov.bd",
+
+      ccc: "Chattogram City Corporation",
+
       // EmployeeHome Translations
 
       manage_tasks: "Manage Tasks",
@@ -1088,6 +1106,8 @@ const resources = {
       notice_8: "ওয়ার্কশপ সতর্কতা: স্মার্ট সিটি প্রযুক্তি সম্পর্কে জানুন!",
       notice_9: "জরুরি সেবা অ্যাপ এখন উপলব্ধ – আজই ডাউনলোড করুন!",
       notice_10: "সর্বশেষ আপডেটের জন্য আমাদের সোশ্যাল মিডিয়ায় ফলো করুন!",
+      notice_11:
+        "চট্টগ্রাম সিটি কর্পোরেশন কর্তৃক শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস) পরিদর্শন করুন।",
 
       // Welcome Translations
       welcome_title: "একটি স্মার্ট এবং টেকসই শহর",
@@ -1251,6 +1271,13 @@ const resources = {
       no_viewed_complaints: "কোনো দেখা অভিযোগ নেই",
       assigned_employee: "নিযুক্ত কর্মচারী",
       not_applicable: "প্রযোজ্য নয়",
+
+      oss_header: "শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস)",
+      oss_image_alt: "শাপলা ওয়ান স্টপ সার্ভিস প্ল্যাটফর্ম",
+      oss_title: "শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস)",
+      oss_description: `শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস) একটি বিপ্লবী ডিজিটাল নাগরিক সেবা প্ল্যাটফর্ম। এটি জিওনেক্স আইটি সার্ভিসেস কো. এলএলসি এবং চট্টগ্রাম সিটি কর্পোরেশনের সহযোগিতায় উন্নয়ন করা হয়েছে। এই স্মার্ট, একক প্ল্যাটফর্মটি সমস্ত মূল পৌর ও জনসেবা একত্রিত করার জন্য ডিজাইন করা হয়েছে—যা দ্রুত, কাগজবিহীন এবং আরও স্বচ্ছ সেবা প্রদান সক্ষম করে।
+      এই উদ্যোগটি নাগরিকদের স্থানীয় সরকারের সাথে যোগাযোগের পদ্ধতি পরিবর্তন করার লক্ষ্যে গুরুত্বপূর্ণ সেবাগুলির কেন্দ্রীভূত অ্যাক্সেস প্রদান করে, বিলম্ব কমায় এবং প্রশাসনিক অকার্যকারিতা দূর করে। শাপলা ওএসএস কাগজের ব্যবহার কমিয়ে এবং পরিবেশগতভাবে দায়িত্বশীল অনুশীলনকে সমর্থন করে টেকসই শাসনকে প্রচার করে। এটি ডিজিটাল বাংলাদেশের জাতীয় দৃষ্টিভঙ্গি বাস্তবায়নের এবং ভবিষ্যত-প্রস্তুত স্মার্ট শহরগুলি গড়ে তোলার দিকে একটি গুরুত্বপূর্ণ পদক্ষেপ।
+      সর্বোপরি, শাপলা ওএসএস নাগরিকদের অভিজ্ঞতা উন্নত করতে কার্যকর, নিরাপদ এবং বিশ্বাসযোগ্য জনসেবা প্রদান করতে প্রতিশ্রুতিবদ্ধ—এভাবে শাসনে বৃহত্তর স্বচ্ছতা, জবাবদিহিতা এবং জনসাধারণের বিশ্বাস Foster করে।`,
 
       // ProgressSection Translations
       progress_title: "নেতৃত্বে চট্টগ্রামের অগ্রগতি",
@@ -1416,6 +1443,11 @@ const resources = {
 
       only_employees_can_update_status:
         "শুধুমাত্র কর্মচারীরা অভিযোগের অবস্থা আপডেট করতে পারেন",
+
+      ccc: "চট্টগ্রাম সিটি কর্পোরেশন",
+
+      oss_link_text: "শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস)",
+      oss_link: "https://oss.ccc.org.bd/",
 
       // EmployeeHome Translations
 

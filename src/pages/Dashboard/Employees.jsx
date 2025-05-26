@@ -29,7 +29,7 @@ const Employees = () => {
     const fetchEmployees = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/users?role=employee"
+          "https://grievance-server.vercel.app/users?role=employee"
         );
         if (!response.ok) throw new Error(t("fetch_error"));
         const data = await response.json();
@@ -72,21 +72,24 @@ const Employees = () => {
       await createEmployeeUser(data.email, data.password);
 
       // Save user in backend
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: data.name,
-          designation: data.designation,
-          mobileNumber: data.mobileNumber,
-          email: data.email,
-          department: data.department,
-          password: data.password,
-          photo: photoUrl || "https://via.placeholder.com/150",
-          role: "employee",
-          suspended: false,
-        }),
-      });
+      const response = await fetch(
+        "https://grievance-server.vercel.app/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: data.name,
+            designation: data.designation,
+            mobileNumber: data.mobileNumber,
+            email: data.email,
+            department: data.department,
+            password: data.password,
+            photo: photoUrl || "https://via.placeholder.com/150",
+            role: "employee",
+            suspended: false,
+          }),
+        }
+      );
       if (!response.ok) throw new Error(t("add_error"));
 
       const addedEmployee = await response.json();
@@ -119,11 +122,14 @@ const Employees = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/users/${email}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ suspended: !currentSuspendedStatus }),
-        });
+        const response = await fetch(
+          `https://grievance-server.vercel.app/users/${email}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ suspended: !currentSuspendedStatus }),
+          }
+        );
         if (!response.ok) throw new Error(t(`fail_${action}`));
 
         setEmployees(

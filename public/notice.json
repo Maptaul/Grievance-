@@ -1,12 +1,57 @@
 [
-  { "id": 1, "title_key": "notice_1", "link": "/careers/data-analyst" },
-  { "id": 2, "title_key": "notice_2", "link": "/digital-platform" },
-  { "id": 3, "title_key": "notice_3", "link": "/internships" },
-  { "id": 4, "title_key": "notice_4", "link": "/green-city" },
-  { "id": 5, "title_key": "notice_5", "link": "/smart-traffic" },
-  { "id": 6, "title_key": "notice_6", "link": "/feedback" },
-  { "id": 7, "title_key": "notice_7", "link": "/careers/sustainability-specialist" },
-  { "id": 8, "title_key": "notice_8", "link": "/workshops" },
-  { "id": 9, "title_key": "notice_9", "link": "/emergency-app" },
-  { "id": 10, "title_key": "notice_10", "link": "/social-media" }
+  {
+    "id": 1,
+    "title_key": "notice_1",
+    "link": "/careers/data-analyst"
+  },
+  {
+    "id": 2,
+    "title_key": "notice_2",
+    "link": "https://www.shaplaoss.com/"
+  },
+  {
+    "id": 3,
+    "title_key": "notice_3",
+    "link": "/internships"
+  },
+  {
+    "id": 4,
+    "title_key": "notice_4",
+    "link": "/green-city"
+  },
+  {
+    "id": 5,
+    "title_key": "notice_5",
+    "link": "/smart-traffic"
+  },
+  {
+    "id": 6,
+    "title_key": "notice_6",
+    "link": "/feedback"
+  },
+  {
+    "id": 7,
+    "title_key": "notice_7",
+    "link": "/careers/sustainability-specialist"
+  },
+  {
+    "id": 8,
+    "title_key": "notice_8",
+    "link": "/workshops"
+  },
+  {
+    "id": 9,
+    "title_key": "notice_9",
+    "link": "/emergency-app"
+  },
+  {
+    "id": 10,
+    "title_key": "notice_10",
+    "link": "/social-media"
+  },
+  {
+    "id": 11,
+    "title_key": "notice_11",
+    "link": "https://www.shaplaoss.com/"
+  }
 ]

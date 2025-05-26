@@ -27,7 +27,9 @@ const ViewOngoingComplaint = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch("http://localhost:3000/users");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/users"
+        );
         if (!response.ok) throw new Error(t("error_fetch_employees"));
         const users = await response.json();
         setEmployees(users.filter((emp) => emp.role === "employee"));
@@ -107,14 +109,17 @@ const ViewOngoingComplaint = () => {
         history: updatedHistory,
       }));
 
-      const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: "Resolved",
-          history: JSON.stringify(updatedHistory),
-        }),
-      });
+      const response = await fetch(
+        `https://grievance-server.vercel.app/complaints/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: "Resolved",
+            history: JSON.stringify(updatedHistory),
+          }),
+        }
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`${t("error_update_status")}: ${errorText}`);

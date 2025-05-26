@@ -105,7 +105,7 @@ const EditComplaint = () => {
         newLocation: updateLocation || undefined,
       };
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaint._id}`,
+        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

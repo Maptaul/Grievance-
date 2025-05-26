@@ -4,6 +4,7 @@ import KeyPillarsSection from "../Components/KeyPillarsSection";
 import MayorMessage from "../Components/MayorMessage";
 import Notice from "../Components/Notice";
 import OngoingProjects from "../Components/OngoingProjects";
+import Oss from "../Components/oss";
 import ProgressSection from "../Components/ProgressSection";
 import Vision from "../Components/Vision";
 import Welcome from "../Components/Welcome";
@@ -34,6 +35,9 @@ const Home = () => {
       </section>
       <section>
         <OngoingProjects />
+      </section>
+      <section>
+        <Oss />
       </section>
       <section>
         <GetInvolved />

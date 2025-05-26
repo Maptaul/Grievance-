@@ -30,8 +30,8 @@ const ViewedComplaints = () => {
     const fetchData = async () => {
       try {
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("http://localhost:3000/complaints"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://grievance-server.vercel.app/complaints"),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
@@ -69,7 +69,9 @@ const ViewedComplaints = () => {
   }, [t, role, user]);
 
   const handleViewClick = (complaint) => {
-    navigate(`/dashboard/viewComplaint/${complaint._id}`, { state: { complaint } });
+    navigate(`/dashboard/viewComplaint/${complaint._id}`, {
+      state: { complaint },
+    });
   };
 
   const handleAssign = async (complaintId, employeeId) => {
@@ -94,7 +96,7 @@ const ViewedComplaints = () => {
       }
 
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaintId}`,
+        `https://grievance-server.vercel.app/complaints/${complaintId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

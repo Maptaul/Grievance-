@@ -31,7 +31,7 @@ const Profile = () => {
       const fetchUserData = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3000/users/${user.email}`
+            `https://grievance-server.vercel.app/users/${user.email}`
           );
           if (!response.ok) {
             throw new Error(t("fetch_user_data_error")); // Translate error message

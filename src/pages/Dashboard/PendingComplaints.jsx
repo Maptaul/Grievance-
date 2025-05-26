@@ -30,8 +30,8 @@ const PendingComplaints = () => {
     const fetchData = async () => {
       try {
         const [complaintsResponse, employeesResponse] = await Promise.all([
-          fetch("http://localhost:3000/complaints"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://grievance-server.vercel.app/complaints"),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintsResponse.ok)
           throw new Error(t("failed_to_fetch_complaints"));
@@ -82,7 +82,7 @@ const PendingComplaints = () => {
   const handleUpdateStatus = async (complaint) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaint._id}`,
+        `https://grievance-server.vercel.app/complaints/${complaint._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -131,7 +131,7 @@ const PendingComplaints = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaintId}`,
+        `https://grievance-server.vercel.app/complaints/${complaintId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

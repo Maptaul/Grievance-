@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
         role: "citizen",
         createdAt: new Date().toISOString(),
       };
-      await axios.post("http://localhost:3000/users", userData);
+      await axios.post("https://grievance-server.vercel.app/users", userData);
       setRole("citizen");
       return userCredential;
     } catch (error) {
@@ -101,7 +101,7 @@ const AuthProvider = ({ children }) => {
           const email = currentUser.email.toLowerCase();
           console.log("Fetching role for email:", email);
           const response = await axios.get(
-            `http://localhost:3000/users/${email}`
+            `https://grievance-server.vercel.app/users/${email}`
           );
           const mongoUser = response.data;
           console.log("MongoDB user data:", mongoUser);
@@ -125,7 +125,7 @@ const AuthProvider = ({ children }) => {
               createdAt: new Date().toISOString(),
             };
             const createResponse = await axios.post(
-              "http://localhost:3000/users",
+              "https://grievance-server.vercel.app/users",
               userData
             );
             const newMongoUser = createResponse.data;

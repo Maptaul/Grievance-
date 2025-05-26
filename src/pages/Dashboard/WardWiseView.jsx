@@ -18,7 +18,9 @@ const WardWiseView = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch("http://localhost:3000/complaints");
+        const response = await fetch(
+          "https://grievance-server.vercel.app/complaints"
+        );
         if (!response.ok) throw new Error(t("fetch_complaints_error")); // Translate error
         const data = await response.json();
         setComplaints(data);
@@ -129,14 +131,17 @@ const WardWiseView = () => {
         },
       ];
 
-      const response = await fetch(`http://localhost:3000/complaints/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: "Resolved",
-          history: JSON.stringify(updatedHistory),
-        }),
-      });
+      const response = await fetch(
+        `https://grievance-server.vercel.app/complaints/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: "Resolved",
+            history: JSON.stringify(updatedHistory),
+          }),
+        }
+      );
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`${t("failed_update_status")}: ${errorText}`);

@@ -23,8 +23,8 @@ const AssignedComplaints = () => {
     const fetchData = async () => {
       try {
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("http://localhost:3000/complaints"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://grievance-server.vercel.app/complaints"),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
@@ -98,7 +98,7 @@ const AssignedComplaints = () => {
     if (role === "employee") {
       try {
         const response = await fetch(
-          `http://localhost:3000/complaints/${complaint._id}`,
+          `https://grievance-server.vercel.app/complaints/${complaint._id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

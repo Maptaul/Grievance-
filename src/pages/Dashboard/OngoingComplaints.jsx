@@ -35,8 +35,8 @@ const OngoingComplaints = () => {
       try {
         setLoading(true); // Ensure loading state is set
         const [complaintsRes, employeesRes] = await Promise.all([
-          fetch("http://localhost:3000/complaints"),
-          fetch("http://localhost:3000/users"),
+          fetch("https://grievance-server.vercel.app/complaints"),
+          fetch("https://grievance-server.vercel.app/users"),
         ]);
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));

@@ -32,7 +32,9 @@ const ViewComplaint = () => {
         }
         setComplaint(complaintData);
 
-        const employeesResponse = await fetch("http://localhost:3000/users");
+        const employeesResponse = await fetch(
+          "https://grievance-server.vercel.app/users"
+        );
         if (!employeesResponse.ok)
           throw new Error(t("failed_to_fetch_employees"));
         const users = await employeesResponse.json();
@@ -59,7 +61,7 @@ const ViewComplaint = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/complaints/${complaintId}`,
+        `https://grievance-server.vercel.app/complaints/${complaintId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

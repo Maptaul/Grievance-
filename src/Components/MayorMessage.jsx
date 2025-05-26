@@ -26,14 +26,14 @@ const MayorMessage = () => {
           </div>
 
           {/* Content */}
-          <div>
+          <div className="text-center ">
             <h3 className="font-semibold text-xl mb-5">
               <span className="text-[#640D5F] block text-2xl py-1">
                 {t("mayor_name")}
               </span>
               <span dangerouslySetInnerHTML={{ __html: t("mayor_title") }} />
             </h3>
-            <p className="italic text-lg text-justify whitespace-normal">
+            <p className=" text-lg text-justify whitespace-normal">
               {t("mayor_message")}
             </p>
           </div>
