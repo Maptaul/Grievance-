@@ -1,6 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaCheckCircle, FaClock, FaUsers } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaExclamationTriangle,
+  FaUsers,
+} from "react-icons/fa";
 import {
   Bar,
   BarChart,
@@ -24,6 +29,7 @@ const EmployeeHome = () => {
   const { t } = useTranslation();
   const [stats, setStats] = useState({
     assignedComplaints: 0,
+    pendingComplaints: 0,
     ongoingComplaints: 0,
     resolvedComplaints: 0,
   });
@@ -42,47 +48,22 @@ const EmployeeHome = () => {
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
         const complaintsData = await complaintsRes.json();
-        console.log("Fetched complaints data:", complaintsData); // Debug log
-
-        let filteredComplaints = [];
-        if (role === "employee" && user?._id) {
-          filteredComplaints = complaintsData.filter((complaint) => {
-            const complaintEmployeeId = complaint.employeeId?.toString() || "";
-            const userId = user._id?.toString() || "";
-            console.log("Employee Filter:", {
-              complaintId: complaint._id,
-              complaintEmployeeId,
-              userId,
-              userRole: role,
-              userEmail: user.email,
-            }); // Enhanced debug log
-            const isAssigned =
-              complaintEmployeeId === userId &&
-              ["Assigned", "Ongoing", "Resolved"].includes(complaint.status);
-            return isAssigned;
-          });
-          if (filteredComplaints.length === 0) {
-            console.warn(
-              "No complaints assigned to employee:",
-              user._id,
-              "Role:",
-              role,
-              "User:",
-              user
-            );
-          }
-        }
-
+        let filteredComplaints = complaintsData.filter(
+          (complaint) => complaint.status === "Resolved"
+        );
         setComplaints(filteredComplaints);
         setStats({
-          assignedComplaints: filteredComplaints.filter(
-            (c) => c.status === "Assigned"
+          assignedComplaints: filteredComplaints.length,
+          pendingComplaints: filteredComplaints.filter(
+            (c) => c.status === t("status_pending")
           ).length,
           ongoingComplaints: filteredComplaints.filter(
-            (c) => c.status === "Ongoing"
+            (c) =>
+              c.status === t("status_viewed") ||
+              c.status === t("status_assigned")
           ).length,
           resolvedComplaints: filteredComplaints.filter(
-            (c) => c.status === "Resolved"
+            (c) => c.status === t("status_resolved")
           ).length,
         });
       } catch (err) {
@@ -92,7 +73,7 @@ const EmployeeHome = () => {
       }
     };
     fetchData();
-  }, [t, role, user]);
+  }, [t]);
 
   // Process chart data
   const categoryData = complaints.reduce((acc, complaint) => {
@@ -105,7 +86,7 @@ const EmployeeHome = () => {
   );
 
   const statusChartData = [
-    { name: t("status_assigned"), value: stats.assignedComplaints },
+    { name: t("status_pending"), value: stats.pendingComplaints },
     { name: t("status_ongoing"), value: stats.ongoingComplaints },
     { name: t("status_resolved"), value: stats.resolvedComplaints },
   ];
@@ -127,7 +108,7 @@ const EmployeeHome = () => {
   // Fallback user data
   const defaultUser = {
     name: user?.displayName || user?.email?.split("@")[0] || t("employee"),
-    photo: user?.photo || "https://via.placeholder.com/80",
+    photo: user?.photoURL || "https://via.placeholder.com/80",
   };
   const profileData = defaultUser;
 
@@ -165,12 +146,20 @@ const EmployeeHome = () => {
           </div>
 
           {/* Stats Cards (Static Display) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
                 title: t("assigned_complaints"),
                 value: stats.assignedComplaints,
                 icon: <FaUsers className="text-3xl text-gray-600" />,
+                bgColor: "bg-gray-100",
+              },
+              {
+                title: t("pending_complaints"),
+                value: stats.pendingComplaints,
+                icon: (
+                  <FaExclamationTriangle className="text-3xl text-red-500" />
+                ),
                 bgColor: "bg-gray-100",
               },
               {
