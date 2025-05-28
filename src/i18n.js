@@ -18,6 +18,7 @@ const resources = {
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
       ccc: "Chittagong City Corporation",
       visit_oss_button: "Visit One Stop Service (Shapla OSS)",
+      OSS: "Shapla OSS",
 
       no_updated_image_available: "No updated image available",
 
@@ -247,6 +248,10 @@ const resources = {
       password_min_length: "Password must be at least 6 characters",
       password_placeholder: "Enter your password",
       view_assigned_complaint: "View Assigned Complaints",
+
+      progress_title: "Progress",
+      view_more_videos: "View More Videos",
+      all_videos: "All Videos",
 
       view_resolved_complaint: "View Resolved Complaints",
 
@@ -1277,6 +1282,7 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       no_viewed_complaints: "কোনো দেখা অভিযোগ নেই",
       assigned_employee: "নিযুক্ত কর্মচারী",
       not_applicable: "প্রযোজ্য নয়",
+      OSS: "শাপলা ওএসএস",
 
       oss_header: "শাপলা ওয়ান স্টপ সার্ভিস (শাপলা ওএসএস)",
       oss_image_alt: "শাপলা ওয়ান স্টপ সার্ভিস প্ল্যাটফর্ম",
@@ -1421,7 +1427,9 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
           },
         },
       },
-
+      progress_title: "অগ্রগতি",
+      view_more_videos: "আরও ভিডিও দেখুন",
+      all_videos: "সব ভিডিও",
       view_assigned_complaint: "নির্ধারিত অভিযোগ দেখুন",
 
       no_assigned_complaints: "কোনো নির্ধারিত অভিযোগ নেই",

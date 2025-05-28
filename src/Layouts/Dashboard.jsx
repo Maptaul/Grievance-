@@ -583,9 +583,9 @@ const Dashboard = () => {
         className="md:hidden p-3 bg-blue-500 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
       >
         {isSidebarOpen ? (
-          <FaTimes className="text-2xl text-white" />
+          <FaTimes className="text-3xl text-white" />
         ) : (
-          <FaBars className="text-2xl text-white" />
+          <FaBars className="text-3xl text-white" />
         )}
       </button>
 

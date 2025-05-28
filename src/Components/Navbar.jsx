@@ -107,6 +107,17 @@ const NavBar = () => {
                     </Link>
                   </li>
                 ) : null}
+                <li>
+                  <a
+                    href="https://www.shaplaoss.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-800 font-medium hover:bg-teal-100 hover:text-teal-600 px-4 py-2 rounded-lg text-sm sm:text-base"
+                    onClick={() => dropdownRef.current.removeAttribute("open")}
+                  >
+                    {t("OSS")}
+                  </a>
+                </li>
               </ul>
             </details>
             <Link to="/" className="flex items-center">

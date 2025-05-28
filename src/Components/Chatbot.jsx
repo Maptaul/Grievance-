@@ -48,9 +48,9 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-4 z-[999]">
+    <div className="fixed bottom-22 right-4 z-[999]">
       {isOpen && (
-        <div className="w-[340px] max-w-[95vw] border border-gray-200 rounded-2xl flex flex-col overflow-hidden bg-white shadow-2xl animate-fade-in-up">
+        <div className="w-[340px] max-w-[90vw] border border-gray-200 rounded-2xl flex flex-col overflow-hidden bg-white shadow-2xl animate-fade-in-up">
           <div className="flex items-center justify-between bg-[#640D5F] text-white px-4 py-2">
             <h4
               className="text-base font-semibold m-0"
