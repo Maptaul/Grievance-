@@ -16,6 +16,8 @@ const resources = {
       complaints: "Complaints",
       language: "Language",
       welcome_to_ccc: "Welcome to the Chittagong City Corporation",
+      ccc: "Chittagong City Corporation",
+      visit_oss_button: "Visit One Stop Service (Shapla OSS)",
 
       no_updated_image_available: "No updated image available",
 
@@ -472,6 +474,11 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
               "Building resilient and eco-friendly urban infrastructure to withstand climate challenges.",
           },
         },
+
+        chatbot_title: "Chatbot",
+        chatbot_close_label: "Close Chatbot",
+        chatbot_input_placeholder: "",
+
         digital_innovation: {
           title: "Digital Innovation",
           description: "Leveraging technology for a smarter city.",
@@ -982,6 +989,8 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       uploaded_image: "আপলোড করা ছবি",
       view_uploaded_image: "আপলোড করা ছবি দেখুন",
 
+      visit_oss_button: "ওএসএস পরিদর্শন করুন(শাপলা ওএসএস)",
+
       // Login Component Translations
       complainant_login_override: "লগইন করুন",
       your_name_override: "ইমেইল",
@@ -1250,6 +1259,8 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       complaint_assigned_success: "অভিযোগ সফলভাবে নিয়োগ করা হয়েছে!",
       failed_to_update_status:
         "অভিযোগের অবস্থা আপডেট করতে ব্যর্থ। অনুগ্রহ করে আবার চেষ্টা করুন।",
+
+      ccc: "চট্টগ্রাম সিটি কর্পোরেশন",
 
       status_viewed: "দেখা হয়েছে",
 

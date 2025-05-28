@@ -20,6 +20,14 @@ const Oss = () => {
               alt={t("oss_image_alt")}
               className="w-[60%] mx-auto rounded-[20px]"
             />
+            <a
+              href="https://www.shaplaoss.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-6 px-6 py-2 bg-[#640D5F] text-white rounded-lg font-semibold shadow hover:bg-[#4a0842] transition-colors duration-200"
+            >
+              {t("visit_oss_button", { defaultValue: "Visit OSS" })}
+            </a>
           </div>
 
           {/* Content */}

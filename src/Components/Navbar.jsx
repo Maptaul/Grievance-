@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useContext, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -47,35 +46,6 @@ const NavBar = () => {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     localStorage.setItem("i18nextLng", lng);
-  };
-
-  // Framer Motion variants for the Complaints/Dashboard button
-  const buttonVariants = {
-    idle: {
-      scale: [1, 1.05, 1],
-      opacity: [1, 0.7, 1],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut",
-      },
-    },
-    hover: {
-      scale: 1.1,
-      opacity: 1,
-      backgroundColor: "#0f766e",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-    tap: {
-      scale: 0.95,
-      opacity: 1,
-      transition: {
-        duration: 0.1,
-      },
-    },
   };
 
   return (
@@ -151,34 +121,28 @@ const NavBar = () => {
           {/* Centered Welcome Text */}
           <div className="flex-1 flex justify-center items-center px-2">
             <span className="text-gray-800 font-semibold text-xs sm:text-sm md:text-base lg:text-lg text-center">
-              {t("welcome_to_ccc")}
+              <span className="block sm:hidden">{t("ccc")}</span>
+              <span className="hidden sm:block">{t("welcome_to_ccc")}</span>
             </span>
           </div>
 
           {/* Buttons and Dropdowns */}
           <div className="flex items-center justify-end gap-2 sm:gap-3">
-            <motion.div
-              variants={buttonVariants}
-              initial="idle"
-              whileHover="hover"
-              whileTap="tap"
-            >
-              {user ? (
-                <Link
-                  to="/dashboard"
-                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
-                >
-                  {t("dashboard")}
-                </Link>
-              ) : (
-                <Link
-                  to="/complaint-category"
-                  className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
-                >
-                  {t("complaints")}
-                </Link>
-              )}
-            </motion.div>
+            {user ? (
+              <Link
+                to="/dashboard"
+                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+              >
+                {t("dashboard")}
+              </Link>
+            ) : (
+              <Link
+                to="/complaint-category"
+                className="bg-[#640D5F] text-white font-bold py-1 px-3 sm:py-2 sm:px-5 rounded-lg text-xs sm:text-sm"
+              >
+                {t("complaints")}
+              </Link>
+            )}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
