@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaMapMarkerAlt } from "react-icons/fa"; // Added for location icon
 import Swal from "sweetalert2";
 import Loading from "../../Components/Loading";
+import { AuthContext } from "../../Providers/AuthProvider"; // Adjust the import path as needed
 
 const WardWiseView = () => {
   const { t } = useTranslation(); // Add translation hook
+  const { user, role } = useContext(AuthContext); // Access role and user from AuthContext
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,25 +15,82 @@ const WardWiseView = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedWard, setSelectedWard] = useState(null);
   const [selectedComplaint, setSelectedComplaint] = useState(null); // State for selected complaint
+  const [employeeWard, setEmployeeWard] = useState(null); // State to store employee's ward
 
-  // Fetch complaints on component mount
+  // Fetch complaints and employee ward on component mount
   useEffect(() => {
-    const fetchComplaints = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch all complaints
         const response = await fetch(
           "https://grievance-server.vercel.app/complaints"
         );
         if (!response.ok) throw new Error(t("fetch_complaints_error")); // Translate error
         const data = await response.json();
-        setComplaints(data);
+        console.log("Fetched complaints data:", data); // Debug: Log all complaints
+
+        let filteredComplaints = data;
+
+        // Fetch employee's ward if role is "employee"
+        if (role === "employee" && user?.email) {
+          const userResponse = await fetch(
+            `https://grievance-server.vercel.app/users/${user.email}`
+          );
+          if (!userResponse.ok) throw new Error(t("fetch_user_data_error"));
+          const userData = await userResponse.json();
+          setEmployeeWard(userData.ward || null); // Assume ward is stored in user data
+
+          // Filter for employee: ward, status, and employeeId with fallback
+          filteredComplaints = data.filter((complaint) => {
+            const complaintEmployeeId = complaint.employeeId?.toString() || "";
+            const userId = user._id?.toString() || "";
+            const isAssignedToEmployee = complaintEmployeeId === userId || !complaintEmployeeId; // Fallback if no employeeId
+            const isRelevantStatus = ["Assigned", "Ongoing", "Resolved"].includes(complaint.status);
+            const isEmployeeWard = !employeeWard || complaint.ward === employeeWard; // Allow if ward is unset
+
+            console.log("Employee Filter:", {
+              complaintId: complaint._id,
+              complaintEmployeeId,
+              userId,
+              userRole: role,
+              userEmail: user.email,
+              status: complaint.status,
+              ward: complaint.ward,
+              employeeWard,
+              isAssignedToEmployee,
+              isRelevantStatus,
+              isEmployeeWard,
+            });
+
+            return isAssignedToEmployee && isRelevantStatus && isEmployeeWard;
+          });
+
+          if (filteredComplaints.length === 0) {
+            console.warn(
+              "No complaints assigned to employee:",
+              user._id,
+              "Role:",
+              role,
+              "User:",
+              user,
+              "EmployeeWard:",
+              employeeWard
+            );
+          }
+        } else {
+          // For administrative role, keep all complaints (no filtering)
+          filteredComplaints = data;
+        }
+
+        setComplaints(filteredComplaints);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchComplaints();
-  }, [t]); // Add t to dependencies
+    fetchData();
+  }, [t, role, user?.email, user?._id]); // Add dependencies
 
   // Group complaints by ward
   const groupedComplaints = complaints.reduce((acc, complaint) => {
@@ -270,8 +329,10 @@ const WardWiseView = () => {
                       <span className="flex items-center gap-2">
                         <span
                           className={`w-2 h-2 rounded-full ${
-                            complaint.status === "Ongoing"
+                            complaint.status === "Assigned"
                               ? "bg-yellow-400"
+                              : complaint.status === "Ongoing"
+                              ? "bg-blue-400"
                               : complaint.status === "Resolved"
                               ? "bg-green-400"
                               : "bg-gray-400"

@@ -48,6 +48,20 @@ const NavBar = () => {
     localStorage.setItem("i18nextLng", lng);
   };
 
+  // Debug user and photoURL
+  useEffect(() => {
+    if (user) {
+      console.log("User data:", user);
+      console.log("Photo URL:", user?.photoURL);
+    }
+  }, [user]);
+
+  // Validate photo URL
+  const validPhotoUrl =
+    user?.photoURL && user.photoURL.startsWith("http")
+      ? user.photoURL
+      : "https://via.placeholder.com/150";
+
   return (
     <header
       className="top-0 w-full bg-white shadow-lg z-50 py-2"
@@ -193,11 +207,11 @@ const NavBar = () => {
                 >
                   <div className="w-6 sm:w-8 rounded-full border border-gray-200">
                     <img
-                      src={
-                        user?.photoURL ||
-                        "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                      }
+                      src={validPhotoUrl}
                       alt="Profile"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/150"; // Fallback on load error
+                      }}
                     />
                   </div>
                 </label>

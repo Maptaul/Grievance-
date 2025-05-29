@@ -149,11 +149,11 @@ const EmployeeHome = () => {
         <div className="space-y-6 max-w-7xl mx-auto">
           {/* Welcome Section */}
           <div className="bg-gray-200 p-4 rounded-lg shadow-sm flex items-center space-x-3 animate-fade-in">
-            <img
+            {/* <img
               src={profileData.photo}
               alt={t("profile_image_alt")}
               className="w-16 h-16 rounded-full border-2 border-gray-300 object-cover transform hover:scale-105 transition-transform duration-300"
-            />
+            /> */}
             <div>
               <h2 className="text-2xl font-semibold text-gray-800">
                 {t("welcome_employee")}, {profileData.name}!

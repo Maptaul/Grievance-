@@ -456,6 +456,8 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
       mayor_image_alt: "Mayor",
       innovated_by_link_aria: "Visit Jionex website, innovated by",
 
+      provide_valid_bangladeshi_mobile: "Please provide a valid mobile number.",
+
       // ProgressSection Translations
       progress_title: "Chattogram’s Progress Under Leadership",
       progress_video1_title: "Dr. Shahadat Hossain’s Speech on Mosquito Spray",
@@ -1427,6 +1429,9 @@ Above all, Shapla OSS is committed to enhancing the citizen experience by delive
           },
         },
       },
+
+      provide_valid_bangladeshi_mobile:
+        "অনুগ্রহ করে একটি বৈধ মোবাইল নম্বর প্রদান করুন ",
       progress_title: "অগ্রগতি",
       view_more_videos: "আরও ভিডিও দেখুন",
       all_videos: "সব ভিডিও",

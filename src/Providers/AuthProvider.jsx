@@ -52,17 +52,24 @@ const AuthProvider = ({ children }) => {
 
   const createEmployeeUser = async (email, password) => {
     const secondaryAuth = getAuth(secondaryApp);
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        secondaryAuth,
-        email,
-        password
-      );
-      await secondaryAuth.signOut();
-      return userCredential;
-    } catch (error) {
-      throw error;
-    }
+    const userCredential = await createUserWithEmailAndPassword(
+      secondaryAuth,
+      email,
+      password
+    );
+    // Optionally set a default photoURL for employees (e.g., a placeholder)
+    await updateProfile(userCredential.user, {
+      photoURL: "https://via.placeholder.com/150",
+    });
+    const userData = {
+      email: email.toLowerCase(),
+      role: "employee",
+      createdAt: new Date().toISOString(),
+      photo: "https://via.placeholder.com/150", // Store default photo in MongoDB
+    };
+    await axios.post("https://grievance-server.vercel.app/users", userData);
+    await secondaryAuth.signOut();
+    return userCredential;
   };
 
   const signIn = (email, password) => {
@@ -99,24 +106,35 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const email = currentUser.email.toLowerCase();
-          // console.log("Fetching role for email:", email);
+          console.log("Fetching role for email:", email);
           const response = await axios.get(
             `https://grievance-server.vercel.app/users/${email}`
           );
           const mongoUser = response.data;
-          // console.log("MongoDB user data:", mongoUser);
+          console.log("MongoDB user data:", mongoUser);
 
           if (mongoUser && mongoUser.email) {
-            // Merge Firebase user with MongoDB user data, including _id
+            // Merge Firebase user with MongoDB user data, including photoURL
+            let photoURL = currentUser.photoURL;
+            if (mongoUser.photo) {
+              photoURL = mongoUser.photo; // Use MongoDB photo if available
+            } else if (
+              currentUser.providerData &&
+              currentUser.providerData[0]?.photoURL
+            ) {
+              photoURL = currentUser.providerData[0].photoURL; // Use Google photoURL
+            }
+
             setUser({
               ...currentUser,
-              _id: mongoUser._id, // Set MongoDB _id
+              _id: mongoUser._id,
               email: mongoUser.email,
-              name: mongoUser.name,
+              name: mongoUser.name || currentUser.displayName,
               role: mongoUser.role,
+              photoURL: photoURL, // Ensure photoURL is set
             });
             setRole(mongoUser.role);
-            // console.log("User role fetched:", mongoUser.role);
+            console.log("User role fetched:", mongoUser.role);
           } else {
             // If no MongoDB user exists, create one with default role 'citizen'
             const userData = {
@@ -131,7 +149,7 @@ const AuthProvider = ({ children }) => {
             const newMongoUser = createResponse.data;
             setUser({
               ...currentUser,
-              _id: newMongoUser._id, // Set new MongoDB _id if available
+              _id: newMongoUser._id,
               email,
               role: "citizen",
             });
@@ -155,11 +173,8 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const displayName = user?.displayName || user?.email || "";
-  const photoURL =
-    user?.photoURL ||
-    (user?.providerData && user.providerData[0]?.photoURL) ||
-    null;
+  const displayName = user?.displayName || user?.name || user?.email || "";
+  const photoURL = user?.photoURL || null;
 
   const authInfo = {
     user,
