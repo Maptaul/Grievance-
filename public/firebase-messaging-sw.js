@@ -28,5 +28,5 @@ const messaging = firebase.messaging();
 
 // Example usage to prevent unused variable error
 messaging.onBackgroundMessage((payload) => {
-  console.log("Received background message: ", payload);
+  // console.log("Received background message: ", payload);
 });

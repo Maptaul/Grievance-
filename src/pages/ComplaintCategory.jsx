@@ -93,7 +93,7 @@ const ComplaintCategory = () => {
                       <img
                         src={item.icon}
                         alt={item.category}
-                        className="w-16 h-16 object-contain rounded-md mx-auto mb-2"
+                        className="w-48 h-24 object-contain rounded-md mx-auto mb-2"
                         style={{
                           filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.08))",
                         }}

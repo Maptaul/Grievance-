@@ -25,12 +25,12 @@ const EditComplaint = () => {
       setError("No complaint data found.");
       return;
     }
-    console.log("Original Image URL:", complaint.fileUrl);
+    /* console.log("Original Image URL:", complaint.fileUrl);
     console.log("History:", complaint.history);
     console.log(
       "History Image URLs:",
       complaint.history?.map((entry) => entry.fileUrl)
-    );
+    ); */
   }, [complaint]);
 
   const handlePhotoChange = (e) => {

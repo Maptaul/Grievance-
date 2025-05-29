@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FiCamera,
@@ -219,7 +219,7 @@ const SubmitComplaint = () => {
         mobileNumber,
       };
 
-      console.log("Submitting complaint data:", complaintData);
+      // console.log("Submitting complaint data:", complaintData);
 
       const response = await fetch(
         "https://grievance-server.vercel.app/complaints",
@@ -240,7 +240,7 @@ const SubmitComplaint = () => {
       }
 
       const responseData = await response.json();
-      console.log("Server response:", responseData);
+      // console.log("Server response:", responseData);
 
       Swal.fire({
         icon: "success",
@@ -288,12 +288,19 @@ const SubmitComplaint = () => {
     }
   };
 
+  // Set initial name based on user data
+  useEffect(() => {
+    if (!isAnonymous && user) {
+      setName(user?.displayName || user?.email?.split("@")[0] || "");
+    }
+  }, [user, isAnonymous]);
+
   return (
     <div className="max-w-2xl mx-auto my-4 p-4 bg-white rounded-xl shadow-lg">
       <div className="text-center mb-6">
         {selectedCategory && (
           <div className="mt-4">
-            <span className="font-bold text-lg bg-blue-100 text-fuchsia-600 px-4 py-2 rounded-full inline-block mt-2">
+            <span className="font-bold text-lg bg-[#640D5F] text-white px-4 py-2 rounded-full inline-block mt-2">
               {t("category_label")}: {t(`category.${selectedCategory}`)}
             </span>
           </div>
@@ -331,8 +338,8 @@ const SubmitComplaint = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t("name_placeholder")}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed"
+                readOnly
               />
             </div>
           </div>
@@ -437,7 +444,7 @@ const SubmitComplaint = () => {
           <label className="text-sm font-medium text-gray-700">
             {t("ward_label")}*
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-start">
             <div className="relative">
               <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <select
@@ -457,7 +464,7 @@ const SubmitComplaint = () => {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
               <button
                 type="button"
                 onClick={getLocation}
@@ -480,7 +487,6 @@ const SubmitComplaint = () => {
             </div>
           </div>
         </div>
-
         <div>
           <button
             type="submit"

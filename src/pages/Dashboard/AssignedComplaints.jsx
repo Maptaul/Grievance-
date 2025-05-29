@@ -29,7 +29,7 @@ const AssignedComplaints = () => {
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
         const data = await complaintsRes.json();
-        console.log("Fetched complaints data:", data); // Debug: Log all fetched complaints
+        // console.log("Fetched complaints data:", data); // Debug: Log all fetched complaints
         let assignedComplaints = data.filter((c) => c.status === "Assigned");
 
         // Role-based filtering with enhanced debugging
@@ -41,14 +41,14 @@ const AssignedComplaints = () => {
           assignedComplaints = assignedComplaints.filter((complaint) => {
             const complaintEmployeeId = complaint.employeeId?.toString() || "";
             const userId = user._id?.toString() || "";
-            console.log("Employee Filter:", {
-              complaintId: complaint._id,
-              complaintEmployeeId,
-              userId,
-              userRole: role,
-              userEmail: user.email,
-              fullUser: user, // Log full user object for debugging
-            }); // Enhanced debug log
+            // console.log("Employee Filter:", {
+            //   complaintId: complaint._id,
+            //   complaintEmployeeId,
+            //   userId,
+            //   userRole: role,
+            //   userEmail: user.email,
+            //   fullUser: user, // Log full user object for debugging
+            // }); // Enhanced debug log
             return complaintEmployeeId === userId;
           });
           if (assignedComplaints.length === 0) {

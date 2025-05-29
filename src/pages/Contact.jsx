@@ -18,7 +18,7 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
     setFormData({ name: "", email: "", subject: "", message: "" });
     setSubmissionStatus("success");
     setTimeout(() => setSubmissionStatus(null), 3000); // Clear after 3s

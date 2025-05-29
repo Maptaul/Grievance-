@@ -99,12 +99,12 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const email = currentUser.email.toLowerCase();
-          console.log("Fetching role for email:", email);
+          // console.log("Fetching role for email:", email);
           const response = await axios.get(
             `https://grievance-server.vercel.app/users/${email}`
           );
           const mongoUser = response.data;
-          console.log("MongoDB user data:", mongoUser);
+          // console.log("MongoDB user data:", mongoUser);
 
           if (mongoUser && mongoUser.email) {
             // Merge Firebase user with MongoDB user data, including _id
@@ -116,7 +116,7 @@ const AuthProvider = ({ children }) => {
               role: mongoUser.role,
             });
             setRole(mongoUser.role);
-            console.log("User role fetched:", mongoUser.role);
+            // console.log("User role fetched:", mongoUser.role);
           } else {
             // If no MongoDB user exists, create one with default role 'citizen'
             const userData = {
