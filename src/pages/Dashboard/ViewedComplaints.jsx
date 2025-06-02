@@ -115,6 +115,8 @@ const ViewedComplaints = () => {
       setSelectedComplaint(null);
       setShowAssignDropdown(false);
       resetAssignDropdown();
+      // Refresh sidebar counts after status change
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
 
       Swal.fire({
         icon: "success",

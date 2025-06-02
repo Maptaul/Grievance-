@@ -51,8 +51,8 @@ const NavBar = () => {
   // Debug user and photoURL
   useEffect(() => {
     if (user) {
-      console.log("User data:", user);
-      console.log("Photo URL:", user?.photoURL);
+      // console.log("User data:", user);
+      // console.log("Photo URL:", user?.photoURL);
     }
   }, [user]);
 

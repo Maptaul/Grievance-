@@ -106,23 +106,22 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const email = currentUser.email.toLowerCase();
-          console.log("Fetching role for email:", email);
+          // console.log(`Fetching role for email: ${email}`);
           const response = await axios.get(
             `https://grievance-server.vercel.app/users/${email}`
           );
           const mongoUser = response.data;
-          console.log("MongoDB user data:", mongoUser);
+          // console.log("AuthProvider.jsx:114 MongoDB user data:", mongoUser);
 
           if (mongoUser && mongoUser.email) {
-            // Merge Firebase user with MongoDB user data, including photoURL
             let photoURL = currentUser.photoURL;
             if (mongoUser.photo) {
-              photoURL = mongoUser.photo; // Use MongoDB photo if available
+              photoURL = mongoUser.photo;
             } else if (
               currentUser.providerData &&
               currentUser.providerData[0]?.photoURL
             ) {
-              photoURL = currentUser.providerData[0].photoURL; // Use Google photoURL
+              photoURL = currentUser.providerData[0].photoURL;
             }
 
             setUser({
@@ -131,12 +130,11 @@ const AuthProvider = ({ children }) => {
               email: mongoUser.email,
               name: mongoUser.name || currentUser.displayName,
               role: mongoUser.role,
-              photoURL: photoURL, // Ensure photoURL is set
+              photoURL: photoURL,
             });
             setRole(mongoUser.role);
-            console.log("User role fetched:", mongoUser.role);
+            // console.log(`AuthProvider.jsx:137 User role fetched: ${mongoUser.role}`);
           } else {
-            // If no MongoDB user exists, create one with default role 'citizen'
             const userData = {
               email,
               role: "citizen",
@@ -154,10 +152,8 @@ const AuthProvider = ({ children }) => {
               role: "citizen",
             });
             setRole("citizen");
-            console.warn("No role found, defaulted to 'citizen'");
           }
         } catch (error) {
-          console.error("Error fetching user role:", error);
           setError(error.message || "Failed to fetch user role");
           setUser(currentUser); // Fallback to Firebase user
           setRole("citizen");
@@ -174,7 +170,13 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const displayName = user?.displayName || user?.name || user?.email || "";
-  const photoURL = user?.photoURL || null;
+  // Always prefer MongoDB photo, then Firebase, then a default for citizens
+  let photoURL = null;
+  if (user?.photoURL) {
+    photoURL = user.photoURL;
+  } else if (user?.role === "citizen") {
+    photoURL = "https://via.placeholder.com/150?text=Citizen";
+  }
 
   const authInfo = {
     user,

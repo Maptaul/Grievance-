@@ -125,11 +125,10 @@ const ViewOngoingComplaint = () => {
         throw new Error(`${t("error_update_status")}: ${errorText}`);
       }
 
-      // Add a slight delay to ensure backend sync
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      toast.success(t("complaint_resolved_successfully"));
-      // After resolving, go back to previous page
+      // After resolving, refresh sidebar counts
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
+      // Add a small delay to ensure backend sync if needed
+      // await new Promise((resolve) => setTimeout(resolve, 500));
       if (window.history.length > 2) {
         navigate(-1);
       } else {

@@ -278,6 +278,8 @@ const SubmitComplaint = () => {
       setWard(null);
       setIsAnonymous(false);
       setMobileNumber("");
+      // Refresh sidebar counts after successful submit
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
     } catch (error) {
       console.error("Submission Error:", error);
       Swal.fire(

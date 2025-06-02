@@ -93,7 +93,7 @@ const ComplaintCategory = () => {
                       <img
                         src={item.icon}
                         alt={item.category}
-                        className="w-48 h-24 object-contain rounded-md mx-auto mb-2"
+                        className="w-full h-36  rounded-md mx-auto mb-2"
                         style={{
                           filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.08))",
                         }}
@@ -101,6 +101,9 @@ const ComplaintCategory = () => {
                     )}
                     <h3 className="text-md font-extrabold capitalize text-gray-800">
                       {translatedCategory}
+                      {/* <span>
+                        <FaArrowAltCircleRight className="h-5 w-5 text-gray-500 text-center" />
+                      </span> */}
                     </h3>
                   </Link>
                 </motion.div>

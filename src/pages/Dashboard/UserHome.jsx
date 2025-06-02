@@ -239,7 +239,7 @@ const UserHome = () => {
             return (
               <div
                 key={complaint._id}
-                className="w-[400px] bg-gray-50 p-2 sm:p-3 rounded-lg shadow-sm hover:bg-gray-300 transition-colors duration-200 overflow-hidden"
+                className="w-[330px] bg-gray-50 p-2 sm:p-3 rounded-lg shadow-sm hover:bg-gray-300 transition-colors duration-200 overflow-hidden"
               >
                 <div className="flex justify-between items-center mb-1 sm:mb-2">
                   <span className="text-gray-800 font-medium text-sm sm:text-base">

@@ -20,10 +20,10 @@ const Profile = () => {
     displayName,
     photoURL,
     role,
-  } = useContext(AuthContext); // Get the current user and loading state from AuthContext
-  const [userData, setUserData] = useState(null); // State to hold the specific user's data
-  const [loading, setLoading] = useState(true); // Loading state for fetching
-  const [error, setError] = useState(null); // Error state
+  } = useContext(AuthContext);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -34,7 +34,7 @@ const Profile = () => {
             `https://grievance-server.vercel.app/users/${user.email}`
           );
           if (!response.ok) {
-            throw new Error(t("fetch_user_data_error")); // Translate error message
+            throw new Error(t("fetch_user_data_error"));
           }
           const data = await response.json();
           setUserData(data);
@@ -47,10 +47,10 @@ const Profile = () => {
 
       fetchUserData();
     } else if (!authLoading && !user) {
-      setError(t("no_user_logged_in")); // Translate error message
+      setError(t("no_user_logged_in"));
       setLoading(false);
     }
-  }, [user, authLoading, t]); // Add t to dependencies
+  }, [user, authLoading, t]);
 
   const handleForgotPassword = () => {
     if (!resetPassword) {
@@ -147,7 +147,7 @@ const Profile = () => {
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="btn btn-primary mt-4 ml-2 inline-flex items-center gap-2 hover:underline font-medium mt-2"
+              className="btn btn-primary  ml-2 inline-flex items-center gap-2 hover:underline font-medium mt-2"
               aria-label={t("forgot_password")}
             >
               <FaEdit /> {t("forgot_password")}

@@ -176,7 +176,8 @@ const ViewAssignedComplaint = () => {
         const errorText = await response.text();
         throw new Error(`${t("error_update_status")}: ${errorText}`);
       }
-      // After resolving, go back to previous page
+      // After resolving, refresh sidebar counts
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
       if (window.history.length > 2) {
         navigate(-1);
       } else {

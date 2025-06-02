@@ -11,6 +11,7 @@ const Footer = () => {
     { key: "Home", path: "/" },
     { key: "contact", path: "/contact" },
     { key: "grievance_portal", path: "/complaint-category" },
+    { key: "Shapla OSS", path: "https://www.shaplaoss.com/#/splash" },
   ];
 
   return (

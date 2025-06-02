@@ -1,16 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { BsFastForwardCircleFill } from "react-icons/bs";
 import {
   FaAngleDown,
   FaAngleUp,
-  FaBars,
   FaHome,
   FaMapMarkedAlt,
-  FaTimes,
   FaUser,
 } from "react-icons/fa";
 import { GrCompliance } from "react-icons/gr";
-import { IoLogOutOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoPlayBackCircle } from "react-icons/io5";
 import { TbReport } from "react-icons/tb";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
@@ -18,7 +17,7 @@ import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isComplaintsDropdownOpen, setIsComplaintsDropdownOpen] =
     useState(false);
   const { user, role, logOut, loading } = useContext(AuthContext);
@@ -96,6 +95,77 @@ const Dashboard = () => {
     fetchComplaintCounts();
   }, [t, user, role]);
 
+  // Add a function to refresh complaint counts
+  const refreshComplaintCounts = async () => {
+    try {
+      const response = await fetch(
+        "https://grievance-server.vercel.app/complaints"
+      );
+      if (!response.ok) throw new Error(t("error_fetch_complaints"));
+      const data = await response.json();
+      let counts = {
+        pending: 0,
+        assigned: 0,
+        viewed: 0,
+        ongoing: 0,
+        resolved: 0,
+        all: 0,
+        my: 0,
+      };
+      if (role === "citizen") {
+        counts.pending = data.filter(
+          (c) => c.status === "Pending" && c.email === user.email
+        ).length;
+        counts.viewed = data.filter(
+          (c) => c.status === "Viewed" && c.email === user.email
+        ).length;
+        counts.assigned = data.filter(
+          (c) => c.status === "Assigned" && c.email === user.email
+        ).length;
+        counts.ongoing = data.filter(
+          (c) => c.status === "Ongoing" && c.email === user.email
+        ).length;
+        counts.resolved = data.filter(
+          (c) => c.status === "Resolved" && c.email === user.email
+        ).length;
+        counts.all = data.filter((c) => c.email === user.email).length;
+      } else if (role === "employee") {
+        counts.pending = data.filter((c) => c.status === "Pending").length;
+        counts.viewed = data.filter((c) => c.status === "Viewed").length;
+        counts.assigned = data.filter(
+          (c) => c.status === "Assigned" && c.employeeId === user._id
+        ).length;
+        counts.ongoing = data.filter(
+          (c) => c.status === "Ongoing" && c.employeeId === user._id
+        ).length;
+        counts.resolved = data.filter(
+          (c) => c.status === "Resolved" && c.employeeId === user._id
+        ).length;
+        counts.all = data.filter((c) => c.employeeId === user._id).length;
+      } else if (role === "administrative") {
+        counts.pending = data.filter((c) => c.status === "Pending").length;
+        counts.viewed = data.filter((c) => c.status === "Viewed").length;
+        counts.assigned = data.filter((c) => c.status === "Assigned").length;
+        counts.ongoing = data.filter((c) => c.status === "Ongoing").length;
+        counts.resolved = data.filter((c) => c.status === "Resolved").length;
+        counts.all = data.length;
+      }
+      setComplaintCounts(counts);
+      // Refresh sidebar counts after status change
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
+    } catch (err) {
+      console.error("Error fetching complaint counts:", err.message);
+    }
+  };
+
+  // Expose refreshComplaintCounts globally for status update pages
+  useEffect(() => {
+    window.refreshComplaintCounts = refreshComplaintCounts;
+    return () => {
+      delete window.refreshComplaintCounts;
+    };
+  }, [user, role, refreshComplaintCounts]);
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -114,7 +184,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/UserHome"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -134,8 +203,11 @@ const Dashboard = () => {
             className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
           >
             <GrCompliance className="mr-2 text-lg" />
-            <span className="md:inline">
-              {t("my_complaints")} ({complaintCounts.all})
+            <span className="md:inline flex items-center gap-2">
+              {t("my_complaints")}
+              <span className="inline-block bg-blue-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-blue-700">
+                {complaintCounts.all}
+              </span>
             </span>
             {isComplaintsDropdownOpen ? (
               <FaAngleUp className="ml-auto" />
@@ -148,108 +220,102 @@ const Dashboard = () => {
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/pending"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("pending_complaints")} ({complaintCounts.pending})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("pending_complaints")}
+                    <span className="inline-block bg-yellow-400 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-yellow-600">
+                      {complaintCounts.pending}
+                    </span>
                   </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/viewed"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("viewed_complaints")} ({complaintCounts.viewed})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("viewed_complaints")}
+                    <span className="inline-block bg-blue-500 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-blue-700">
+                      {complaintCounts.viewed}
+                    </span>
                   </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/assigned"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("assigned_complaints")} ({complaintCounts.assigned})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("assigned_complaints")}
+                    <span className="inline-block bg-purple-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-purple-800">
+                      {complaintCounts.assigned}
+                    </span>
                   </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/ongoing"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("ongoing_complaints")} ({complaintCounts.ongoing})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("ongoing_complaints")}
+                    <span className="inline-block bg-orange-500 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-orange-700">
+                      {complaintCounts.ongoing}
+                    </span>
                   </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/resolved"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("resolved_complaints")} ({complaintCounts.resolved})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("resolved_complaints")}
+                    <span className="inline-block bg-green-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-green-800">
+                      {complaintCounts.resolved}
+                    </span>
                   </span>
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/dashboard/ManageMyComplaints/AllComplaints"
-                  onClick={() => {
-                    setIsSidebarOpen(false);
-                    setIsComplaintsDropdownOpen(false);
-                  }}
                   className={({ isActive }) =>
                     `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                       isActive ? "bg-blue-500 text-white" : "text-gray-800"
                     }`
                   }
                 >
-                  <span className="md:inline">
-                    {t("all_complaints")} ({complaintCounts.all})
+                  <span className="md:inline flex items-center gap-2">
+                    {t("all_complaints")}
+                    <span className="inline-block bg-gray-700 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-gray-900">
+                      {complaintCounts.all}
+                    </span>
                   </span>
                 </NavLink>
               </li>
@@ -260,7 +326,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/Profile"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -284,7 +349,6 @@ const Dashboard = () => {
               ? "/dashboard/AdminHome"
               : "/dashboard/EmployeeHome"
           }
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -306,7 +370,7 @@ const Dashboard = () => {
             className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
           >
             <TbReport className="mr-2 text-lg" />
-            <span className="md:inline">
+            <span className="md:inline flex items-center gap-2">
               {role === "employee" ? t("my_complaints") : t("complaints")}
               {role === "citizen" && ` (${complaintCounts.pending})`}
               {role === "employee" && ` (${complaintCounts.assigned})`}
@@ -324,108 +388,102 @@ const Dashboard = () => {
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/pending"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("pending_complaints")} ({complaintCounts.pending})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("pending_complaints")}
+                        <span className="inline-block bg-yellow-400 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-yellow-600">
+                          {complaintCounts.pending}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/viewed"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("viewed_complaints")} ({complaintCounts.viewed})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("viewed_complaints")}
+                        <span className="inline-block bg-blue-500 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-blue-700">
+                          {complaintCounts.viewed}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/assigned"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("assigned_complaints")} ({complaintCounts.assigned})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("assigned_complaints")}
+                        <span className="inline-block bg-purple-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-purple-800">
+                          {complaintCounts.assigned}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/ongoing"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("ongoing_complaints")} ({complaintCounts.ongoing})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("ongoing_complaints")}
+                        <span className="inline-block bg-orange-500 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-orange-700">
+                          {complaintCounts.ongoing}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/resolved"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("resolved_complaints")} ({complaintCounts.resolved})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("resolved_complaints")}
+                        <span className="inline-block bg-green-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-green-800">
+                          {complaintCounts.resolved}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/AllComplaints"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("all_complaints")} ({complaintCounts.all})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("all_complaints")}
+                        <span className="inline-block bg-gray-700 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-gray-900">
+                          {complaintCounts.all}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
@@ -435,72 +493,68 @@ const Dashboard = () => {
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/assigned"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("assigned_complaints")} ({complaintCounts.assigned})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("assigned_complaints")}
+                        <span className="inline-block bg-purple-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-purple-800">
+                          {complaintCounts.assigned}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/ongoing"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("ongoing_complaints")} ({complaintCounts.ongoing})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("ongoing_complaints")}
+                        <span className="inline-block bg-orange-500 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-orange-700">
+                          {complaintCounts.ongoing}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/resolved"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("resolved_complaints")} ({complaintCounts.resolved})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("resolved_complaints")}
+                        <span className="inline-block bg-green-600 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-green-800">
+                          {complaintCounts.resolved}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       to="/dashboard/ManageComplaints/AllComplaints"
-                      onClick={() => {
-                        setIsSidebarOpen(false);
-                        setIsComplaintsDropdownOpen(false);
-                      }}
                       className={({ isActive }) =>
                         `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
                           isActive ? "bg-blue-500 text-white" : "text-gray-800"
                         }`
                       }
                     >
-                      <span className="md:inline">
-                        {t("all_complaints")} ({complaintCounts.all})
+                      <span className="md:inline flex items-center gap-2">
+                        {t("all_complaints")}
+                        <span className="inline-block bg-gray-700 text-white font-extrabold rounded-lg px-2 py-0.5 ml-1 text-sm shadow border border-gray-900">
+                          {complaintCounts.all}
+                        </span>
                       </span>
                     </NavLink>
                   </li>
@@ -513,7 +567,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/WardWiseView"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -527,7 +580,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/Profile"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -547,7 +599,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/ManageUsers"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -561,7 +612,6 @@ const Dashboard = () => {
       <li>
         <NavLink
           to="/dashboard/Employees"
-          onClick={() => setIsSidebarOpen(false)}
           className={({ isActive }) =>
             `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
               isActive ? "bg-blue-500 text-white" : "text-gray-800"
@@ -577,86 +627,97 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        className="md:hidden p-3 bg-blue-500 fixed bottom-4 right-4 rounded-full shadow-lg z-50"
-      >
-        {isSidebarOpen ? (
-          <FaTimes className="text-3xl text-white" />
-        ) : (
-          <FaBars className="text-3xl text-white" />
-        )}
-      </button>
-
-      {/* Overlay for Mobile */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-gray-800 bg-opacity-50 z-30 md:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
       {/* Sidebar */}
-      <div className="flex-shrink-0 bg-gray-200 shadow-md md:shadow-none md:w-56">
-        <div
-          className={`w-56 mt-16 bg-gray-200 fixed top-0 left-0 h-full z-40 transition-transform duration-300 ease-in-out ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 md:w-56 md:static md:h-auto md:min-h-screen`}
-        >
-          <div className="p-4 h-full flex flex-col">
-            <h1 className="text-xl font-bold text-center mb-6 text-gray-800">
-              {role === "administrative"
-                ? t("admin_dashboard")
-                : role === "employee"
-                ? t("employee_dashboard")
-                : t("user_dashboard")}
-            </h1>
-            <nav className="flex-1">
-              <ul className="space-y-1 text-base font-bold">
-                {/* Conditionally render menu based on role */}
-                {role === "citizen" ? (
-                  citizenMenu
-                ) : (
-                  <>
-                    {adminAndEmployeeMenu}
-                    {role === "administrative" && adminSpecificMenu}
-                  </>
-                )}
-
-                {/* Common Menu Items */}
-                <div className="my-4 border-t border-gray-300"></div>
-                <li>
-                  <NavLink
-                    to="/"
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={({ isActive }) =>
-                      `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
-                        isActive ? "bg-blue-500 text-white" : "text-gray-800"
-                      }`
-                    }
-                  >
-                    <FaHome className="mr-2 text-lg" />
-                    <span className="md:inline">{t("home")}</span>
-                  </NavLink>
-                </li>
-                <li>
+      {isSidebarOpen && (
+        <div className="flex-shrink-0 bg-gray-200 shadow-md md:shadow-none md:w-56 transition-all duration-300">
+          <div
+            className={`w-58 mt-16 bg-gray-200 fixed top-0 left-0 h-full z-40 transition-transform duration-300 ease-in-out md:translate-x-0 md:w-56 md:static md:h-auto md:min-h-screen`}
+          >
+            <div className="p-4 h-full flex flex-col">
+              <div className="flex items-center justify-center mb-6 relative">
+                <div className="flex items-center justify-between w-full">
+                  <h1 className="text-xl text-left font-bold text-gray-800 w-full">
+                    {role === "administrative"
+                      ? t("admin_dashboard")
+                      : role === "employee"
+                      ? t("employee_dashboard")
+                      : t("user_dashboard")}
+                  </h1>
                   <button
-                    onClick={handleLogout}
-                    className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
+                    className="focus:outline-none group"
+                    onClick={() => setIsSidebarOpen(false)}
+                    aria-label="Hide sidebar"
+                    tabIndex={0}
                   >
-                    <IoLogOutOutline className="mr-2 text-lg" />
-                    <span className="md:inline">{t("logout")}</span>
+                    <span className="absolute left-full ml-2 px-2 py-1 rounded bg-gray-800 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                      Close sidebar
+                    </span>
+                    <IoPlayBackCircle className="text-4xl  text-blue-600" />
                   </button>
-                </li>
-              </ul>
-            </nav>
+                </div>
+              </div>
+              <nav className="flex-1">
+                <ul className="space-y-1 text-base font-bold">
+                  {/* Conditionally render menu based on role */}
+                  {role === "citizen" ? (
+                    citizenMenu
+                  ) : (
+                    <>
+                      {adminAndEmployeeMenu}
+                      {role === "administrative" && adminSpecificMenu}
+                    </>
+                  )}
+
+                  {/* Common Menu Items */}
+                  <div className="my-4 border-t border-gray-300"></div>
+                  <li>
+                    <NavLink
+                      to="/"
+                      className={({ isActive }) =>
+                        `flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors ${
+                          isActive ? "bg-blue-500 text-white" : "text-gray-800"
+                        }`
+                      }
+                    >
+                      <FaHome className="mr-2 text-lg" />
+                      <span className="md:inline">{t("home")}</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-gray-800 w-full text-left"
+                    >
+                      <IoLogOutOutline className="mr-2 text-lg" />
+                      <span className="md:inline">{t("logout")}</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 bg-gray-100 min-h-screen p-6 md:p-8 transition-all duration-300">
+      <div
+        className={`transition-all duration-300 ${
+          isSidebarOpen ? "flex-1" : "w-full"
+        } bg-gray-100 min-h-screen p-6 md:p-8`}
+      >
+        {!isSidebarOpen && (
+          <button
+            className="mb-4 text-blue-600 focus:outline-none group"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Show sidebar"
+            tabIndex={0}
+          >
+            <span className="absolute left-full ml-2 px-2 py-1 rounded bg-gray-800 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+              Open sidebar
+            </span>
+            <BsFastForwardCircleFill className="text-4xl  text-blue-600" />
+          </button>
+        )}
         <Outlet />
       </div>
     </div>

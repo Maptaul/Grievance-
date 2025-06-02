@@ -27,7 +27,7 @@ const WardWiseView = () => {
         );
         if (!response.ok) throw new Error(t("fetch_complaints_error")); // Translate error
         const data = await response.json();
-        console.log("Fetched complaints data:", data); // Debug: Log all complaints
+        // console.log("Fetched complaints data:", data); // Debug: Log all complaints
 
         let filteredComplaints = data;
 
@@ -44,23 +44,29 @@ const WardWiseView = () => {
           filteredComplaints = data.filter((complaint) => {
             const complaintEmployeeId = complaint.employeeId?.toString() || "";
             const userId = user._id?.toString() || "";
-            const isAssignedToEmployee = complaintEmployeeId === userId || !complaintEmployeeId; // Fallback if no employeeId
-            const isRelevantStatus = ["Assigned", "Ongoing", "Resolved"].includes(complaint.status);
-            const isEmployeeWard = !employeeWard || complaint.ward === employeeWard; // Allow if ward is unset
+            const isAssignedToEmployee =
+              complaintEmployeeId === userId || !complaintEmployeeId; // Fallback if no employeeId
+            const isRelevantStatus = [
+              "Assigned",
+              "Ongoing",
+              "Resolved",
+            ].includes(complaint.status);
+            const isEmployeeWard =
+              !employeeWard || complaint.ward === employeeWard; // Allow if ward is unset
 
-            console.log("Employee Filter:", {
-              complaintId: complaint._id,
-              complaintEmployeeId,
-              userId,
-              userRole: role,
-              userEmail: user.email,
-              status: complaint.status,
-              ward: complaint.ward,
-              employeeWard,
-              isAssignedToEmployee,
-              isRelevantStatus,
-              isEmployeeWard,
-            });
+            // console.log("Employee Filter:", {
+            //   complaintId: complaint._id,
+            //   complaintEmployeeId,
+            //   userId,
+            //   userRole: role,
+            //   userEmail: user.email,
+            //   status: complaint.status,
+            //   ward: complaint.ward,
+            //   employeeWard,
+            //   isAssignedToEmployee,
+            //   isRelevantStatus,
+            //   isEmployeeWard,
+            // });
 
             return isAssignedToEmployee && isRelevantStatus && isEmployeeWard;
           });

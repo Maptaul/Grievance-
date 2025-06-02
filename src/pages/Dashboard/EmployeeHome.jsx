@@ -42,20 +42,20 @@ const EmployeeHome = () => {
         if (!complaintsRes.ok) throw new Error(t("error_fetch_complaints"));
         if (!employeesRes.ok) throw new Error(t("error_fetch_employees"));
         const complaintsData = await complaintsRes.json();
-        console.log("Fetched complaints data:", complaintsData); // Debug log
+        // console.log("Fetched complaints data:", complaintsData); // Debug log
 
         let filteredComplaints = [];
         if (role === "employee" && user?._id) {
           filteredComplaints = complaintsData.filter((complaint) => {
             const complaintEmployeeId = complaint.employeeId?.toString() || "";
             const userId = user._id?.toString() || "";
-            console.log("Employee Filter:", {
-              complaintId: complaint._id,
-              complaintEmployeeId,
-              userId,
-              userRole: role,
-              userEmail: user.email,
-            }); // Enhanced debug log
+            // console.log("Employee Filter:", {
+            //   complaintId: complaint._id,
+            //   complaintEmployeeId,
+            //   userId,
+            //   userRole: role,
+            //   userEmail: user.email,
+            // }); // Enhanced debug log
             const isAssigned =
               complaintEmployeeId === userId &&
               ["Assigned", "Ongoing", "Resolved"].includes(complaint.status);

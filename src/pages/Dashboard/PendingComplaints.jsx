@@ -100,6 +100,8 @@ const PendingComplaints = () => {
         c._id === complaint._id ? { ...c, status: "Viewed" } : c
       );
       setComplaints(updatedComplaints);
+      // Refresh sidebar counts after status change
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
       setSelectedComplaint({ ...complaint, status: "Viewed" });
 
       await Swal.fire({
@@ -146,8 +148,8 @@ const PendingComplaints = () => {
       // Remove the assigned complaint from the local state
       const updatedComplaints = complaints.filter((c) => c._id !== complaintId);
       setComplaints(updatedComplaints);
-
-      // Close the modal and dropdown
+      // Refresh sidebar counts after status change
+      if (window.refreshComplaintCounts) window.refreshComplaintCounts();
       setSelectedComplaint(null);
       setShowAssignDropdown(false);
       resetAssignDropdown();
